@@ -1,0 +1,384 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+# Project specific virtual environments
+faster_whisper_env/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env
+.env.test
+.env.local
+.env.production
+.env.development
+
+# Cache files
+*.cache
+.cache/
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Media files (uncomment if you don't want to track them)
+# Videos
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.flv
+*.wmv
+*.webm
+*.m4v
+*.3gp
+
+# Audio
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.aac
+*.wma
+*.m4a
+
+# Images (uncomment if you don't want to track them)
+# *.jpg
+# *.jpeg
+# *.png
+# *.gif
+# *.bmp
+# *.tiff
+# *.svg
+# *.webp
+# *.ico
+
+# Temporary directories
+tmp/
+temp/
+cache/
+
+# AI/ML model files (usually large)
+*.pt
+*.pth
+*.h5
+*.pb
+*.onnx
+*.tflite
+*.pkl
+*.pickle
+*.joblib
+*.model
+*.weights
+
+# Data directories (uncomment if you don't want to track data)
+# data/
+# datasets/
+# models/
+# checkpoints/
+
+# Configuration files with sensitive data
+config.ini
+secrets.ini
+.secrets
+credentials.json
+service-account-key.json
+*.pem
+*.key
+*.crt
+*.p12
+
+# Docker
+.dockerignore
+Dockerfile.local
+docker-compose.override.yml
+.docker/
+
+# Kubernetes
+*.kubeconfig
+kube-config
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Cloud storage sync files
+.dropbox
+.icloud
+
+# Local configuration
+local_config.py
+local_settings.py
+config_local.py
+
+# Test files
+test_output/
+test_results/
+.coverage
+.pytest_cache/
+
+# Build artifacts
+build/
+dist/
+*.whl
+*.tar.gz
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Project specific
+# GCP credentials and configs
+*.service-account.json
+gcp-credentials.json
+.gcp/
+
+# Whisper/Audio processing
+# Downloaded audio files
+downloads/
+output/
+processed/
+transcriptions/
+
+# Monitoring/logging
+monitoring/logs/
+*.audit
+
+# Local development
+dev_config.py
+local.env
+development.env
+.local
+
+# Application specific temporary files
+app/temp/
+app/cache/
+app/logs/
+
+# Backup and temporary files
+*.backup
+*.swp
+*.tmp
+
+# Custom project directories (uncomment as needed)
+# uploads/
+# static/media/
+# user_data/

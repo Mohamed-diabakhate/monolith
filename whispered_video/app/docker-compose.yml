@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  whispered-video:
+    build:
+      context: ..
+      dockerfile: app/Dockerfile
+    container_name: whispered-video-app
+    volumes:
+      # Mount transcripts directory for persistent storage
+      - ../transcripts:/app/transcripts
+      # Mount downloads cache for faster re-downloads
+      - ../downloads_cache:/app/downloads_cache
+      # Mount input directory for local files
+      - ../input:/app/input:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MODEL_SIZE=medium
+      - DEVICE=cpu
+      - CPU_THREADS=4
+      - LOG_LEVEL=INFO
+      - CLEANUP_TEMP_FILES=true
+    working_dir: /app
+    command: ["python", "main.py", "--help"]
+    restart: unless-stopped
+    
+  # Optional: Add a web interface service for future development
+  # web-interface:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.web
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ../transcripts:/app/transcripts
+  #   depends_on:
+  #     - whispered-video
+  #   environment:
+  #     - FLASK_ENV=development
+  #   restart: unless-stopped
+
+volumes:
+  transcripts:
+  downloads_cache: 

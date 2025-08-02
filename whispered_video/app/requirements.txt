@@ -1,0 +1,30 @@
+# Core ML and Audio Processing
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+faster-whisper==0.10.0
+ctranslate2==4.6.0
+
+# Audio and Video Processing
+av>=11.0.0
+yt-dlp>=2025.7.21
+
+# System Monitoring
+psutil>=7.0.0
+
+# Progress Tracking
+tqdm>=4.67.1
+
+# Utilities
+numpy>=2.0.2
+Pillow>=11.3.0
+requests>=2.32.4
+urllib3==1.26.18
+
+# Optional: For better logging
+coloredlogs>=15.0.1
+
+# Development dependencies (optional)
+# pytest>=7.0.0
+# black>=22.0.0
+# flake8>=4.0.0 
