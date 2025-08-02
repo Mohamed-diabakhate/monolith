@@ -1,0 +1,3148 @@
+{
+  "metadata": {
+    "audio_file": "Gary Neville gives his honest opinion on Man Utd signings Mbeumo and Cunha.mp3",
+    "model_used": "faster-whisper tiny",
+    "device": "Apple M2 Pro (CPU with int8)",
+    "compute_type": "int8",
+    "cpu_threads": 12,
+    "language_detected": "en",
+    "language_confidence": 0.5107749104499817,
+    "audio_duration_seconds": 106.0106875,
+    "generated_timestamp": "2025-08-02 21:17:23"
+  },
+  "performance": {
+    "total_segments": 23,
+    "total_words": 404,
+    "average_words_per_segment": 17.565217391304348,
+    "processing_speed_realtime": 36.58337331605314,
+    "python_script_runtime_seconds": 2.8977832794189453,
+    "total_service_runtime_seconds": 6.342397212982178,
+    "cloud_run_configuration": {
+      "cpu_cores": 2.0,
+      "memory_gb": 4.0
+    },
+    "local_performance": {
+      "average_cpu_usage_percent": 0.6,
+      "peak_memory_usage_gb": 0.8479499816894531
+    }
+  },
+  "cost_analysis": {
+    "cpu_cost_usd": 0.0003044350662231445,
+    "memory_cost_usd": 6.342397212982178e-05,
+    "request_cost_usd": 4.0000000000000003e-07,
+    "total_cost_usd": 0.0003682590383529663,
+    "cost_per_minute_usd": 0.00020842749747451621,
+    "cost_40min_usd": 0.008328444208251353,
+    "pricing_reference": {
+      "cpu_cost_per_vcpu_second": 2.4e-05,
+      "memory_cost_per_gib_second": 2.5e-06,
+      "request_cost_per_million": 0.4
+    }
+  },
+  "segments": [
+    {
+      "segment_number": 1,
+      "start_time": 0.0,
+      "end_time": 4.92,
+      "start_time_formatted": "00:00.000",
+      "end_time_formatted": "00:04.920",
+      "duration_seconds": 4.92,
+      "text": "Since the 1990s, over the last 10 or 11 years of sort of accepted a position whereby it",
+      "word_count": 18,
+      "word_timestamps": [
+        {
+          "word": " Since",
+          "start_time": 0.0,
+          "end_time": 0.26,
+          "start_time_formatted": "00:00.000",
+          "end_time_formatted": "00:00.260"
+        },
+        {
+          "word": " the",
+          "start_time": 0.26,
+          "end_time": 0.54,
+          "start_time_formatted": "00:00.260",
+          "end_time_formatted": "00:00.540"
+        },
+        {
+          "word": " 1990s,",
+          "start_time": 0.54,
+          "end_time": 0.88,
+          "start_time_formatted": "00:00.540",
+          "end_time_formatted": "00:00.880"
+        },
+        {
+          "word": " over",
+          "start_time": 0.92,
+          "end_time": 0.92,
+          "start_time_formatted": "00:00.920",
+          "end_time_formatted": "00:00.920"
+        },
+        {
+          "word": " the",
+          "start_time": 0.92,
+          "end_time": 1.14,
+          "start_time_formatted": "00:00.920",
+          "end_time_formatted": "00:01.140"
+        },
+        {
+          "word": " last",
+          "start_time": 1.14,
+          "end_time": 1.18,
+          "start_time_formatted": "00:01.140",
+          "end_time_formatted": "00:01.180"
+        },
+        {
+          "word": " 10",
+          "start_time": 1.18,
+          "end_time": 1.5,
+          "start_time_formatted": "00:01.180",
+          "end_time_formatted": "00:01.500"
+        },
+        {
+          "word": " or",
+          "start_time": 1.5,
+          "end_time": 1.52,
+          "start_time_formatted": "00:01.500",
+          "end_time_formatted": "00:01.520"
+        },
+        {
+          "word": " 11",
+          "start_time": 1.52,
+          "end_time": 1.72,
+          "start_time_formatted": "00:01.520",
+          "end_time_formatted": "00:01.720"
+        },
+        {
+          "word": " years",
+          "start_time": 1.72,
+          "end_time": 2.02,
+          "start_time_formatted": "00:01.720",
+          "end_time_formatted": "00:02.020"
+        },
+        {
+          "word": " of",
+          "start_time": 2.02,
+          "end_time": 2.42,
+          "start_time_formatted": "00:02.020",
+          "end_time_formatted": "00:02.420"
+        },
+        {
+          "word": " sort",
+          "start_time": 2.42,
+          "end_time": 2.42,
+          "start_time_formatted": "00:02.420",
+          "end_time_formatted": "00:02.420"
+        },
+        {
+          "word": " of",
+          "start_time": 2.42,
+          "end_time": 2.62,
+          "start_time_formatted": "00:02.420",
+          "end_time_formatted": "00:02.620"
+        },
+        {
+          "word": " accepted",
+          "start_time": 2.62,
+          "end_time": 3.3,
+          "start_time_formatted": "00:02.620",
+          "end_time_formatted": "00:03.300"
+        },
+        {
+          "word": " a",
+          "start_time": 3.3,
+          "end_time": 4.0,
+          "start_time_formatted": "00:03.300",
+          "end_time_formatted": "00:04.000"
+        },
+        {
+          "word": " position",
+          "start_time": 4.0,
+          "end_time": 4.3,
+          "start_time_formatted": "00:04.000",
+          "end_time_formatted": "00:04.300"
+        },
+        {
+          "word": " whereby",
+          "start_time": 4.3,
+          "end_time": 4.64,
+          "start_time_formatted": "00:04.300",
+          "end_time_formatted": "00:04.640"
+        },
+        {
+          "word": " it",
+          "start_time": 4.64,
+          "end_time": 4.92,
+          "start_time_formatted": "00:04.640",
+          "end_time_formatted": "00:04.920"
+        }
+      ]
+    },
+    {
+      "segment_number": 2,
+      "start_time": 4.92,
+      "end_time": 8.26,
+      "start_time_formatted": "00:04.920",
+      "end_time_formatted": "00:08.260",
+      "duration_seconds": 3.34,
+      "text": "made mistakes in the transfer of the market or made mistakes in recruitment or they've",
+      "word_count": 15,
+      "word_timestamps": [
+        {
+          "word": " made",
+          "start_time": 4.92,
+          "end_time": 5.06,
+          "start_time_formatted": "00:04.920",
+          "end_time_formatted": "00:05.060"
+        },
+        {
+          "word": " mistakes",
+          "start_time": 5.06,
+          "end_time": 5.36,
+          "start_time_formatted": "00:05.060",
+          "end_time_formatted": "00:05.360"
+        },
+        {
+          "word": " in",
+          "start_time": 5.36,
+          "end_time": 5.62,
+          "start_time_formatted": "00:05.360",
+          "end_time_formatted": "00:05.620"
+        },
+        {
+          "word": " the",
+          "start_time": 5.62,
+          "end_time": 5.66,
+          "start_time_formatted": "00:05.620",
+          "end_time_formatted": "00:05.660"
+        },
+        {
+          "word": " transfer",
+          "start_time": 5.66,
+          "end_time": 6.02,
+          "start_time_formatted": "00:05.660",
+          "end_time_formatted": "00:06.020"
+        },
+        {
+          "word": " of",
+          "start_time": 6.02,
+          "end_time": 6.26,
+          "start_time_formatted": "00:06.020",
+          "end_time_formatted": "00:06.260"
+        },
+        {
+          "word": " the",
+          "start_time": 6.26,
+          "end_time": 6.52,
+          "start_time_formatted": "00:06.260",
+          "end_time_formatted": "00:06.520"
+        },
+        {
+          "word": " market",
+          "start_time": 6.52,
+          "end_time": 6.52,
+          "start_time_formatted": "00:06.520",
+          "end_time_formatted": "00:06.520"
+        },
+        {
+          "word": " or",
+          "start_time": 6.52,
+          "end_time": 6.76,
+          "start_time_formatted": "00:06.520",
+          "end_time_formatted": "00:06.760"
+        },
+        {
+          "word": " made",
+          "start_time": 6.76,
+          "end_time": 6.96,
+          "start_time_formatted": "00:06.760",
+          "end_time_formatted": "00:06.960"
+        },
+        {
+          "word": " mistakes",
+          "start_time": 6.96,
+          "end_time": 7.32,
+          "start_time_formatted": "00:06.960",
+          "end_time_formatted": "00:07.320"
+        },
+        {
+          "word": " in",
+          "start_time": 7.32,
+          "end_time": 7.52,
+          "start_time_formatted": "00:07.320",
+          "end_time_formatted": "00:07.520"
+        },
+        {
+          "word": " recruitment",
+          "start_time": 7.52,
+          "end_time": 7.78,
+          "start_time_formatted": "00:07.520",
+          "end_time_formatted": "00:07.780"
+        },
+        {
+          "word": " or",
+          "start_time": 7.78,
+          "end_time": 8.1,
+          "start_time_formatted": "00:07.780",
+          "end_time_formatted": "00:08.100"
+        },
+        {
+          "word": " they've",
+          "start_time": 8.1,
+          "end_time": 8.26,
+          "start_time_formatted": "00:08.100",
+          "end_time_formatted": "00:08.260"
+        }
+      ]
+    },
+    {
+      "segment_number": 3,
+      "start_time": 8.26,
+      "end_time": 12.56,
+      "start_time_formatted": "00:08.260",
+      "end_time_formatted": "00:12.560",
+      "duration_seconds": 4.300000000000001,
+      "text": "held on to players too long, it would seem that to be fair what's happening now is that",
+      "word_count": 18,
+      "word_timestamps": [
+        {
+          "word": " held",
+          "start_time": 8.26,
+          "end_time": 8.36,
+          "start_time_formatted": "00:08.260",
+          "end_time_formatted": "00:08.360"
+        },
+        {
+          "word": " on",
+          "start_time": 8.36,
+          "end_time": 8.6,
+          "start_time_formatted": "00:08.360",
+          "end_time_formatted": "00:08.600"
+        },
+        {
+          "word": " to",
+          "start_time": 8.6,
+          "end_time": 8.78,
+          "start_time_formatted": "00:08.600",
+          "end_time_formatted": "00:08.780"
+        },
+        {
+          "word": " players",
+          "start_time": 8.78,
+          "end_time": 8.94,
+          "start_time_formatted": "00:08.780",
+          "end_time_formatted": "00:08.940"
+        },
+        {
+          "word": " too",
+          "start_time": 8.94,
+          "end_time": 9.26,
+          "start_time_formatted": "00:08.940",
+          "end_time_formatted": "00:09.260"
+        },
+        {
+          "word": " long,",
+          "start_time": 9.26,
+          "end_time": 9.5,
+          "start_time_formatted": "00:09.260",
+          "end_time_formatted": "00:09.500"
+        },
+        {
+          "word": " it",
+          "start_time": 9.58,
+          "end_time": 9.62,
+          "start_time_formatted": "00:09.580",
+          "end_time_formatted": "00:09.620"
+        },
+        {
+          "word": " would",
+          "start_time": 9.62,
+          "end_time": 9.8,
+          "start_time_formatted": "00:09.620",
+          "end_time_formatted": "00:09.800"
+        },
+        {
+          "word": " seem",
+          "start_time": 9.8,
+          "end_time": 10.06,
+          "start_time_formatted": "00:09.800",
+          "end_time_formatted": "00:10.060"
+        },
+        {
+          "word": " that",
+          "start_time": 10.06,
+          "end_time": 10.22,
+          "start_time_formatted": "00:10.060",
+          "end_time_formatted": "00:10.220"
+        },
+        {
+          "word": " to",
+          "start_time": 10.22,
+          "end_time": 10.3,
+          "start_time_formatted": "00:10.220",
+          "end_time_formatted": "00:10.300"
+        },
+        {
+          "word": " be",
+          "start_time": 10.3,
+          "end_time": 10.48,
+          "start_time_formatted": "00:10.300",
+          "end_time_formatted": "00:10.480"
+        },
+        {
+          "word": " fair",
+          "start_time": 10.48,
+          "end_time": 11.12,
+          "start_time_formatted": "00:10.480",
+          "end_time_formatted": "00:11.120"
+        },
+        {
+          "word": " what's",
+          "start_time": 11.12,
+          "end_time": 11.64,
+          "start_time_formatted": "00:11.120",
+          "end_time_formatted": "00:11.640"
+        },
+        {
+          "word": " happening",
+          "start_time": 11.64,
+          "end_time": 11.88,
+          "start_time_formatted": "00:11.640",
+          "end_time_formatted": "00:11.880"
+        },
+        {
+          "word": " now",
+          "start_time": 11.88,
+          "end_time": 12.2,
+          "start_time_formatted": "00:11.880",
+          "end_time_formatted": "00:12.200"
+        },
+        {
+          "word": " is",
+          "start_time": 12.2,
+          "end_time": 12.42,
+          "start_time_formatted": "00:12.200",
+          "end_time_formatted": "00:12.420"
+        },
+        {
+          "word": " that",
+          "start_time": 12.42,
+          "end_time": 12.56,
+          "start_time_formatted": "00:12.420",
+          "end_time_formatted": "00:12.560"
+        }
+      ]
+    },
+    {
+      "segment_number": 4,
+      "start_time": 12.56,
+      "end_time": 16.72,
+      "start_time_formatted": "00:12.560",
+      "end_time_formatted": "00:16.720",
+      "duration_seconds": 4.159999999999998,
+      "text": "urban armour is identifying players. He's just not one in the squad and to be fair, he's",
+      "word_count": 17,
+      "word_timestamps": [
+        {
+          "word": " urban",
+          "start_time": 12.56,
+          "end_time": 12.74,
+          "start_time_formatted": "00:12.560",
+          "end_time_formatted": "00:12.740"
+        },
+        {
+          "word": " armour",
+          "start_time": 12.74,
+          "end_time": 13.0,
+          "start_time_formatted": "00:12.740",
+          "end_time_formatted": "00:13.000"
+        },
+        {
+          "word": " is",
+          "start_time": 13.0,
+          "end_time": 13.22,
+          "start_time_formatted": "00:13.000",
+          "end_time_formatted": "00:13.220"
+        },
+        {
+          "word": " identifying",
+          "start_time": 13.22,
+          "end_time": 13.8,
+          "start_time_formatted": "00:13.220",
+          "end_time_formatted": "00:13.800"
+        },
+        {
+          "word": " players.",
+          "start_time": 13.8,
+          "end_time": 14.28,
+          "start_time_formatted": "00:13.800",
+          "end_time_formatted": "00:14.280"
+        },
+        {
+          "word": " He's",
+          "start_time": 14.5,
+          "end_time": 14.6,
+          "start_time_formatted": "00:14.500",
+          "end_time_formatted": "00:14.600"
+        },
+        {
+          "word": " just",
+          "start_time": 14.6,
+          "end_time": 14.72,
+          "start_time_formatted": "00:14.600",
+          "end_time_formatted": "00:14.720"
+        },
+        {
+          "word": " not",
+          "start_time": 14.72,
+          "end_time": 14.98,
+          "start_time_formatted": "00:14.720",
+          "end_time_formatted": "00:14.980"
+        },
+        {
+          "word": " one",
+          "start_time": 14.98,
+          "end_time": 15.2,
+          "start_time_formatted": "00:14.980",
+          "end_time_formatted": "00:15.200"
+        },
+        {
+          "word": " in",
+          "start_time": 15.2,
+          "end_time": 15.4,
+          "start_time_formatted": "00:15.200",
+          "end_time_formatted": "00:15.400"
+        },
+        {
+          "word": " the",
+          "start_time": 15.4,
+          "end_time": 15.54,
+          "start_time_formatted": "00:15.400",
+          "end_time_formatted": "00:15.540"
+        },
+        {
+          "word": " squad",
+          "start_time": 15.54,
+          "end_time": 15.84,
+          "start_time_formatted": "00:15.540",
+          "end_time_formatted": "00:15.840"
+        },
+        {
+          "word": " and",
+          "start_time": 15.84,
+          "end_time": 16.1,
+          "start_time_formatted": "00:15.840",
+          "end_time_formatted": "00:16.100"
+        },
+        {
+          "word": " to",
+          "start_time": 16.1,
+          "end_time": 16.18,
+          "start_time_formatted": "00:16.100",
+          "end_time_formatted": "00:16.180"
+        },
+        {
+          "word": " be",
+          "start_time": 16.18,
+          "end_time": 16.3,
+          "start_time_formatted": "00:16.180",
+          "end_time_formatted": "00:16.300"
+        },
+        {
+          "word": " fair,",
+          "start_time": 16.3,
+          "end_time": 16.52,
+          "start_time_formatted": "00:16.300",
+          "end_time_formatted": "00:16.520"
+        },
+        {
+          "word": " he's",
+          "start_time": 16.52,
+          "end_time": 16.72,
+          "start_time_formatted": "00:16.520",
+          "end_time_formatted": "00:16.720"
+        }
+      ]
+    },
+    {
+      "segment_number": 5,
+      "start_time": 16.72,
+      "end_time": 22.62,
+      "start_time_formatted": "00:16.720",
+      "end_time_formatted": "00:22.620",
+      "duration_seconds": 5.900000000000002,
+      "text": "moving them out of the squad. That's a positive. The second thing is I do like on paper, the",
+      "word_count": 19,
+      "word_timestamps": [
+        {
+          "word": " moving",
+          "start_time": 16.72,
+          "end_time": 16.92,
+          "start_time_formatted": "00:16.720",
+          "end_time_formatted": "00:16.920"
+        },
+        {
+          "word": " them",
+          "start_time": 16.92,
+          "end_time": 17.18,
+          "start_time_formatted": "00:16.920",
+          "end_time_formatted": "00:17.180"
+        },
+        {
+          "word": " out",
+          "start_time": 17.18,
+          "end_time": 17.28,
+          "start_time_formatted": "00:17.180",
+          "end_time_formatted": "00:17.280"
+        },
+        {
+          "word": " of",
+          "start_time": 17.28,
+          "end_time": 17.46,
+          "start_time_formatted": "00:17.280",
+          "end_time_formatted": "00:17.460"
+        },
+        {
+          "word": " the",
+          "start_time": 17.46,
+          "end_time": 17.54,
+          "start_time_formatted": "00:17.460",
+          "end_time_formatted": "00:17.540"
+        },
+        {
+          "word": " squad.",
+          "start_time": 17.54,
+          "end_time": 17.78,
+          "start_time_formatted": "00:17.540",
+          "end_time_formatted": "00:17.780"
+        },
+        {
+          "word": " That's",
+          "start_time": 18.0,
+          "end_time": 18.4,
+          "start_time_formatted": "00:18.000",
+          "end_time_formatted": "00:18.400"
+        },
+        {
+          "word": " a",
+          "start_time": 18.4,
+          "end_time": 18.46,
+          "start_time_formatted": "00:18.400",
+          "end_time_formatted": "00:18.460"
+        },
+        {
+          "word": " positive.",
+          "start_time": 18.46,
+          "end_time": 18.8,
+          "start_time_formatted": "00:18.460",
+          "end_time_formatted": "00:18.800"
+        },
+        {
+          "word": " The",
+          "start_time": 19.44,
+          "end_time": 19.64,
+          "start_time_formatted": "00:19.440",
+          "end_time_formatted": "00:19.640"
+        },
+        {
+          "word": " second",
+          "start_time": 19.64,
+          "end_time": 19.94,
+          "start_time_formatted": "00:19.640",
+          "end_time_formatted": "00:19.940"
+        },
+        {
+          "word": " thing",
+          "start_time": 19.94,
+          "end_time": 20.16,
+          "start_time_formatted": "00:19.940",
+          "end_time_formatted": "00:20.160"
+        },
+        {
+          "word": " is",
+          "start_time": 20.16,
+          "end_time": 20.34,
+          "start_time_formatted": "00:20.160",
+          "end_time_formatted": "00:20.340"
+        },
+        {
+          "word": " I",
+          "start_time": 20.34,
+          "end_time": 20.44,
+          "start_time_formatted": "00:20.340",
+          "end_time_formatted": "00:20.440"
+        },
+        {
+          "word": " do",
+          "start_time": 20.44,
+          "end_time": 20.72,
+          "start_time_formatted": "00:20.440",
+          "end_time_formatted": "00:20.720"
+        },
+        {
+          "word": " like",
+          "start_time": 20.72,
+          "end_time": 21.1,
+          "start_time_formatted": "00:20.720",
+          "end_time_formatted": "00:21.100"
+        },
+        {
+          "word": " on",
+          "start_time": 21.1,
+          "end_time": 21.52,
+          "start_time_formatted": "00:21.100",
+          "end_time_formatted": "00:21.520"
+        },
+        {
+          "word": " paper,",
+          "start_time": 21.52,
+          "end_time": 22.12,
+          "start_time_formatted": "00:21.520",
+          "end_time_formatted": "00:22.120"
+        },
+        {
+          "word": " the",
+          "start_time": 22.42,
+          "end_time": 22.62,
+          "start_time_formatted": "00:22.420",
+          "end_time_formatted": "00:22.620"
+        }
+      ]
+    },
+    {
+      "segment_number": 6,
+      "start_time": 22.62,
+      "end_time": 28.82,
+      "start_time_formatted": "00:22.620",
+      "end_time_formatted": "00:28.820",
+      "duration_seconds": 6.199999999999999,
+      "text": "signings of Cunia and Burmob. Why do I like them? A couple of reasons. Well, three actually,",
+      "word_count": 17,
+      "word_timestamps": [
+        {
+          "word": " signings",
+          "start_time": 22.62,
+          "end_time": 23.06,
+          "start_time_formatted": "00:22.620",
+          "end_time_formatted": "00:23.060"
+        },
+        {
+          "word": " of",
+          "start_time": 23.06,
+          "end_time": 23.2,
+          "start_time_formatted": "00:23.060",
+          "end_time_formatted": "00:23.200"
+        },
+        {
+          "word": " Cunia",
+          "start_time": 23.2,
+          "end_time": 23.6,
+          "start_time_formatted": "00:23.200",
+          "end_time_formatted": "00:23.600"
+        },
+        {
+          "word": " and",
+          "start_time": 23.6,
+          "end_time": 24.16,
+          "start_time_formatted": "00:23.600",
+          "end_time_formatted": "00:24.160"
+        },
+        {
+          "word": " Burmob.",
+          "start_time": 24.16,
+          "end_time": 24.92,
+          "start_time_formatted": "00:24.160",
+          "end_time_formatted": "00:24.920"
+        },
+        {
+          "word": " Why",
+          "start_time": 25.26,
+          "end_time": 25.4,
+          "start_time_formatted": "00:25.260",
+          "end_time_formatted": "00:25.400"
+        },
+        {
+          "word": " do",
+          "start_time": 25.4,
+          "end_time": 25.58,
+          "start_time_formatted": "00:25.400",
+          "end_time_formatted": "00:25.580"
+        },
+        {
+          "word": " I",
+          "start_time": 25.58,
+          "end_time": 25.58,
+          "start_time_formatted": "00:25.580",
+          "end_time_formatted": "00:25.580"
+        },
+        {
+          "word": " like",
+          "start_time": 25.58,
+          "end_time": 25.84,
+          "start_time_formatted": "00:25.580",
+          "end_time_formatted": "00:25.840"
+        },
+        {
+          "word": " them?",
+          "start_time": 25.84,
+          "end_time": 26.7,
+          "start_time_formatted": "00:25.840",
+          "end_time_formatted": "00:26.700"
+        },
+        {
+          "word": " A",
+          "start_time": 26.7,
+          "end_time": 26.84,
+          "start_time_formatted": "00:26.700",
+          "end_time_formatted": "00:26.840"
+        },
+        {
+          "word": " couple",
+          "start_time": 26.84,
+          "end_time": 27.0,
+          "start_time_formatted": "00:26.840",
+          "end_time_formatted": "00:27.000"
+        },
+        {
+          "word": " of",
+          "start_time": 27.0,
+          "end_time": 27.24,
+          "start_time_formatted": "00:27.000",
+          "end_time_formatted": "00:27.240"
+        },
+        {
+          "word": " reasons.",
+          "start_time": 27.24,
+          "end_time": 27.5,
+          "start_time_formatted": "00:27.240",
+          "end_time_formatted": "00:27.500"
+        },
+        {
+          "word": " Well,",
+          "start_time": 28.18,
+          "end_time": 28.24,
+          "start_time_formatted": "00:28.180",
+          "end_time_formatted": "00:28.240"
+        },
+        {
+          "word": " three",
+          "start_time": 28.46,
+          "end_time": 28.52,
+          "start_time_formatted": "00:28.460",
+          "end_time_formatted": "00:28.520"
+        },
+        {
+          "word": " actually,",
+          "start_time": 28.52,
+          "end_time": 28.82,
+          "start_time_formatted": "00:28.520",
+          "end_time_formatted": "00:28.820"
+        }
+      ]
+    },
+    {
+      "segment_number": 7,
+      "start_time": 28.82,
+      "end_time": 32.98,
+      "start_time_formatted": "00:28.820",
+      "end_time_formatted": "00:32.980",
+      "duration_seconds": 4.159999999999997,
+      "text": "one is that they've got Premier League experience. One is that they look more like Man's",
+      "word_count": 16,
+      "word_timestamps": [
+        {
+          "word": " one",
+          "start_time": 28.82,
+          "end_time": 29.0,
+          "start_time_formatted": "00:28.820",
+          "end_time_formatted": "00:29.000"
+        },
+        {
+          "word": " is",
+          "start_time": 29.0,
+          "end_time": 29.18,
+          "start_time_formatted": "00:29.000",
+          "end_time_formatted": "00:29.180"
+        },
+        {
+          "word": " that",
+          "start_time": 29.18,
+          "end_time": 29.28,
+          "start_time_formatted": "00:29.180",
+          "end_time_formatted": "00:29.280"
+        },
+        {
+          "word": " they've",
+          "start_time": 29.28,
+          "end_time": 29.44,
+          "start_time_formatted": "00:29.280",
+          "end_time_formatted": "00:29.440"
+        },
+        {
+          "word": " got",
+          "start_time": 29.44,
+          "end_time": 29.5,
+          "start_time_formatted": "00:29.440",
+          "end_time_formatted": "00:29.500"
+        },
+        {
+          "word": " Premier",
+          "start_time": 29.5,
+          "end_time": 29.72,
+          "start_time_formatted": "00:29.500",
+          "end_time_formatted": "00:29.720"
+        },
+        {
+          "word": " League",
+          "start_time": 29.72,
+          "end_time": 30.0,
+          "start_time_formatted": "00:29.720",
+          "end_time_formatted": "00:30.000"
+        },
+        {
+          "word": " experience.",
+          "start_time": 30.0,
+          "end_time": 30.72,
+          "start_time_formatted": "00:30.000",
+          "end_time_formatted": "00:30.720"
+        },
+        {
+          "word": " One",
+          "start_time": 31.36,
+          "end_time": 31.36,
+          "start_time_formatted": "00:31.360",
+          "end_time_formatted": "00:31.360"
+        },
+        {
+          "word": " is",
+          "start_time": 31.36,
+          "end_time": 31.48,
+          "start_time_formatted": "00:31.360",
+          "end_time_formatted": "00:31.480"
+        },
+        {
+          "word": " that",
+          "start_time": 31.48,
+          "end_time": 31.74,
+          "start_time_formatted": "00:31.480",
+          "end_time_formatted": "00:31.740"
+        },
+        {
+          "word": " they",
+          "start_time": 31.74,
+          "end_time": 31.96,
+          "start_time_formatted": "00:31.740",
+          "end_time_formatted": "00:31.960"
+        },
+        {
+          "word": " look",
+          "start_time": 31.96,
+          "end_time": 32.18,
+          "start_time_formatted": "00:31.960",
+          "end_time_formatted": "00:32.180"
+        },
+        {
+          "word": " more",
+          "start_time": 32.18,
+          "end_time": 32.5,
+          "start_time_formatted": "00:32.180",
+          "end_time_formatted": "00:32.500"
+        },
+        {
+          "word": " like",
+          "start_time": 32.5,
+          "end_time": 32.68,
+          "start_time_formatted": "00:32.500",
+          "end_time_formatted": "00:32.680"
+        },
+        {
+          "word": " Man's",
+          "start_time": 32.68,
+          "end_time": 32.98,
+          "start_time_formatted": "00:32.680",
+          "end_time_formatted": "00:32.980"
+        }
+      ]
+    },
+    {
+      "segment_number": 8,
+      "start_time": 32.98,
+      "end_time": 37.28,
+      "start_time_formatted": "00:32.980",
+      "end_time_formatted": "00:37.280",
+      "duration_seconds": 4.300000000000004,
+      "text": "U90 styles of players, with a more pace and power and the ability to have that sort of",
+      "word_count": 18,
+      "word_timestamps": [
+        {
+          "word": " U90",
+          "start_time": 32.98,
+          "end_time": 33.44,
+          "start_time_formatted": "00:32.980",
+          "end_time_formatted": "00:33.440"
+        },
+        {
+          "word": " styles",
+          "start_time": 33.44,
+          "end_time": 33.9,
+          "start_time_formatted": "00:33.440",
+          "end_time_formatted": "00:33.900"
+        },
+        {
+          "word": " of",
+          "start_time": 33.9,
+          "end_time": 34.14,
+          "start_time_formatted": "00:33.900",
+          "end_time_formatted": "00:34.140"
+        },
+        {
+          "word": " players,",
+          "start_time": 34.14,
+          "end_time": 34.42,
+          "start_time_formatted": "00:34.140",
+          "end_time_formatted": "00:34.420"
+        },
+        {
+          "word": " with",
+          "start_time": 34.58,
+          "end_time": 34.58,
+          "start_time_formatted": "00:34.580",
+          "end_time_formatted": "00:34.580"
+        },
+        {
+          "word": " a",
+          "start_time": 34.58,
+          "end_time": 34.76,
+          "start_time_formatted": "00:34.580",
+          "end_time_formatted": "00:34.760"
+        },
+        {
+          "word": " more",
+          "start_time": 34.76,
+          "end_time": 34.98,
+          "start_time_formatted": "00:34.760",
+          "end_time_formatted": "00:34.980"
+        },
+        {
+          "word": " pace",
+          "start_time": 34.98,
+          "end_time": 35.26,
+          "start_time_formatted": "00:34.980",
+          "end_time_formatted": "00:35.260"
+        },
+        {
+          "word": " and",
+          "start_time": 35.26,
+          "end_time": 35.48,
+          "start_time_formatted": "00:35.260",
+          "end_time_formatted": "00:35.480"
+        },
+        {
+          "word": " power",
+          "start_time": 35.48,
+          "end_time": 35.8,
+          "start_time_formatted": "00:35.480",
+          "end_time_formatted": "00:35.800"
+        },
+        {
+          "word": " and",
+          "start_time": 35.8,
+          "end_time": 35.9,
+          "start_time_formatted": "00:35.800",
+          "end_time_formatted": "00:35.900"
+        },
+        {
+          "word": " the",
+          "start_time": 35.9,
+          "end_time": 36.0,
+          "start_time_formatted": "00:35.900",
+          "end_time_formatted": "00:36.000"
+        },
+        {
+          "word": " ability",
+          "start_time": 36.0,
+          "end_time": 36.26,
+          "start_time_formatted": "00:36.000",
+          "end_time_formatted": "00:36.260"
+        },
+        {
+          "word": " to",
+          "start_time": 36.26,
+          "end_time": 36.5,
+          "start_time_formatted": "00:36.260",
+          "end_time_formatted": "00:36.500"
+        },
+        {
+          "word": " have",
+          "start_time": 36.5,
+          "end_time": 36.64,
+          "start_time_formatted": "00:36.500",
+          "end_time_formatted": "00:36.640"
+        },
+        {
+          "word": " that",
+          "start_time": 36.64,
+          "end_time": 36.94,
+          "start_time_formatted": "00:36.640",
+          "end_time_formatted": "00:36.940"
+        },
+        {
+          "word": " sort",
+          "start_time": 36.94,
+          "end_time": 37.06,
+          "start_time_formatted": "00:36.940",
+          "end_time_formatted": "00:37.060"
+        },
+        {
+          "word": " of",
+          "start_time": 37.06,
+          "end_time": 37.28,
+          "start_time_formatted": "00:37.060",
+          "end_time_formatted": "00:37.280"
+        }
+      ]
+    },
+    {
+      "segment_number": 9,
+      "start_time": 38.08,
+      "end_time": 41.52,
+      "start_time_formatted": "00:38.080",
+      "end_time_formatted": "00:41.520",
+      "duration_seconds": 3.440000000000005,
+      "text": "physicality to be able to get from box to box quickly. I think when you look at particularly",
+      "word_count": 18,
+      "word_timestamps": [
+        {
+          "word": " physicality",
+          "start_time": 38.08,
+          "end_time": 38.52,
+          "start_time_formatted": "00:38.080",
+          "end_time_formatted": "00:38.520"
+        },
+        {
+          "word": " to",
+          "start_time": 38.52,
+          "end_time": 38.72,
+          "start_time_formatted": "00:38.520",
+          "end_time_formatted": "00:38.720"
+        },
+        {
+          "word": " be",
+          "start_time": 38.72,
+          "end_time": 38.72,
+          "start_time_formatted": "00:38.720",
+          "end_time_formatted": "00:38.720"
+        },
+        {
+          "word": " able",
+          "start_time": 38.72,
+          "end_time": 38.92,
+          "start_time_formatted": "00:38.720",
+          "end_time_formatted": "00:38.920"
+        },
+        {
+          "word": " to",
+          "start_time": 38.92,
+          "end_time": 38.94,
+          "start_time_formatted": "00:38.920",
+          "end_time_formatted": "00:38.940"
+        },
+        {
+          "word": " get",
+          "start_time": 38.94,
+          "end_time": 39.12,
+          "start_time_formatted": "00:38.940",
+          "end_time_formatted": "00:39.120"
+        },
+        {
+          "word": " from",
+          "start_time": 39.12,
+          "end_time": 39.32,
+          "start_time_formatted": "00:39.120",
+          "end_time_formatted": "00:39.320"
+        },
+        {
+          "word": " box",
+          "start_time": 39.32,
+          "end_time": 39.6,
+          "start_time_formatted": "00:39.320",
+          "end_time_formatted": "00:39.600"
+        },
+        {
+          "word": " to",
+          "start_time": 39.6,
+          "end_time": 39.72,
+          "start_time_formatted": "00:39.600",
+          "end_time_formatted": "00:39.720"
+        },
+        {
+          "word": " box",
+          "start_time": 39.72,
+          "end_time": 39.96,
+          "start_time_formatted": "00:39.720",
+          "end_time_formatted": "00:39.960"
+        },
+        {
+          "word": " quickly.",
+          "start_time": 39.96,
+          "end_time": 40.32,
+          "start_time_formatted": "00:39.960",
+          "end_time_formatted": "00:40.320"
+        },
+        {
+          "word": " I",
+          "start_time": 40.42,
+          "end_time": 40.42,
+          "start_time_formatted": "00:40.420",
+          "end_time_formatted": "00:40.420"
+        },
+        {
+          "word": " think",
+          "start_time": 40.42,
+          "end_time": 40.56,
+          "start_time_formatted": "00:40.420",
+          "end_time_formatted": "00:40.560"
+        },
+        {
+          "word": " when",
+          "start_time": 40.56,
+          "end_time": 40.76,
+          "start_time_formatted": "00:40.560",
+          "end_time_formatted": "00:40.760"
+        },
+        {
+          "word": " you",
+          "start_time": 40.76,
+          "end_time": 40.84,
+          "start_time_formatted": "00:40.760",
+          "end_time_formatted": "00:40.840"
+        },
+        {
+          "word": " look",
+          "start_time": 40.84,
+          "end_time": 41.02,
+          "start_time_formatted": "00:40.840",
+          "end_time_formatted": "00:41.020"
+        },
+        {
+          "word": " at",
+          "start_time": 41.02,
+          "end_time": 41.32,
+          "start_time_formatted": "00:41.020",
+          "end_time_formatted": "00:41.320"
+        },
+        {
+          "word": " particularly",
+          "start_time": 41.32,
+          "end_time": 41.52,
+          "start_time_formatted": "00:41.320",
+          "end_time_formatted": "00:41.520"
+        }
+      ]
+    },
+    {
+      "segment_number": 10,
+      "start_time": 41.52,
+      "end_time": 46.68,
+      "start_time_formatted": "00:41.520",
+      "end_time_formatted": "00:46.680",
+      "duration_seconds": 5.159999999999997,
+      "text": "in that show, Sand Show, Anthony, they're marching because I call them more people who sort of",
+      "word_count": 17,
+      "word_timestamps": [
+        {
+          "word": " in",
+          "start_time": 41.52,
+          "end_time": 41.82,
+          "start_time_formatted": "00:41.520",
+          "end_time_formatted": "00:41.820"
+        },
+        {
+          "word": " that",
+          "start_time": 41.82,
+          "end_time": 41.98,
+          "start_time_formatted": "00:41.820",
+          "end_time_formatted": "00:41.980"
+        },
+        {
+          "word": " show,",
+          "start_time": 41.98,
+          "end_time": 42.98,
+          "start_time_formatted": "00:41.980",
+          "end_time_formatted": "00:42.980"
+        },
+        {
+          "word": " Sand",
+          "start_time": 42.98,
+          "end_time": 43.38,
+          "start_time_formatted": "00:42.980",
+          "end_time_formatted": "00:43.380"
+        },
+        {
+          "word": " Show,",
+          "start_time": 43.38,
+          "end_time": 43.72,
+          "start_time_formatted": "00:43.380",
+          "end_time_formatted": "00:43.720"
+        },
+        {
+          "word": " Anthony,",
+          "start_time": 44.02,
+          "end_time": 44.26,
+          "start_time_formatted": "00:44.020",
+          "end_time_formatted": "00:44.260"
+        },
+        {
+          "word": " they're",
+          "start_time": 44.4,
+          "end_time": 44.52,
+          "start_time_formatted": "00:44.400",
+          "end_time_formatted": "00:44.520"
+        },
+        {
+          "word": " marching",
+          "start_time": 44.52,
+          "end_time": 44.76,
+          "start_time_formatted": "00:44.520",
+          "end_time_formatted": "00:44.760"
+        },
+        {
+          "word": " because",
+          "start_time": 44.76,
+          "end_time": 45.12,
+          "start_time_formatted": "00:44.760",
+          "end_time_formatted": "00:45.120"
+        },
+        {
+          "word": " I",
+          "start_time": 45.12,
+          "end_time": 45.36,
+          "start_time_formatted": "00:45.120",
+          "end_time_formatted": "00:45.360"
+        },
+        {
+          "word": " call",
+          "start_time": 45.36,
+          "end_time": 45.5,
+          "start_time_formatted": "00:45.360",
+          "end_time_formatted": "00:45.500"
+        },
+        {
+          "word": " them",
+          "start_time": 45.5,
+          "end_time": 45.74,
+          "start_time_formatted": "00:45.500",
+          "end_time_formatted": "00:45.740"
+        },
+        {
+          "word": " more",
+          "start_time": 45.74,
+          "end_time": 45.98,
+          "start_time_formatted": "00:45.740",
+          "end_time_formatted": "00:45.980"
+        },
+        {
+          "word": " people",
+          "start_time": 45.98,
+          "end_time": 46.22,
+          "start_time_formatted": "00:45.980",
+          "end_time_formatted": "00:46.220"
+        },
+        {
+          "word": " who",
+          "start_time": 46.22,
+          "end_time": 46.4,
+          "start_time_formatted": "00:46.220",
+          "end_time_formatted": "00:46.400"
+        },
+        {
+          "word": " sort",
+          "start_time": 46.4,
+          "end_time": 46.58,
+          "start_time_formatted": "00:46.400",
+          "end_time_formatted": "00:46.580"
+        },
+        {
+          "word": " of",
+          "start_time": 46.58,
+          "end_time": 46.68,
+          "start_time_formatted": "00:46.580",
+          "end_time_formatted": "00:46.680"
+        }
+      ]
+    },
+    {
+      "segment_number": 11,
+      "start_time": 46.68,
+      "end_time": 51.24,
+      "start_time_formatted": "00:46.680",
+      "end_time_formatted": "00:51.240",
+      "duration_seconds": 4.560000000000002,
+      "text": "working tight spaces. I've always felt that in ITG need players that can open the legs up and",
+      "word_count": 18,
+      "word_timestamps": [
+        {
+          "word": " working",
+          "start_time": 46.68,
+          "end_time": 46.96,
+          "start_time_formatted": "00:46.680",
+          "end_time_formatted": "00:46.960"
+        },
+        {
+          "word": " tight",
+          "start_time": 46.96,
+          "end_time": 47.28,
+          "start_time_formatted": "00:46.960",
+          "end_time_formatted": "00:47.280"
+        },
+        {
+          "word": " spaces.",
+          "start_time": 47.28,
+          "end_time": 47.84,
+          "start_time_formatted": "00:47.280",
+          "end_time_formatted": "00:47.840"
+        },
+        {
+          "word": " I've",
+          "start_time": 48.2,
+          "end_time": 48.5,
+          "start_time_formatted": "00:48.200",
+          "end_time_formatted": "00:48.500"
+        },
+        {
+          "word": " always",
+          "start_time": 48.5,
+          "end_time": 48.66,
+          "start_time_formatted": "00:48.500",
+          "end_time_formatted": "00:48.660"
+        },
+        {
+          "word": " felt",
+          "start_time": 48.66,
+          "end_time": 48.92,
+          "start_time_formatted": "00:48.660",
+          "end_time_formatted": "00:48.920"
+        },
+        {
+          "word": " that",
+          "start_time": 48.92,
+          "end_time": 49.12,
+          "start_time_formatted": "00:48.920",
+          "end_time_formatted": "00:49.120"
+        },
+        {
+          "word": " in",
+          "start_time": 49.12,
+          "end_time": 49.2,
+          "start_time_formatted": "00:49.120",
+          "end_time_formatted": "00:49.200"
+        },
+        {
+          "word": " ITG",
+          "start_time": 49.2,
+          "end_time": 49.6,
+          "start_time_formatted": "00:49.200",
+          "end_time_formatted": "00:49.600"
+        },
+        {
+          "word": " need",
+          "start_time": 49.6,
+          "end_time": 49.84,
+          "start_time_formatted": "00:49.600",
+          "end_time_formatted": "00:49.840"
+        },
+        {
+          "word": " players",
+          "start_time": 49.84,
+          "end_time": 49.98,
+          "start_time_formatted": "00:49.840",
+          "end_time_formatted": "00:49.980"
+        },
+        {
+          "word": " that",
+          "start_time": 49.98,
+          "end_time": 50.14,
+          "start_time_formatted": "00:49.980",
+          "end_time_formatted": "00:50.140"
+        },
+        {
+          "word": " can",
+          "start_time": 50.14,
+          "end_time": 50.3,
+          "start_time_formatted": "00:50.140",
+          "end_time_formatted": "00:50.300"
+        },
+        {
+          "word": " open",
+          "start_time": 50.3,
+          "end_time": 50.52,
+          "start_time_formatted": "00:50.300",
+          "end_time_formatted": "00:50.520"
+        },
+        {
+          "word": " the",
+          "start_time": 50.52,
+          "end_time": 50.74,
+          "start_time_formatted": "00:50.520",
+          "end_time_formatted": "00:50.740"
+        },
+        {
+          "word": " legs",
+          "start_time": 50.74,
+          "end_time": 50.88,
+          "start_time_formatted": "00:50.740",
+          "end_time_formatted": "00:50.880"
+        },
+        {
+          "word": " up",
+          "start_time": 50.88,
+          "end_time": 51.08,
+          "start_time_formatted": "00:50.880",
+          "end_time_formatted": "00:51.080"
+        },
+        {
+          "word": " and",
+          "start_time": 51.08,
+          "end_time": 51.24,
+          "start_time_formatted": "00:51.080",
+          "end_time_formatted": "00:51.240"
+        }
+      ]
+    },
+    {
+      "segment_number": 12,
+      "start_time": 51.24,
+      "end_time": 56.34,
+      "start_time_formatted": "00:51.240",
+      "end_time_formatted": "00:56.340",
+      "duration_seconds": 5.100000000000001,
+      "text": "really sort of stretch teams. I think Cunia and Burmob do that. And then the other thing I like about",
+      "word_count": 20,
+      "word_timestamps": [
+        {
+          "word": " really",
+          "start_time": 51.24,
+          "end_time": 51.44,
+          "start_time_formatted": "00:51.240",
+          "end_time_formatted": "00:51.440"
+        },
+        {
+          "word": " sort",
+          "start_time": 51.44,
+          "end_time": 51.64,
+          "start_time_formatted": "00:51.440",
+          "end_time_formatted": "00:51.640"
+        },
+        {
+          "word": " of",
+          "start_time": 51.64,
+          "end_time": 51.82,
+          "start_time_formatted": "00:51.640",
+          "end_time_formatted": "00:51.820"
+        },
+        {
+          "word": " stretch",
+          "start_time": 51.82,
+          "end_time": 52.08,
+          "start_time_formatted": "00:51.820",
+          "end_time_formatted": "00:52.080"
+        },
+        {
+          "word": " teams.",
+          "start_time": 52.08,
+          "end_time": 52.36,
+          "start_time_formatted": "00:52.080",
+          "end_time_formatted": "00:52.360"
+        },
+        {
+          "word": " I",
+          "start_time": 52.4,
+          "end_time": 52.52,
+          "start_time_formatted": "00:52.400",
+          "end_time_formatted": "00:52.520"
+        },
+        {
+          "word": " think",
+          "start_time": 52.52,
+          "end_time": 52.72,
+          "start_time_formatted": "00:52.520",
+          "end_time_formatted": "00:52.720"
+        },
+        {
+          "word": " Cunia",
+          "start_time": 52.72,
+          "end_time": 53.08,
+          "start_time_formatted": "00:52.720",
+          "end_time_formatted": "00:53.080"
+        },
+        {
+          "word": " and",
+          "start_time": 53.08,
+          "end_time": 53.82,
+          "start_time_formatted": "00:53.080",
+          "end_time_formatted": "00:53.820"
+        },
+        {
+          "word": " Burmob",
+          "start_time": 53.82,
+          "end_time": 54.28,
+          "start_time_formatted": "00:53.820",
+          "end_time_formatted": "00:54.280"
+        },
+        {
+          "word": " do",
+          "start_time": 54.28,
+          "end_time": 54.5,
+          "start_time_formatted": "00:54.280",
+          "end_time_formatted": "00:54.500"
+        },
+        {
+          "word": " that.",
+          "start_time": 54.5,
+          "end_time": 54.9,
+          "start_time_formatted": "00:54.500",
+          "end_time_formatted": "00:54.900"
+        },
+        {
+          "word": " And",
+          "start_time": 55.3,
+          "end_time": 55.36,
+          "start_time_formatted": "00:55.300",
+          "end_time_formatted": "00:55.360"
+        },
+        {
+          "word": " then",
+          "start_time": 55.36,
+          "end_time": 55.48,
+          "start_time_formatted": "00:55.360",
+          "end_time_formatted": "00:55.480"
+        },
+        {
+          "word": " the",
+          "start_time": 55.48,
+          "end_time": 55.48,
+          "start_time_formatted": "00:55.480",
+          "end_time_formatted": "00:55.480"
+        },
+        {
+          "word": " other",
+          "start_time": 55.48,
+          "end_time": 55.62,
+          "start_time_formatted": "00:55.480",
+          "end_time_formatted": "00:55.620"
+        },
+        {
+          "word": " thing",
+          "start_time": 55.62,
+          "end_time": 55.74,
+          "start_time_formatted": "00:55.620",
+          "end_time_formatted": "00:55.740"
+        },
+        {
+          "word": " I",
+          "start_time": 55.74,
+          "end_time": 55.9,
+          "start_time_formatted": "00:55.740",
+          "end_time_formatted": "00:55.900"
+        },
+        {
+          "word": " like",
+          "start_time": 55.9,
+          "end_time": 56.1,
+          "start_time_formatted": "00:55.900",
+          "end_time_formatted": "00:56.100"
+        },
+        {
+          "word": " about",
+          "start_time": 56.1,
+          "end_time": 56.34,
+          "start_time_formatted": "00:56.100",
+          "end_time_formatted": "00:56.340"
+        }
+      ]
+    },
+    {
+      "segment_number": 13,
+      "start_time": 56.34,
+      "end_time": 60.62,
+      "start_time_formatted": "00:56.340",
+      "end_time_formatted": "01:00.620",
+      "duration_seconds": 4.279999999999994,
+      "text": "those two signings is that they've not proved themselves at the highest level yet in the",
+      "word_count": 16,
+      "word_timestamps": [
+        {
+          "word": " those",
+          "start_time": 56.34,
+          "end_time": 56.62,
+          "start_time_formatted": "00:56.340",
+          "end_time_formatted": "00:56.620"
+        },
+        {
+          "word": " two",
+          "start_time": 56.62,
+          "end_time": 56.84,
+          "start_time_formatted": "00:56.620",
+          "end_time_formatted": "00:56.840"
+        },
+        {
+          "word": " signings",
+          "start_time": 56.84,
+          "end_time": 57.38,
+          "start_time_formatted": "00:56.840",
+          "end_time_formatted": "00:57.380"
+        },
+        {
+          "word": " is",
+          "start_time": 57.38,
+          "end_time": 57.64,
+          "start_time_formatted": "00:57.380",
+          "end_time_formatted": "00:57.640"
+        },
+        {
+          "word": " that",
+          "start_time": 57.64,
+          "end_time": 57.74,
+          "start_time_formatted": "00:57.640",
+          "end_time_formatted": "00:57.740"
+        },
+        {
+          "word": " they've",
+          "start_time": 57.74,
+          "end_time": 58.06,
+          "start_time_formatted": "00:57.740",
+          "end_time_formatted": "00:58.060"
+        },
+        {
+          "word": " not",
+          "start_time": 58.06,
+          "end_time": 58.4,
+          "start_time_formatted": "00:58.060",
+          "end_time_formatted": "00:58.400"
+        },
+        {
+          "word": " proved",
+          "start_time": 58.4,
+          "end_time": 58.62,
+          "start_time_formatted": "00:58.400",
+          "end_time_formatted": "00:58.620"
+        },
+        {
+          "word": " themselves",
+          "start_time": 58.62,
+          "end_time": 59.12,
+          "start_time_formatted": "00:58.620",
+          "end_time_formatted": "00:59.120"
+        },
+        {
+          "word": " at",
+          "start_time": 59.12,
+          "end_time": 59.38,
+          "start_time_formatted": "00:59.120",
+          "end_time_formatted": "00:59.380"
+        },
+        {
+          "word": " the",
+          "start_time": 59.38,
+          "end_time": 59.46,
+          "start_time_formatted": "00:59.380",
+          "end_time_formatted": "00:59.460"
+        },
+        {
+          "word": " highest",
+          "start_time": 59.46,
+          "end_time": 59.74,
+          "start_time_formatted": "00:59.460",
+          "end_time_formatted": "00:59.740"
+        },
+        {
+          "word": " level",
+          "start_time": 59.74,
+          "end_time": 60.06,
+          "start_time_formatted": "00:59.740",
+          "end_time_formatted": "01:00.060"
+        },
+        {
+          "word": " yet",
+          "start_time": 60.06,
+          "end_time": 60.36,
+          "start_time_formatted": "01:00.060",
+          "end_time_formatted": "01:00.360"
+        },
+        {
+          "word": " in",
+          "start_time": 60.36,
+          "end_time": 60.44,
+          "start_time_formatted": "01:00.360",
+          "end_time_formatted": "01:00.440"
+        },
+        {
+          "word": " the",
+          "start_time": 60.44,
+          "end_time": 60.62,
+          "start_time_formatted": "01:00.440",
+          "end_time_formatted": "01:00.620"
+        }
+      ]
+    },
+    {
+      "segment_number": 14,
+      "start_time": 60.62,
+      "end_time": 65.92,
+      "start_time_formatted": "01:00.620",
+      "end_time_formatted": "01:05.920",
+      "duration_seconds": 5.300000000000004,
+      "text": "game in respect to the Premier League club level or European club level. So they should be",
+      "word_count": 17,
+      "word_timestamps": [
+        {
+          "word": " game",
+          "start_time": 60.62,
+          "end_time": 60.82,
+          "start_time_formatted": "01:00.620",
+          "end_time_formatted": "01:00.820"
+        },
+        {
+          "word": " in",
+          "start_time": 60.82,
+          "end_time": 60.94,
+          "start_time_formatted": "01:00.820",
+          "end_time_formatted": "01:00.940"
+        },
+        {
+          "word": " respect",
+          "start_time": 60.94,
+          "end_time": 61.18,
+          "start_time_formatted": "01:00.940",
+          "end_time_formatted": "01:01.180"
+        },
+        {
+          "word": " to",
+          "start_time": 61.18,
+          "end_time": 61.38,
+          "start_time_formatted": "01:01.180",
+          "end_time_formatted": "01:01.380"
+        },
+        {
+          "word": " the",
+          "start_time": 61.38,
+          "end_time": 61.52,
+          "start_time_formatted": "01:01.380",
+          "end_time_formatted": "01:01.520"
+        },
+        {
+          "word": " Premier",
+          "start_time": 61.52,
+          "end_time": 61.8,
+          "start_time_formatted": "01:01.520",
+          "end_time_formatted": "01:01.800"
+        },
+        {
+          "word": " League",
+          "start_time": 61.8,
+          "end_time": 62.1,
+          "start_time_formatted": "01:01.800",
+          "end_time_formatted": "01:02.100"
+        },
+        {
+          "word": " club",
+          "start_time": 62.1,
+          "end_time": 62.3,
+          "start_time_formatted": "01:02.100",
+          "end_time_formatted": "01:02.300"
+        },
+        {
+          "word": " level",
+          "start_time": 62.3,
+          "end_time": 62.58,
+          "start_time_formatted": "01:02.300",
+          "end_time_formatted": "01:02.580"
+        },
+        {
+          "word": " or",
+          "start_time": 62.58,
+          "end_time": 63.92,
+          "start_time_formatted": "01:02.580",
+          "end_time_formatted": "01:03.920"
+        },
+        {
+          "word": " European",
+          "start_time": 63.92,
+          "end_time": 64.24,
+          "start_time_formatted": "01:03.920",
+          "end_time_formatted": "01:04.240"
+        },
+        {
+          "word": " club",
+          "start_time": 64.24,
+          "end_time": 64.7,
+          "start_time_formatted": "01:04.240",
+          "end_time_formatted": "01:04.700"
+        },
+        {
+          "word": " level.",
+          "start_time": 64.7,
+          "end_time": 65.02,
+          "start_time_formatted": "01:04.700",
+          "end_time_formatted": "01:05.020"
+        },
+        {
+          "word": " So",
+          "start_time": 65.18,
+          "end_time": 65.24,
+          "start_time_formatted": "01:05.180",
+          "end_time_formatted": "01:05.240"
+        },
+        {
+          "word": " they",
+          "start_time": 65.24,
+          "end_time": 65.42,
+          "start_time_formatted": "01:05.240",
+          "end_time_formatted": "01:05.420"
+        },
+        {
+          "word": " should",
+          "start_time": 65.42,
+          "end_time": 65.6,
+          "start_time_formatted": "01:05.420",
+          "end_time_formatted": "01:05.600"
+        },
+        {
+          "word": " be",
+          "start_time": 65.6,
+          "end_time": 65.92,
+          "start_time_formatted": "01:05.600",
+          "end_time_formatted": "01:05.920"
+        }
+      ]
+    },
+    {
+      "segment_number": 15,
+      "start_time": 65.92,
+      "end_time": 71.34,
+      "start_time_formatted": "01:05.920",
+      "end_time_formatted": "01:11.340",
+      "duration_seconds": 5.420000000000002,
+      "text": "really desperate and hungry to prove themselves on a huge stage, which is all trafficked. And",
+      "word_count": 16,
+      "word_timestamps": [
+        {
+          "word": " really",
+          "start_time": 65.92,
+          "end_time": 66.28,
+          "start_time_formatted": "01:05.920",
+          "end_time_formatted": "01:06.280"
+        },
+        {
+          "word": " desperate",
+          "start_time": 66.28,
+          "end_time": 66.94,
+          "start_time_formatted": "01:06.280",
+          "end_time_formatted": "01:06.940"
+        },
+        {
+          "word": " and",
+          "start_time": 66.94,
+          "end_time": 67.26,
+          "start_time_formatted": "01:06.940",
+          "end_time_formatted": "01:07.260"
+        },
+        {
+          "word": " hungry",
+          "start_time": 67.26,
+          "end_time": 67.64,
+          "start_time_formatted": "01:07.260",
+          "end_time_formatted": "01:07.640"
+        },
+        {
+          "word": " to",
+          "start_time": 67.64,
+          "end_time": 68.18,
+          "start_time_formatted": "01:07.640",
+          "end_time_formatted": "01:08.180"
+        },
+        {
+          "word": " prove",
+          "start_time": 68.18,
+          "end_time": 68.42,
+          "start_time_formatted": "01:08.180",
+          "end_time_formatted": "01:08.420"
+        },
+        {
+          "word": " themselves",
+          "start_time": 68.42,
+          "end_time": 68.86,
+          "start_time_formatted": "01:08.420",
+          "end_time_formatted": "01:08.860"
+        },
+        {
+          "word": " on",
+          "start_time": 68.86,
+          "end_time": 69.1,
+          "start_time_formatted": "01:08.860",
+          "end_time_formatted": "01:09.100"
+        },
+        {
+          "word": " a",
+          "start_time": 69.1,
+          "end_time": 69.22,
+          "start_time_formatted": "01:09.100",
+          "end_time_formatted": "01:09.220"
+        },
+        {
+          "word": " huge",
+          "start_time": 69.22,
+          "end_time": 69.46,
+          "start_time_formatted": "01:09.220",
+          "end_time_formatted": "01:09.460"
+        },
+        {
+          "word": " stage,",
+          "start_time": 69.46,
+          "end_time": 69.78,
+          "start_time_formatted": "01:09.460",
+          "end_time_formatted": "01:09.780"
+        },
+        {
+          "word": " which",
+          "start_time": 69.86,
+          "end_time": 69.98,
+          "start_time_formatted": "01:09.860",
+          "end_time_formatted": "01:09.980"
+        },
+        {
+          "word": " is",
+          "start_time": 69.98,
+          "end_time": 70.18,
+          "start_time_formatted": "01:09.980",
+          "end_time_formatted": "01:10.180"
+        },
+        {
+          "word": " all",
+          "start_time": 70.18,
+          "end_time": 70.34,
+          "start_time_formatted": "01:10.180",
+          "end_time_formatted": "01:10.340"
+        },
+        {
+          "word": " trafficked.",
+          "start_time": 70.34,
+          "end_time": 70.8,
+          "start_time_formatted": "01:10.340",
+          "end_time_formatted": "01:10.800"
+        },
+        {
+          "word": " And",
+          "start_time": 71.24,
+          "end_time": 71.34,
+          "start_time_formatted": "01:11.240",
+          "end_time_formatted": "01:11.340"
+        }
+      ]
+    },
+    {
+      "segment_number": 16,
+      "start_time": 71.34,
+      "end_time": 75.1,
+      "start_time_formatted": "01:11.340",
+      "end_time_formatted": "01:15.100",
+      "duration_seconds": 3.759999999999991,
+      "text": "that Cunia hasn't always been there in the last 10 years with players that have come to the club.",
+      "word_count": 19,
+      "word_timestamps": [
+        {
+          "word": " that",
+          "start_time": 71.34,
+          "end_time": 71.46,
+          "start_time_formatted": "01:11.340",
+          "end_time_formatted": "01:11.460"
+        },
+        {
+          "word": " Cunia",
+          "start_time": 71.46,
+          "end_time": 71.74,
+          "start_time_formatted": "01:11.460",
+          "end_time_formatted": "01:11.740"
+        },
+        {
+          "word": " hasn't",
+          "start_time": 71.74,
+          "end_time": 72.06,
+          "start_time_formatted": "01:11.740",
+          "end_time_formatted": "01:12.060"
+        },
+        {
+          "word": " always",
+          "start_time": 72.06,
+          "end_time": 72.34,
+          "start_time_formatted": "01:12.060",
+          "end_time_formatted": "01:12.340"
+        },
+        {
+          "word": " been",
+          "start_time": 72.34,
+          "end_time": 72.58,
+          "start_time_formatted": "01:12.340",
+          "end_time_formatted": "01:12.580"
+        },
+        {
+          "word": " there",
+          "start_time": 72.58,
+          "end_time": 72.9,
+          "start_time_formatted": "01:12.580",
+          "end_time_formatted": "01:12.900"
+        },
+        {
+          "word": " in",
+          "start_time": 72.9,
+          "end_time": 73.06,
+          "start_time_formatted": "01:12.900",
+          "end_time_formatted": "01:13.060"
+        },
+        {
+          "word": " the",
+          "start_time": 73.06,
+          "end_time": 73.06,
+          "start_time_formatted": "01:13.060",
+          "end_time_formatted": "01:13.060"
+        },
+        {
+          "word": " last",
+          "start_time": 73.06,
+          "end_time": 73.24,
+          "start_time_formatted": "01:13.060",
+          "end_time_formatted": "01:13.240"
+        },
+        {
+          "word": " 10",
+          "start_time": 73.24,
+          "end_time": 73.48,
+          "start_time_formatted": "01:13.240",
+          "end_time_formatted": "01:13.480"
+        },
+        {
+          "word": " years",
+          "start_time": 73.48,
+          "end_time": 73.72,
+          "start_time_formatted": "01:13.480",
+          "end_time_formatted": "01:13.720"
+        },
+        {
+          "word": " with",
+          "start_time": 73.72,
+          "end_time": 73.96,
+          "start_time_formatted": "01:13.720",
+          "end_time_formatted": "01:13.960"
+        },
+        {
+          "word": " players",
+          "start_time": 73.96,
+          "end_time": 74.18,
+          "start_time_formatted": "01:13.960",
+          "end_time_formatted": "01:14.180"
+        },
+        {
+          "word": " that",
+          "start_time": 74.18,
+          "end_time": 74.34,
+          "start_time_formatted": "01:14.180",
+          "end_time_formatted": "01:14.340"
+        },
+        {
+          "word": " have",
+          "start_time": 74.34,
+          "end_time": 74.48,
+          "start_time_formatted": "01:14.340",
+          "end_time_formatted": "01:14.480"
+        },
+        {
+          "word": " come",
+          "start_time": 74.48,
+          "end_time": 74.6,
+          "start_time_formatted": "01:14.480",
+          "end_time_formatted": "01:14.600"
+        },
+        {
+          "word": " to",
+          "start_time": 74.6,
+          "end_time": 74.8,
+          "start_time_formatted": "01:14.600",
+          "end_time_formatted": "01:14.800"
+        },
+        {
+          "word": " the",
+          "start_time": 74.8,
+          "end_time": 74.94,
+          "start_time_formatted": "01:14.800",
+          "end_time_formatted": "01:14.940"
+        },
+        {
+          "word": " club.",
+          "start_time": 74.94,
+          "end_time": 75.1,
+          "start_time_formatted": "01:14.940",
+          "end_time_formatted": "01:15.100"
+        }
+      ]
+    },
+    {
+      "segment_number": 17,
+      "start_time": 75.2,
+      "end_time": 79.42,
+      "start_time_formatted": "01:15.200",
+      "end_time_formatted": "01:19.420",
+      "duration_seconds": 4.219999999999999,
+      "text": "They've come maybe where they've been the more finished article and we've got excited by them,",
+      "word_count": 16,
+      "word_timestamps": [
+        {
+          "word": " They've",
+          "start_time": 75.2,
+          "end_time": 75.38,
+          "start_time_formatted": "01:15.200",
+          "end_time_formatted": "01:15.380"
+        },
+        {
+          "word": " come",
+          "start_time": 75.38,
+          "end_time": 75.58,
+          "start_time_formatted": "01:15.380",
+          "end_time_formatted": "01:15.580"
+        },
+        {
+          "word": " maybe",
+          "start_time": 75.58,
+          "end_time": 75.88,
+          "start_time_formatted": "01:15.580",
+          "end_time_formatted": "01:15.880"
+        },
+        {
+          "word": " where",
+          "start_time": 75.88,
+          "end_time": 76.08,
+          "start_time_formatted": "01:15.880",
+          "end_time_formatted": "01:16.080"
+        },
+        {
+          "word": " they've",
+          "start_time": 76.08,
+          "end_time": 76.26,
+          "start_time_formatted": "01:16.080",
+          "end_time_formatted": "01:16.260"
+        },
+        {
+          "word": " been",
+          "start_time": 76.26,
+          "end_time": 76.32,
+          "start_time_formatted": "01:16.260",
+          "end_time_formatted": "01:16.320"
+        },
+        {
+          "word": " the",
+          "start_time": 76.32,
+          "end_time": 76.52,
+          "start_time_formatted": "01:16.320",
+          "end_time_formatted": "01:16.520"
+        },
+        {
+          "word": " more",
+          "start_time": 76.52,
+          "end_time": 76.64,
+          "start_time_formatted": "01:16.520",
+          "end_time_formatted": "01:16.640"
+        },
+        {
+          "word": " finished",
+          "start_time": 76.64,
+          "end_time": 76.98,
+          "start_time_formatted": "01:16.640",
+          "end_time_formatted": "01:16.980"
+        },
+        {
+          "word": " article",
+          "start_time": 76.98,
+          "end_time": 77.54,
+          "start_time_formatted": "01:16.980",
+          "end_time_formatted": "01:17.540"
+        },
+        {
+          "word": " and",
+          "start_time": 77.54,
+          "end_time": 78.04,
+          "start_time_formatted": "01:17.540",
+          "end_time_formatted": "01:18.040"
+        },
+        {
+          "word": " we've",
+          "start_time": 78.04,
+          "end_time": 78.18,
+          "start_time_formatted": "01:18.040",
+          "end_time_formatted": "01:18.180"
+        },
+        {
+          "word": " got",
+          "start_time": 78.18,
+          "end_time": 78.34,
+          "start_time_formatted": "01:18.180",
+          "end_time_formatted": "01:18.340"
+        },
+        {
+          "word": " excited",
+          "start_time": 78.34,
+          "end_time": 78.76,
+          "start_time_formatted": "01:18.340",
+          "end_time_formatted": "01:18.760"
+        },
+        {
+          "word": " by",
+          "start_time": 78.76,
+          "end_time": 79.18,
+          "start_time_formatted": "01:18.760",
+          "end_time_formatted": "01:19.180"
+        },
+        {
+          "word": " them,",
+          "start_time": 79.18,
+          "end_time": 79.42,
+          "start_time_formatted": "01:19.180",
+          "end_time_formatted": "01:19.420"
+        }
+      ]
+    },
+    {
+      "segment_number": 18,
+      "start_time": 79.44,
+      "end_time": 83.82,
+      "start_time_formatted": "01:19.440",
+      "end_time_formatted": "01:23.820",
+      "duration_seconds": 4.3799999999999955,
+      "text": "but maybe they've come and maybe not at that desperation. I always feel like a player needs",
+      "word_count": 17,
+      "word_timestamps": [
+        {
+          "word": " but",
+          "start_time": 79.44,
+          "end_time": 79.6,
+          "start_time_formatted": "01:19.440",
+          "end_time_formatted": "01:19.600"
+        },
+        {
+          "word": " maybe",
+          "start_time": 79.6,
+          "end_time": 79.84,
+          "start_time_formatted": "01:19.600",
+          "end_time_formatted": "01:19.840"
+        },
+        {
+          "word": " they've",
+          "start_time": 79.84,
+          "end_time": 80.12,
+          "start_time_formatted": "01:19.840",
+          "end_time_formatted": "01:20.120"
+        },
+        {
+          "word": " come",
+          "start_time": 80.12,
+          "end_time": 80.26,
+          "start_time_formatted": "01:20.120",
+          "end_time_formatted": "01:20.260"
+        },
+        {
+          "word": " and",
+          "start_time": 80.26,
+          "end_time": 80.44,
+          "start_time_formatted": "01:20.260",
+          "end_time_formatted": "01:20.440"
+        },
+        {
+          "word": " maybe",
+          "start_time": 80.44,
+          "end_time": 80.62,
+          "start_time_formatted": "01:20.440",
+          "end_time_formatted": "01:20.620"
+        },
+        {
+          "word": " not",
+          "start_time": 80.62,
+          "end_time": 80.88,
+          "start_time_formatted": "01:20.620",
+          "end_time_formatted": "01:20.880"
+        },
+        {
+          "word": " at",
+          "start_time": 80.88,
+          "end_time": 81.04,
+          "start_time_formatted": "01:20.880",
+          "end_time_formatted": "01:21.040"
+        },
+        {
+          "word": " that",
+          "start_time": 81.04,
+          "end_time": 81.3,
+          "start_time_formatted": "01:21.040",
+          "end_time_formatted": "01:21.300"
+        },
+        {
+          "word": " desperation.",
+          "start_time": 81.3,
+          "end_time": 81.94,
+          "start_time_formatted": "01:21.300",
+          "end_time_formatted": "01:21.940"
+        },
+        {
+          "word": " I",
+          "start_time": 82.56,
+          "end_time": 82.62,
+          "start_time_formatted": "01:22.560",
+          "end_time_formatted": "01:22.620"
+        },
+        {
+          "word": " always",
+          "start_time": 82.62,
+          "end_time": 82.8,
+          "start_time_formatted": "01:22.620",
+          "end_time_formatted": "01:22.800"
+        },
+        {
+          "word": " feel",
+          "start_time": 82.8,
+          "end_time": 83.0,
+          "start_time_formatted": "01:22.800",
+          "end_time_formatted": "01:23.000"
+        },
+        {
+          "word": " like",
+          "start_time": 83.0,
+          "end_time": 83.16,
+          "start_time_formatted": "01:23.000",
+          "end_time_formatted": "01:23.160"
+        },
+        {
+          "word": " a",
+          "start_time": 83.16,
+          "end_time": 83.34,
+          "start_time_formatted": "01:23.160",
+          "end_time_formatted": "01:23.340"
+        },
+        {
+          "word": " player",
+          "start_time": 83.34,
+          "end_time": 83.5,
+          "start_time_formatted": "01:23.340",
+          "end_time_formatted": "01:23.500"
+        },
+        {
+          "word": " needs",
+          "start_time": 83.5,
+          "end_time": 83.82,
+          "start_time_formatted": "01:23.500",
+          "end_time_formatted": "01:23.820"
+        }
+      ]
+    },
+    {
+      "segment_number": 19,
+      "start_time": 83.82,
+      "end_time": 88.58,
+      "start_time_formatted": "01:23.820",
+      "end_time_formatted": "01:28.580",
+      "duration_seconds": 4.760000000000005,
+      "text": "longer than he desperation in the game to feel it. It's the most important thing. I think these",
+      "word_count": 18,
+      "word_timestamps": [
+        {
+          "word": " longer",
+          "start_time": 83.82,
+          "end_time": 84.24,
+          "start_time_formatted": "01:23.820",
+          "end_time_formatted": "01:24.240"
+        },
+        {
+          "word": " than",
+          "start_time": 84.24,
+          "end_time": 84.4,
+          "start_time_formatted": "01:24.240",
+          "end_time_formatted": "01:24.400"
+        },
+        {
+          "word": " he",
+          "start_time": 84.4,
+          "end_time": 84.56,
+          "start_time_formatted": "01:24.400",
+          "end_time_formatted": "01:24.560"
+        },
+        {
+          "word": " desperation",
+          "start_time": 84.56,
+          "end_time": 85.04,
+          "start_time_formatted": "01:24.560",
+          "end_time_formatted": "01:25.040"
+        },
+        {
+          "word": " in",
+          "start_time": 85.04,
+          "end_time": 85.42,
+          "start_time_formatted": "01:25.040",
+          "end_time_formatted": "01:25.420"
+        },
+        {
+          "word": " the",
+          "start_time": 85.42,
+          "end_time": 85.5,
+          "start_time_formatted": "01:25.420",
+          "end_time_formatted": "01:25.500"
+        },
+        {
+          "word": " game",
+          "start_time": 85.5,
+          "end_time": 85.72,
+          "start_time_formatted": "01:25.500",
+          "end_time_formatted": "01:25.720"
+        },
+        {
+          "word": " to",
+          "start_time": 85.72,
+          "end_time": 85.92,
+          "start_time_formatted": "01:25.720",
+          "end_time_formatted": "01:25.920"
+        },
+        {
+          "word": " feel",
+          "start_time": 85.92,
+          "end_time": 86.2,
+          "start_time_formatted": "01:25.920",
+          "end_time_formatted": "01:26.200"
+        },
+        {
+          "word": " it.",
+          "start_time": 86.2,
+          "end_time": 86.38,
+          "start_time_formatted": "01:26.200",
+          "end_time_formatted": "01:26.380"
+        },
+        {
+          "word": " It's",
+          "start_time": 86.4,
+          "end_time": 86.5,
+          "start_time_formatted": "01:26.400",
+          "end_time_formatted": "01:26.500"
+        },
+        {
+          "word": " the",
+          "start_time": 86.5,
+          "end_time": 86.58,
+          "start_time_formatted": "01:26.500",
+          "end_time_formatted": "01:26.580"
+        },
+        {
+          "word": " most",
+          "start_time": 86.58,
+          "end_time": 86.82,
+          "start_time_formatted": "01:26.580",
+          "end_time_formatted": "01:26.820"
+        },
+        {
+          "word": " important",
+          "start_time": 86.82,
+          "end_time": 87.28,
+          "start_time_formatted": "01:26.820",
+          "end_time_formatted": "01:27.280"
+        },
+        {
+          "word": " thing.",
+          "start_time": 87.28,
+          "end_time": 87.76,
+          "start_time_formatted": "01:27.280",
+          "end_time_formatted": "01:27.760"
+        },
+        {
+          "word": " I",
+          "start_time": 88.06,
+          "end_time": 88.08,
+          "start_time_formatted": "01:28.060",
+          "end_time_formatted": "01:28.080"
+        },
+        {
+          "word": " think",
+          "start_time": 88.08,
+          "end_time": 88.32,
+          "start_time_formatted": "01:28.080",
+          "end_time_formatted": "01:28.320"
+        },
+        {
+          "word": " these",
+          "start_time": 88.32,
+          "end_time": 88.58,
+          "start_time_formatted": "01:28.320",
+          "end_time_formatted": "01:28.580"
+        }
+      ]
+    },
+    {
+      "segment_number": 20,
+      "start_time": 88.58,
+      "end_time": 93.26,
+      "start_time_formatted": "01:28.580",
+      "end_time_formatted": "01:33.260",
+      "duration_seconds": 4.680000000000007,
+      "text": "two lads that assign will have that. So I think the two signings are good signings yet. There's",
+      "word_count": 18,
+      "word_timestamps": [
+        {
+          "word": " two",
+          "start_time": 88.58,
+          "end_time": 88.8,
+          "start_time_formatted": "01:28.580",
+          "end_time_formatted": "01:28.800"
+        },
+        {
+          "word": " lads",
+          "start_time": 88.8,
+          "end_time": 89.0,
+          "start_time_formatted": "01:28.800",
+          "end_time_formatted": "01:29.000"
+        },
+        {
+          "word": " that",
+          "start_time": 89.0,
+          "end_time": 89.26,
+          "start_time_formatted": "01:29.000",
+          "end_time_formatted": "01:29.260"
+        },
+        {
+          "word": " assign",
+          "start_time": 89.26,
+          "end_time": 89.66,
+          "start_time_formatted": "01:29.260",
+          "end_time_formatted": "01:29.660"
+        },
+        {
+          "word": " will",
+          "start_time": 89.66,
+          "end_time": 89.9,
+          "start_time_formatted": "01:29.660",
+          "end_time_formatted": "01:29.900"
+        },
+        {
+          "word": " have",
+          "start_time": 89.9,
+          "end_time": 90.12,
+          "start_time_formatted": "01:29.900",
+          "end_time_formatted": "01:30.120"
+        },
+        {
+          "word": " that.",
+          "start_time": 90.12,
+          "end_time": 90.46,
+          "start_time_formatted": "01:30.120",
+          "end_time_formatted": "01:30.460"
+        },
+        {
+          "word": " So",
+          "start_time": 90.78,
+          "end_time": 90.78,
+          "start_time_formatted": "01:30.780",
+          "end_time_formatted": "01:30.780"
+        },
+        {
+          "word": " I",
+          "start_time": 90.78,
+          "end_time": 91.2,
+          "start_time_formatted": "01:30.780",
+          "end_time_formatted": "01:31.200"
+        },
+        {
+          "word": " think",
+          "start_time": 91.2,
+          "end_time": 91.4,
+          "start_time_formatted": "01:31.200",
+          "end_time_formatted": "01:31.400"
+        },
+        {
+          "word": " the",
+          "start_time": 91.4,
+          "end_time": 91.58,
+          "start_time_formatted": "01:31.400",
+          "end_time_formatted": "01:31.580"
+        },
+        {
+          "word": " two",
+          "start_time": 91.58,
+          "end_time": 91.76,
+          "start_time_formatted": "01:31.580",
+          "end_time_formatted": "01:31.760"
+        },
+        {
+          "word": " signings",
+          "start_time": 91.76,
+          "end_time": 92.12,
+          "start_time_formatted": "01:31.760",
+          "end_time_formatted": "01:32.120"
+        },
+        {
+          "word": " are",
+          "start_time": 92.12,
+          "end_time": 92.16,
+          "start_time_formatted": "01:32.120",
+          "end_time_formatted": "01:32.160"
+        },
+        {
+          "word": " good",
+          "start_time": 92.16,
+          "end_time": 92.38,
+          "start_time_formatted": "01:32.160",
+          "end_time_formatted": "01:32.380"
+        },
+        {
+          "word": " signings",
+          "start_time": 92.38,
+          "end_time": 93.0,
+          "start_time_formatted": "01:32.380",
+          "end_time_formatted": "01:33.000"
+        },
+        {
+          "word": " yet.",
+          "start_time": 93.0,
+          "end_time": 93.04,
+          "start_time_formatted": "01:33.000",
+          "end_time_formatted": "01:33.040"
+        },
+        {
+          "word": " There's",
+          "start_time": 93.1,
+          "end_time": 93.26,
+          "start_time_formatted": "01:33.100",
+          "end_time_formatted": "01:33.260"
+        }
+      ]
+    },
+    {
+      "segment_number": 21,
+      "start_time": 93.26,
+      "end_time": 98.54,
+      "start_time_formatted": "01:33.260",
+      "end_time_formatted": "01:38.540",
+      "duration_seconds": 5.280000000000001,
+      "text": "a couple more needed. I think they need a goalkeeper. They need to send it forward. And I think",
+      "word_count": 19,
+      "word_timestamps": [
+        {
+          "word": " a",
+          "start_time": 93.26,
+          "end_time": 93.36,
+          "start_time_formatted": "01:33.260",
+          "end_time_formatted": "01:33.360"
+        },
+        {
+          "word": " couple",
+          "start_time": 93.36,
+          "end_time": 93.58,
+          "start_time_formatted": "01:33.360",
+          "end_time_formatted": "01:33.580"
+        },
+        {
+          "word": " more",
+          "start_time": 93.58,
+          "end_time": 93.84,
+          "start_time_formatted": "01:33.580",
+          "end_time_formatted": "01:33.840"
+        },
+        {
+          "word": " needed.",
+          "start_time": 93.84,
+          "end_time": 94.18,
+          "start_time_formatted": "01:33.840",
+          "end_time_formatted": "01:34.180"
+        },
+        {
+          "word": " I",
+          "start_time": 94.28,
+          "end_time": 94.56,
+          "start_time_formatted": "01:34.280",
+          "end_time_formatted": "01:34.560"
+        },
+        {
+          "word": " think",
+          "start_time": 94.56,
+          "end_time": 94.72,
+          "start_time_formatted": "01:34.560",
+          "end_time_formatted": "01:34.720"
+        },
+        {
+          "word": " they",
+          "start_time": 94.72,
+          "end_time": 94.94,
+          "start_time_formatted": "01:34.720",
+          "end_time_formatted": "01:34.940"
+        },
+        {
+          "word": " need",
+          "start_time": 94.94,
+          "end_time": 95.04,
+          "start_time_formatted": "01:34.940",
+          "end_time_formatted": "01:35.040"
+        },
+        {
+          "word": " a",
+          "start_time": 95.04,
+          "end_time": 95.3,
+          "start_time_formatted": "01:35.040",
+          "end_time_formatted": "01:35.300"
+        },
+        {
+          "word": " goalkeeper.",
+          "start_time": 95.3,
+          "end_time": 95.66,
+          "start_time_formatted": "01:35.300",
+          "end_time_formatted": "01:35.660"
+        },
+        {
+          "word": " They",
+          "start_time": 95.82,
+          "end_time": 95.84,
+          "start_time_formatted": "01:35.820",
+          "end_time_formatted": "01:35.840"
+        },
+        {
+          "word": " need",
+          "start_time": 95.84,
+          "end_time": 95.94,
+          "start_time_formatted": "01:35.840",
+          "end_time_formatted": "01:35.940"
+        },
+        {
+          "word": " to",
+          "start_time": 95.94,
+          "end_time": 95.96,
+          "start_time_formatted": "01:35.940",
+          "end_time_formatted": "01:35.960"
+        },
+        {
+          "word": " send",
+          "start_time": 95.96,
+          "end_time": 96.1,
+          "start_time_formatted": "01:35.960",
+          "end_time_formatted": "01:36.100"
+        },
+        {
+          "word": " it",
+          "start_time": 96.1,
+          "end_time": 96.32,
+          "start_time_formatted": "01:36.100",
+          "end_time_formatted": "01:36.320"
+        },
+        {
+          "word": " forward.",
+          "start_time": 96.32,
+          "end_time": 96.66,
+          "start_time_formatted": "01:36.320",
+          "end_time_formatted": "01:36.660"
+        },
+        {
+          "word": " And",
+          "start_time": 98.32,
+          "end_time": 98.38,
+          "start_time_formatted": "01:38.320",
+          "end_time_formatted": "01:38.380"
+        },
+        {
+          "word": " I",
+          "start_time": 98.38,
+          "end_time": 98.4,
+          "start_time_formatted": "01:38.380",
+          "end_time_formatted": "01:38.400"
+        },
+        {
+          "word": " think",
+          "start_time": 98.4,
+          "end_time": 98.54,
+          "start_time_formatted": "01:38.400",
+          "end_time_formatted": "01:38.540"
+        }
+      ]
+    },
+    {
+      "segment_number": 22,
+      "start_time": 98.54,
+      "end_time": 103.32,
+      "start_time_formatted": "01:38.540",
+      "end_time_formatted": "01:43.320",
+      "duration_seconds": 4.779999999999987,
+      "text": "if they fill those two positions with decent signings, then you need to have to have to have",
+      "word_count": 18,
+      "word_timestamps": [
+        {
+          "word": " if",
+          "start_time": 98.54,
+          "end_time": 98.7,
+          "start_time_formatted": "01:38.540",
+          "end_time_formatted": "01:38.700"
+        },
+        {
+          "word": " they",
+          "start_time": 98.7,
+          "end_time": 98.86,
+          "start_time_formatted": "01:38.700",
+          "end_time_formatted": "01:38.860"
+        },
+        {
+          "word": " fill",
+          "start_time": 98.86,
+          "end_time": 99.12,
+          "start_time_formatted": "01:38.860",
+          "end_time_formatted": "01:39.120"
+        },
+        {
+          "word": " those",
+          "start_time": 99.12,
+          "end_time": 99.4,
+          "start_time_formatted": "01:39.120",
+          "end_time_formatted": "01:39.400"
+        },
+        {
+          "word": " two",
+          "start_time": 99.4,
+          "end_time": 99.62,
+          "start_time_formatted": "01:39.400",
+          "end_time_formatted": "01:39.620"
+        },
+        {
+          "word": " positions",
+          "start_time": 99.62,
+          "end_time": 99.98,
+          "start_time_formatted": "01:39.620",
+          "end_time_formatted": "01:39.980"
+        },
+        {
+          "word": " with",
+          "start_time": 99.98,
+          "end_time": 100.54,
+          "start_time_formatted": "01:39.980",
+          "end_time_formatted": "01:40.540"
+        },
+        {
+          "word": " decent",
+          "start_time": 100.54,
+          "end_time": 100.8,
+          "start_time_formatted": "01:40.540",
+          "end_time_formatted": "01:40.800"
+        },
+        {
+          "word": " signings,",
+          "start_time": 100.8,
+          "end_time": 101.52,
+          "start_time_formatted": "01:40.800",
+          "end_time_formatted": "01:41.520"
+        },
+        {
+          "word": " then",
+          "start_time": 101.62,
+          "end_time": 101.64,
+          "start_time_formatted": "01:41.620",
+          "end_time_formatted": "01:41.640"
+        },
+        {
+          "word": " you",
+          "start_time": 101.64,
+          "end_time": 101.82,
+          "start_time_formatted": "01:41.640",
+          "end_time_formatted": "01:41.820"
+        },
+        {
+          "word": " need",
+          "start_time": 101.82,
+          "end_time": 101.88,
+          "start_time_formatted": "01:41.820",
+          "end_time_formatted": "01:41.880"
+        },
+        {
+          "word": " to",
+          "start_time": 101.88,
+          "end_time": 102.04,
+          "start_time_formatted": "01:41.880",
+          "end_time_formatted": "01:42.040"
+        },
+        {
+          "word": " have",
+          "start_time": 102.04,
+          "end_time": 102.3,
+          "start_time_formatted": "01:42.040",
+          "end_time_formatted": "01:42.300"
+        },
+        {
+          "word": " to",
+          "start_time": 102.3,
+          "end_time": 103.14,
+          "start_time_formatted": "01:42.300",
+          "end_time_formatted": "01:43.140"
+        },
+        {
+          "word": " have",
+          "start_time": 103.14,
+          "end_time": 103.22,
+          "start_time_formatted": "01:43.140",
+          "end_time_formatted": "01:43.220"
+        },
+        {
+          "word": " to",
+          "start_time": 103.22,
+          "end_time": 103.22,
+          "start_time_formatted": "01:43.220",
+          "end_time_formatted": "01:43.220"
+        },
+        {
+          "word": " have",
+          "start_time": 103.22,
+          "end_time": 103.32,
+          "start_time_formatted": "01:43.220",
+          "end_time_formatted": "01:43.320"
+        }
+      ]
+    },
+    {
+      "segment_number": 23,
+      "start_time": 103.32,
+      "end_time": 105.98,
+      "start_time_formatted": "01:43.320",
+      "end_time_formatted": "01:45.980",
+      "duration_seconds": 2.660000000000011,
+      "text": "a better season in the last year. It can't get any worse really. I think there's a couple more",
+      "word_count": 19,
+      "word_timestamps": [
+        {
+          "word": " a",
+          "start_time": 103.32,
+          "end_time": 103.44,
+          "start_time_formatted": "01:43.320",
+          "end_time_formatted": "01:43.440"
+        },
+        {
+          "word": " better",
+          "start_time": 103.44,
+          "end_time": 103.56,
+          "start_time_formatted": "01:43.440",
+          "end_time_formatted": "01:43.560"
+        },
+        {
+          "word": " season",
+          "start_time": 103.56,
+          "end_time": 103.86,
+          "start_time_formatted": "01:43.560",
+          "end_time_formatted": "01:43.860"
+        },
+        {
+          "word": " in",
+          "start_time": 103.86,
+          "end_time": 104.1,
+          "start_time_formatted": "01:43.860",
+          "end_time_formatted": "01:44.100"
+        },
+        {
+          "word": " the",
+          "start_time": 104.1,
+          "end_time": 104.1,
+          "start_time_formatted": "01:44.100",
+          "end_time_formatted": "01:44.100"
+        },
+        {
+          "word": " last",
+          "start_time": 104.1,
+          "end_time": 104.2,
+          "start_time_formatted": "01:44.100",
+          "end_time_formatted": "01:44.200"
+        },
+        {
+          "word": " year.",
+          "start_time": 104.2,
+          "end_time": 104.64,
+          "start_time_formatted": "01:44.200",
+          "end_time_formatted": "01:44.640"
+        },
+        {
+          "word": " It",
+          "start_time": 104.94,
+          "end_time": 104.98,
+          "start_time_formatted": "01:44.940",
+          "end_time_formatted": "01:44.980"
+        },
+        {
+          "word": " can't",
+          "start_time": 104.98,
+          "end_time": 105.14,
+          "start_time_formatted": "01:44.980",
+          "end_time_formatted": "01:45.140"
+        },
+        {
+          "word": " get",
+          "start_time": 105.14,
+          "end_time": 105.32,
+          "start_time_formatted": "01:45.140",
+          "end_time_formatted": "01:45.320"
+        },
+        {
+          "word": " any",
+          "start_time": 105.32,
+          "end_time": 105.46,
+          "start_time_formatted": "01:45.320",
+          "end_time_formatted": "01:45.460"
+        },
+        {
+          "word": " worse",
+          "start_time": 105.46,
+          "end_time": 105.7,
+          "start_time_formatted": "01:45.460",
+          "end_time_formatted": "01:45.700"
+        },
+        {
+          "word": " really.",
+          "start_time": 105.7,
+          "end_time": 105.9,
+          "start_time_formatted": "01:45.700",
+          "end_time_formatted": "01:45.900"
+        },
+        {
+          "word": " I",
+          "start_time": 105.94,
+          "end_time": 105.98,
+          "start_time_formatted": "01:45.940",
+          "end_time_formatted": "01:45.980"
+        },
+        {
+          "word": " think",
+          "start_time": 105.98,
+          "end_time": 105.98,
+          "start_time_formatted": "01:45.980",
+          "end_time_formatted": "01:45.980"
+        },
+        {
+          "word": " there's",
+          "start_time": 105.98,
+          "end_time": 105.98,
+          "start_time_formatted": "01:45.980",
+          "end_time_formatted": "01:45.980"
+        },
+        {
+          "word": " a",
+          "start_time": 105.98,
+          "end_time": 105.98,
+          "start_time_formatted": "01:45.980",
+          "end_time_formatted": "01:45.980"
+        },
+        {
+          "word": " couple",
+          "start_time": 105.98,
+          "end_time": 105.98,
+          "start_time_formatted": "01:45.980",
+          "end_time_formatted": "01:45.980"
+        },
+        {
+          "word": " more",
+          "start_time": 105.98,
+          "end_time": 105.98,
+          "start_time_formatted": "01:45.980",
+          "end_time_formatted": "01:45.980"
+        }
+      ]
+    }
+  ]
+}

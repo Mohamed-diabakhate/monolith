@@ -80,8 +80,8 @@ run_url() {
     
     # Run the container
     docker run --rm \
-        -v "$(pwd)/../transcripts:/app/transcripts" \
-        -v "$(pwd)/../downloads_cache:/app/downloads_cache" \
+        -v "$(pwd)/../transcripts:/transcripts" \
+        -v "$(pwd)/../downloads_cache:/downloads_cache" \
         -v "$(pwd)/../input:/app/input:ro" \
         whispered-video:latest \
         python main.py "$url" "$@"
@@ -117,8 +117,8 @@ transcribe_file() {
     
     # Run the container
     docker run --rm \
-        -v "$(pwd)/../transcripts:/app/transcripts" \
-        -v "$(pwd)/../downloads_cache:/app/downloads_cache" \
+        -v "$(pwd)/../transcripts:/transcripts" \
+        -v "$(pwd)/../downloads_cache:/downloads_cache" \
         -v "$(pwd)/../input:/app/input:ro" \
         whispered-video:latest \
         python main.py --file "/app/input/$filename" "$@"
@@ -131,8 +131,8 @@ open_shell() {
     print_info "Opening shell in container..."
     cd "$(dirname "$0")"
     docker run --rm -it \
-        -v "$(pwd)/../transcripts:/app/transcripts" \
-        -v "$(pwd)/../downloads_cache:/app/downloads_cache" \
+        -v "$(pwd)/../transcripts:/transcripts" \
+        -v "$(pwd)/../downloads_cache:/downloads_cache" \
         -v "$(pwd)/../input:/app/input" \
         whispered-video:latest \
         /bin/bash

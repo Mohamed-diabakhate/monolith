@@ -261,14 +261,17 @@ class Transcriber:
         base_name = os.path.splitext(os.path.basename(audio_file))[0]
         transcript_file, summary_file = create_output_paths(base_name, output_dir)
         
+        # Convert segments to list once to avoid consuming the iterator
+        segments_list = list(segments)
+        
         # Write clean transcript
-        self._write_transcript(transcript_file, audio_file, info, segments)
+        self._write_transcript(transcript_file, audio_file, info, segments_list)
         
         # Write detailed summary
         print("📊 Writing detailed summary...")
         print("   📋 Creating summary file...")
         self._write_summary(
-            summary_file, audio_file, info, segments, duration, service_runtime,
+            summary_file, audio_file, info, segments_list, duration, service_runtime,
             avg_cpu, peak_memory, cost_data
         )
         
@@ -283,14 +286,13 @@ class Transcriber:
             f.write(f"**Generated:** {time.strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             f.write("---\n\n")
             
-            # Convert segments to list for progress tracking
-            segments_list = list(segments)
-            total_segments = len(segments_list)
+            # segments is already a list from _create_output_files
+            total_segments = len(segments)
             
             print(f"   📋 Writing {total_segments} segments to transcript...")
             print("   🔄 Processing segments...")
             
-            for i, segment in enumerate(segments_list, 1):
+            for i, segment in enumerate(segments, 1):
                 text = segment.text.strip()
                 if text:
                     f.write(f"{text}\n\n")
@@ -315,16 +317,15 @@ class Transcriber:
         """Write detailed summary file in JSON format"""
         import json
         
-        # Convert segments to list for processing
-        segments_list = list(segments)
-        segment_count = len(segments_list)
+        # segments is already a list from _create_output_files
+        segment_count = len(segments)
         total_words = 0
         
         # Process segments
         print("   📝 Processing detailed segment information...")
         processed_segments = []
         
-        for i, segment in enumerate(segments_list, 1):
+        for i, segment in enumerate(segments, 1):
             start_time_str = format_timestamp(segment.start)
             end_time_str = format_timestamp(segment.end)
             segment_duration = segment.end - segment.start

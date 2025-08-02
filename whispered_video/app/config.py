@@ -8,8 +8,16 @@ from pathlib import Path
 # Base paths
 BASE_DIR = Path(__file__).parent.parent
 APP_DIR = BASE_DIR / "app"
-DOWNLOADS_DIR = BASE_DIR / "downloads_cache"
-TRANSCRIPTS_DIR = BASE_DIR / "transcripts"
+
+# Check if running in container (Docker)
+if os.path.exists('/.dockerenv'):
+    # Container paths
+    DOWNLOADS_DIR = Path("/downloads_cache")
+    TRANSCRIPTS_DIR = Path("/transcripts")
+else:
+    # Host paths
+    DOWNLOADS_DIR = BASE_DIR / "downloads_cache"
+    TRANSCRIPTS_DIR = BASE_DIR / "transcripts"
 
 # Ensure directories exist
 DOWNLOADS_DIR.mkdir(exist_ok=True)
