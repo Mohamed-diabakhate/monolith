@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana NFT Downloader - Monitor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 30px;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .status-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .status-card h3 {
+            margin: 0 0 15px 0;
+            color: #667eea;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-online {
+            background: #28a745;
+        }
+        .status-offline {
+            background: #dc3545;
+        }
+        .status-warning {
+            background: #ffc107;
+        }
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .info-section h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #5a67d8;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖼️ Solana NFT Downloader</h1>
+            <p>Docker Deployment Monitor</p>
+        </div>
+        
+        <div class="content">
+            <div class="status-grid">
+                <div class="status-card">
+                    <h3>Application Status</h3>
+                    <p>
+                        <span class="status-indicator status-online"></span>
+                        <strong>Online</strong>
+                    </p>
+                    <p>NFT Downloader service is running</p>
+                </div>
+                
+                <div class="status-card">
+                    <h3>Docker Status</h3>
+                    <p>
+                        <span class="status-indicator status-online"></span>
+                        <strong>Container Running</strong>
+                    </p>
+                    <p>Docker container is healthy</p>
+                </div>
+                
+                <div class="status-card">
+                    <h3>Storage</h3>
+                    <p>
+                        <span class="status-indicator status-warning"></span>
+                        <strong>Monitoring</strong>
+                    </p>
+                    <p>Check output directory for files</p>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h3>🚀 Quick Start Commands</h3>
+                <p>Use these commands to interact with the NFT Downloader:</p>
+                
+                <div class="code-block">
+# Download NFTs from a wallet
+docker-compose run --rm nft-downloader --wallet YOUR_WALLET_ADDRESS
+
+# Validate configuration
+docker-compose run --rm nft-downloader --wallet YOUR_WALLET_ADDRESS --validate-only
+
+# Show statistics
+docker-compose run --rm nft-downloader --wallet YOUR_WALLET_ADDRESS --stats
+
+# With custom output directory
+docker-compose run --rm nft-downloader --wallet YOUR_WALLET_ADDRESS --output /app/output/custom
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h3>📁 Directory Structure</h3>
+                <p>The following directories are mounted as volumes:</p>
+                <ul>
+                    <li><strong>./output/</strong> - Downloaded NFT images</li>
+                    <li><strong>./logs/</strong> - Application logs</li>
+                    <li><strong>./credentials/</strong> - Google Cloud credentials</li>
+                </ul>
+            </div>
+            
+            <div class="info-section">
+                <h3>🔧 Configuration</h3>
+                <p>Make sure you have configured the following:</p>
+                <ol>
+                    <li>Set <code>GOOGLE_CLOUD_PROJECT</code> in your <code>.env</code> file</li>
+                    <li>Place your Google Cloud service account key in <code>credentials/service-account.json</code></li>
+                    <li>Ensure your Ankr API key is stored in Google Secret Manager</li>
+                </ol>
+            </div>
+            
+            <div class="info-section">
+                <h3>📊 Monitoring</h3>
+                <p>Monitor your application:</p>
+                <a href="/health" class="button">Health Check</a>
+                <a href="#" class="button" onclick="checkStatus()">Check Status</a>
+                <a href="#" class="button" onclick="viewLogs()">View Logs</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Solana NFT Downloader - Docker Deployment</p>
+            <p>Built with ❤️ for the Solana community</p>
+        </div>
+    </div>
+    
+    <script>
+        function checkStatus() {
+            fetch('/health')
+                .then(response => {
+                    if (response.ok) {
+                        alert('✅ Application is healthy!');
+                    } else {
+                        alert('❌ Application health check failed');
+                    }
+                })
+                .catch(error => {
+                    alert('❌ Cannot connect to application');
+                });
+        }
+        
+        function viewLogs() {
+            alert('Logs are available in the ./logs/ directory on your host machine');
+        }
+        
+        // Auto-refresh status every 30 seconds
+        setInterval(() => {
+            fetch('/health')
+                .then(response => {
+                    if (!response.ok) {
+                        console.log('Application health check failed');
+                    }
+                })
+                .catch(error => {
+                    console.log('Cannot connect to application');
+                });
+        }, 30000);
+    </script>
+</body>
+</html> 
