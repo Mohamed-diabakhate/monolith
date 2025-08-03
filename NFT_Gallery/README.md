@@ -69,11 +69,13 @@ The application is configured to use the "develop" database by default to avoid 
 **Configuration Options:**
 
 1. **Environment Variable:**
+
    ```bash
    export FIRESTORE_DATABASE=develop
    ```
 
 2. **Command Line:**
+
    ```bash
    python main_enhanced.py --wallet YOUR_WALLET --database develop
    ```
@@ -99,9 +101,57 @@ gcloud firestore databases create --project=your-project-id --database=develop
 
 ## Enhanced Mode Features
 
+### Firestore Image Download System
+
+The enhanced mode now includes a comprehensive image download system that reads from Firestore documents and tracks download status:
+
+#### Download Status Tracking
+
+Each NFT document in Firestore includes download status fields:
+
+- `download_status`: "pending", "downloading", "completed", "failed"
+- `download_attempts`: Number of download attempts
+- `download_error`: Error message if download failed
+- `local_file_path`: Path to downloaded file
+- `file_size`: Size of downloaded file in bytes
+- `download_completed_at`: Timestamp when download completed
+- `last_download_attempt`: Timestamp of last download attempt
+
+#### Download Commands
+
+```bash
+# Download all pending images from Firestore
+python main_enhanced.py --wallet YOUR_WALLET --download-images
+
+# Download only pending images
+python main_enhanced.py --wallet YOUR_WALLET --download-pending
+
+# Retry failed downloads
+python main_enhanced.py --wallet YOUR_WALLET --retry-failed
+
+# Show download statistics
+python main_enhanced.py --wallet YOUR_WALLET --download-stats
+
+# Download with custom settings
+python main_enhanced.py --wallet YOUR_WALLET --download-images --max-concurrent 10 --batch-size 100
+
+# Download by specific status
+python main_enhanced.py --wallet YOUR_WALLET --download-images --download-status pending
+```
+
+#### Download Features
+
+- **Concurrent Downloads**: Configurable concurrent download limits
+- **Batch Processing**: Process documents in configurable batches
+- **Retry Logic**: Automatic retry of failed downloads
+- **Progress Tracking**: Real-time download progress and statistics
+- **Status Management**: Comprehensive status tracking and updates
+- **Error Handling**: Detailed error tracking and reporting
+
 ### Firestore Integration
 
 Store NFT data in Google Cloud Firestore for:
+
 - **Persistent Storage**: Keep NFT data across sessions
 - **Advanced Queries**: Search and filter NFTs
 - **Statistics**: Get detailed analytics
@@ -160,11 +210,13 @@ docker-compose up
 ### Common Issues
 
 1. **Firestore Permission Errors**
+
    - Ensure you're using the "develop" database: `FIRESTORE_DATABASE=develop`
    - Check Google Cloud authentication: `gcloud auth application-default login`
    - Verify project permissions
 
 2. **App Engine Database Disabled**
+
    - Use the "develop" database instead of default
    - This is the recommended solution for most cases
 
@@ -182,13 +234,13 @@ python main_enhanced.py --wallet YOUR_WALLET --validate-only
 
 ## Configuration Reference
 
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `HELIUS_API_KEY` | Helius API key | - | Yes |
-| `GOOGLE_CLOUD_PROJECT` | Google Cloud project ID | - | Yes (enhanced mode) |
-| `FIRESTORE_DATABASE` | Firestore database name | `develop` | No |
-| `OUTPUT_DIR` | Local output directory | `~/Pictures/SolanaNFTs` | No |
-| `LOG_LEVEL` | Logging level | `INFO` | No |
+| Variable               | Description             | Default                 | Required            |
+| ---------------------- | ----------------------- | ----------------------- | ------------------- |
+| `HELIUS_API_KEY`       | Helius API key          | -                       | Yes                 |
+| `GOOGLE_CLOUD_PROJECT` | Google Cloud project ID | -                       | Yes (enhanced mode) |
+| `FIRESTORE_DATABASE`   | Firestore database name | `develop`               | No                  |
+| `OUTPUT_DIR`           | Local output directory  | `~/Pictures/SolanaNFTs` | No                  |
+| `LOG_LEVEL`            | Logging level           | `INFO`                  | No                  |
 
 ## Contributing
 
@@ -200,4 +252,4 @@ python main_enhanced.py --wallet YOUR_WALLET --validate-only
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.

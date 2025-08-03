@@ -87,7 +87,15 @@ class FirestoreManager:
                 "created_at": datetime.now(timezone.utc),
                 "updated_at": datetime.now(timezone.utc),
                 "last_synced": datetime.now(timezone.utc),
-                "sync_status": "synced"
+                "sync_status": "synced",
+                # Download status fields
+                "download_status": "pending",
+                "download_attempts": 0,
+                "download_error": None,
+                "local_file_path": None,
+                "file_size": None,
+                "download_completed_at": None,
+                "last_download_attempt": None
             }
             
             # Use asset_id as document ID for easy lookup
@@ -234,27 +242,296 @@ class FirestoreManager:
     
     def update_nft_sync_status(self, asset_id: str, status: str = "synced") -> bool:
         """
-        Update NFT sync status.
+        Update NFT sync status in Firestore.
         
         Args:
             asset_id: NFT asset ID
-            status: Sync status ("synced", "failed", "pending")
+            status: New sync status
             
         Returns:
-            True if updated successfully
+            True if update successful, False otherwise
         """
         try:
             doc_ref = self.collection.document(asset_id)
             doc_ref.update({
                 "sync_status": status,
-                "last_synced": datetime.now(timezone.utc),
                 "updated_at": datetime.now(timezone.utc)
             })
+            self.logger.info(f"Updated sync status for asset {asset_id} to {status}")
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to update sync status for asset {asset_id}: {str(e)}")
+            return False
+
+    def update_download_status(self, asset_id: str, status: str, error: Optional[str] = None, 
+                             local_file_path: Optional[str] = None, file_size: Optional[int] = None) -> bool:
+        """
+        Update NFT download status in Firestore.
+        
+        Args:
+            asset_id: NFT asset ID
+            status: Download status (pending, downloading, completed, failed)
+            error: Error message if download failed
+            local_file_path: Path to downloaded file
+            file_size: Size of downloaded file in bytes
+            
+        Returns:
+            True if update successful, False otherwise
+        """
+        try:
+            update_data = {
+                "download_status": status,
+                "last_download_attempt": datetime.now(timezone.utc),
+                "updated_at": datetime.now(timezone.utc)
+            }
+            
+            if status == "downloading":
+                # Increment download attempts
+                doc_ref = self.collection.document(asset_id)
+                doc = doc_ref.get()
+                if doc.exists:
+                    current_attempts = doc.to_dict().get("download_attempts", 0)
+                    update_data["download_attempts"] = current_attempts + 1
+            
+            elif status == "completed":
+                update_data.update({
+                    "download_completed_at": datetime.now(timezone.utc),
+                    "download_error": None
+                })
+                if local_file_path:
+                    update_data["local_file_path"] = local_file_path
+                if file_size:
+                    update_data["file_size"] = file_size
+                    
+            elif status == "failed":
+                if error:
+                    update_data["download_error"] = error
+            
+            doc_ref = self.collection.document(asset_id)
+            doc_ref.update(update_data)
+            
+            self.logger.info(f"Updated download status for asset {asset_id} to {status}")
             return True
             
         except Exception as e:
-            self.logger.error(f"Failed to update sync status for {asset_id}: {str(e)}")
+            self.logger.error(f"Failed to update download status for asset {asset_id}: {str(e)}")
             return False
+
+    def get_nfts_by_download_status(self, status: str, wallet_address: Optional[str] = None, 
+                                   limit: int = 100) -> List[Dict[str, Any]]:
+        """
+        Get NFTs by download status.
+        
+        Args:
+            status: Download status to filter by
+            wallet_address: Optional wallet address filter
+            limit: Maximum number of documents to return
+            
+        Returns:
+            List of NFT documents matching the criteria
+        """
+        try:
+            query = self.collection.where("download_status", "==", status)
+            
+            if wallet_address:
+                query = query.where("wallet_address", "==", wallet_address)
+            
+            docs = query.limit(limit).stream()
+            return [{"id": doc.id, **doc.to_dict()} for doc in docs]
+            
+        except Exception as e:
+            self.logger.error(f"Failed to get NFTs by download status {status}: {str(e)}")
+            return []
+
+    def get_download_statistics(self, wallet_address: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Get download statistics for NFTs.
+        
+        Args:
+            wallet_address: Optional wallet address filter
+            
+        Returns:
+            Dictionary with download statistics
+        """
+        try:
+            # Build base query
+            if wallet_address:
+                query = self.collection.where("wallet_address", "==", wallet_address)
+            else:
+                query = self.collection
+            
+            # Get all documents
+            docs = list(query.stream())
+            
+            if not docs:
+                return {
+                    "total_documents": 0,
+                    "pending_downloads": 0,
+                    "downloading": 0,
+                    "completed_downloads": 0,
+                    "failed_downloads": 0,
+                    "total_file_size": 0,
+                    "download_success_rate": "0%"
+                }
+            
+            # Count by status
+            status_counts = {}
+            total_file_size = 0
+            completed_count = 0
+            
+            for doc in docs:
+                data = doc.to_dict()
+                status = data.get("download_status", "pending")
+                status_counts[status] = status_counts.get(status, 0) + 1
+                
+                if status == "completed":
+                    completed_count += 1
+                    file_size = data.get("file_size", 0)
+                    total_file_size += file_size
+            
+            total_docs = len(docs)
+            success_rate = (completed_count / total_docs * 100) if total_docs > 0 else 0
+            
+            return {
+                "total_documents": total_docs,
+                "pending_downloads": status_counts.get("pending", 0),
+                "downloading": status_counts.get("downloading", 0),
+                "completed_downloads": status_counts.get("completed", 0),
+                "failed_downloads": status_counts.get("failed", 0),
+                "total_file_size": total_file_size,
+                "download_success_rate": f"{success_rate:.1f}%"
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Failed to get download statistics: {str(e)}")
+            return {}
+
+    def batch_update_download_status(self, updates: List[Dict[str, Any]]) -> Dict[str, int]:
+        """
+        Batch update download status for multiple NFTs.
+        
+        Args:
+            updates: List of update dictionaries with keys: asset_id, status, error, local_file_path, file_size
+            
+        Returns:
+            Dictionary with success and failure counts
+        """
+        try:
+            batch = self.db.batch()
+            success_count = 0
+            failure_count = 0
+            
+            for update in updates:
+                try:
+                    asset_id = update["asset_id"]
+                    status = update["status"]
+                    error = update.get("error")
+                    local_file_path = update.get("local_file_path")
+                    file_size = update.get("file_size")
+                    
+                    doc_ref = self.collection.document(asset_id)
+                    
+                    update_data = {
+                        "download_status": status,
+                        "last_download_attempt": datetime.now(timezone.utc),
+                        "updated_at": datetime.now(timezone.utc)
+                    }
+                    
+                    if status == "completed":
+                        update_data.update({
+                            "download_completed_at": datetime.now(timezone.utc),
+                            "download_error": None
+                        })
+                        if local_file_path:
+                            update_data["local_file_path"] = local_file_path
+                        if file_size:
+                            update_data["file_size"] = file_size
+                    elif status == "failed" and error:
+                        update_data["download_error"] = error
+                    
+                    batch.update(doc_ref, update_data)
+                    success_count += 1
+                    
+                except Exception as e:
+                    self.logger.error(f"Failed to prepare batch update for {update.get('asset_id', 'unknown')}: {str(e)}")
+                    failure_count += 1
+            
+            # Commit batch
+            batch.commit()
+            self.logger.info(f"Batch update completed: {success_count} successful, {failure_count} failed")
+            
+            return {
+                "success_count": success_count,
+                "failure_count": failure_count
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Failed to execute batch update: {str(e)}")
+            return {"success_count": 0, "failure_count": len(updates)}
+
+    def reset_download_status(self, asset_ids: Optional[List[str]] = None, 
+                            wallet_address: Optional[str] = None) -> int:
+        """
+        Reset download status to pending for specified NFTs.
+        
+        Args:
+            asset_ids: List of asset IDs to reset (if None, reset all for wallet)
+            wallet_address: Wallet address filter (required if asset_ids is None)
+            
+        Returns:
+            Number of documents updated
+        """
+        try:
+            if asset_ids:
+                # Reset specific assets
+                batch = self.db.batch()
+                for asset_id in asset_ids:
+                    doc_ref = self.collection.document(asset_id)
+                    batch.update(doc_ref, {
+                        "download_status": "pending",
+                        "download_attempts": 0,
+                        "download_error": None,
+                        "local_file_path": None,
+                        "file_size": None,
+                        "download_completed_at": None,
+                        "updated_at": datetime.now(timezone.utc)
+                    })
+                batch.commit()
+                return len(asset_ids)
+            else:
+                # Reset all for wallet
+                if not wallet_address:
+                    raise ValueError("wallet_address is required when asset_ids is None")
+                
+                docs = self.collection.where("wallet_address", "==", wallet_address).stream()
+                batch = self.db.batch()
+                count = 0
+                
+                for doc in docs:
+                    batch.update(doc.reference, {
+                        "download_status": "pending",
+                        "download_attempts": 0,
+                        "download_error": None,
+                        "local_file_path": None,
+                        "file_size": None,
+                        "download_completed_at": None,
+                        "updated_at": datetime.now(timezone.utc)
+                    })
+                    count += 1
+                    
+                    # Commit in batches of 500 (Firestore limit)
+                    if count % 500 == 0:
+                        batch.commit()
+                        batch = self.db.batch()
+                
+                if count % 500 != 0:
+                    batch.commit()
+                
+                return count
+                
+        except Exception as e:
+            self.logger.error(f"Failed to reset download status: {str(e)}")
+            return 0
     
     def delete_nft(self, asset_id: str) -> bool:
         """

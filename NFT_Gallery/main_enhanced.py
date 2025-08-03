@@ -15,6 +15,7 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from src.enhanced_nft_processor import EnhancedNFTProcessor, EnhancedNFTProcessorError
+from src.firestore_image_downloader import FirestoreImageDownloader, FirestoreImageDownloaderError
 from src.utils import setup_logging, validate_environment, get_system_info
 
 
@@ -48,6 +49,21 @@ Examples:
   
   # Search NFTs in Firestore
   python main_enhanced.py --wallet 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM --search-collection "Bored Ape"
+  
+  # Download images from Firestore documents
+  python main_enhanced.py --wallet 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM --download-images
+  
+  # Download only pending images
+  python main_enhanced.py --wallet 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM --download-pending
+  
+  # Retry failed downloads
+  python main_enhanced.py --wallet 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM --retry-failed
+  
+  # Show download statistics
+  python main_enhanced.py --wallet 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM --download-stats
+  
+  # Download with custom settings
+  python main_enhanced.py --wallet 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM --download-images --max-concurrent 10 --batch-size 100
         """
     )
     
@@ -96,6 +112,50 @@ Examples:
         "--compressed-only",
         action="store_true",
         help="Only process compressed NFTs"
+    )
+    
+    parser.add_argument(
+        "--download-images",
+        action="store_true",
+        help="Download images from Firestore documents"
+    )
+    
+    parser.add_argument(
+        "--download-pending",
+        action="store_true",
+        help="Download only pending images from Firestore"
+    )
+    
+    parser.add_argument(
+        "--retry-failed",
+        action="store_true",
+        help="Retry failed downloads from Firestore"
+    )
+    
+    parser.add_argument(
+        "--download-stats",
+        action="store_true",
+        help="Show download statistics and exit"
+    )
+    
+    parser.add_argument(
+        "--download-status",
+        choices=["pending", "downloading", "completed", "failed"],
+        help="Filter downloads by status"
+    )
+    
+    parser.add_argument(
+        "--max-concurrent",
+        type=int,
+        default=5,
+        help="Maximum concurrent downloads (default: 5)"
+    )
+    
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=50,
+        help="Batch size for processing downloads (default: 50)"
     )
     
     parser.add_argument(
@@ -209,6 +269,124 @@ def search_nfts_in_firestore(processor, collection_name, compressed_only, logger
         logger.error(f"Failed to search NFTs in Firestore: {str(e)}")
 
 
+def display_download_stats(processor, logger):
+    """Display download statistics from Firestore."""
+    try:
+        # Get download statistics from Firestore
+        stats = processor.firestore_manager.get_download_statistics(processor.wallet_address)
+        
+        logger.info("=== Download Statistics ===")
+        logger.info(f"Total Documents: {stats.get('total_documents', 0)}")
+        logger.info(f"Pending Downloads: {stats.get('pending_downloads', 0)}")
+        logger.info(f"Currently Downloading: {stats.get('downloading', 0)}")
+        logger.info(f"Completed Downloads: {stats.get('completed_downloads', 0)}")
+        logger.info(f"Failed Downloads: {stats.get('failed_downloads', 0)}")
+        logger.info(f"Total File Size: {stats.get('total_file_size', 0):,} bytes")
+        logger.info(f"Download Success Rate: {stats.get('download_success_rate', '0%')}")
+        
+        # Show file size in human readable format
+        total_size = stats.get('total_file_size', 0)
+        if total_size > 0:
+            if total_size > 1024 * 1024 * 1024:  # GB
+                size_str = f"{total_size / (1024 * 1024 * 1024):.2f} GB"
+            elif total_size > 1024 * 1024:  # MB
+                size_str = f"{total_size / (1024 * 1024):.2f} MB"
+            elif total_size > 1024:  # KB
+                size_str = f"{total_size / 1024:.2f} KB"
+            else:
+                size_str = f"{total_size} bytes"
+            logger.info(f"Total File Size: {size_str}")
+        
+    except Exception as e:
+        logger.error(f"Failed to get download statistics: {str(e)}")
+
+
+def handle_image_downloads(processor, args, logger):
+    """Handle image downloads from Firestore documents."""
+    try:
+        # Create Firestore image downloader
+        from src.firestore_image_downloader import FirestoreImageDownloader
+        
+        downloader = FirestoreImageDownloader(
+            processor.firestore_manager,
+            processor.file_manager,
+            max_concurrent_downloads=args.max_concurrent,
+            max_retries=3
+        )
+        
+        logger.info("=== Firestore Image Downloader ===")
+        logger.info(f"Wallet: {args.wallet}")
+        logger.info(f"Max Concurrent Downloads: {args.max_concurrent}")
+        logger.info(f"Batch Size: {args.batch_size}")
+        
+        # Determine download operation
+        if args.retry_failed:
+            logger.info("Starting retry of failed downloads...")
+            results = downloader.retry_failed_downloads(
+                wallet_address=args.wallet,
+                max_attempts=3
+            )
+            operation = "Retry"
+        elif args.download_pending:
+            logger.info("Starting download of pending images...")
+            results = downloader.download_pending_images(
+                wallet_address=args.wallet,
+                batch_size=args.batch_size
+            )
+            operation = "Pending Download"
+        else:  # args.download_images
+            logger.info("Starting download of images with status filter...")
+            status_filter = args.download_status or "pending"
+            results = downloader.download_wallet_images(
+                wallet_address=args.wallet,
+                status_filter=status_filter
+            )
+            operation = f"Download ({status_filter})"
+        
+        # Display results
+        logger.info(f"=== {operation} Results ===")
+        logger.info(f"Total Processed: {results.get('total_processed', 0)}")
+        logger.info(f"Successful Downloads: {results.get('successful_downloads', 0)}")
+        logger.info(f"Failed Downloads: {results.get('failed_downloads', 0)}")
+        logger.info(f"Skipped Downloads: {results.get('skipped_downloads', 0)}")
+        logger.info(f"Total File Size: {results.get('total_file_size', 0):,} bytes")
+        logger.info(f"Success Rate: {results.get('success_rate', '0%')}")
+        
+        # Show file size in human readable format
+        total_size = results.get('total_file_size', 0)
+        if total_size > 0:
+            if total_size > 1024 * 1024 * 1024:  # GB
+                size_str = f"{total_size / (1024 * 1024 * 1024):.2f} GB"
+            elif total_size > 1024 * 1024:  # MB
+                size_str = f"{total_size / (1024 * 1024):.2f} MB"
+            elif total_size > 1024:  # KB
+                size_str = f"{total_size / 1024:.2f} KB"
+            else:
+                size_str = f"{total_size} bytes"
+            logger.info(f"Total File Size: {size_str}")
+        
+        # Show current progress
+        progress = downloader.get_download_progress(args.wallet)
+        if progress:
+            logger.info("=== Current Progress ===")
+            logger.info(f"Session Processed: {progress.get('session_processed', 0)}")
+            logger.info(f"Session Successful: {progress.get('session_successful', 0)}")
+            logger.info(f"Session Failed: {progress.get('session_failed', 0)}")
+            logger.info(f"Session File Size: {progress.get('session_file_size', 0):,} bytes")
+        
+        logger.info("Download operation completed!")
+        
+    except FirestoreImageDownloaderError as e:
+        logger.error(f"Firestore image downloader error: {str(e)}")
+        sys.exit(1)
+    except Exception as e:
+        logger.error(f"Failed to handle image downloads: {str(e)}")
+        if args.verbose:
+            import traceback
+            logger.error(traceback.format_exc())
+        sys.exit(1)
+
+
 def main():
     """Main entry point."""
     # Load environment variables from .env file
@@ -285,6 +463,16 @@ def main():
         # Handle Firestore search
         if args.search_collection:
             search_nfts_in_firestore(processor, args.search_collection, args.compressed_only, logger)
+            return
+        
+        # Handle image downloads from Firestore
+        if args.download_images or args.download_pending or args.retry_failed:
+            handle_image_downloads(processor, args, logger)
+            return
+        
+        # Handle download statistics
+        if args.download_stats:
+            display_download_stats(processor, logger)
             return
         
         # Handle regular statistics
