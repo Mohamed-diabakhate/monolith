@@ -1,0 +1,53 @@
+services:
+  nft-downloader:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: solana-nft-downloader
+    environment:
+      - GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS:-/app/credentials/service-account.json}
+      - OUTPUT_DIR=/app/output
+      - PYTHONPATH=/app
+    volumes:
+      - ./output:/app/output
+      - ./credentials:/app/credentials:ro
+      - ./logs:/app/logs
+      - ~/.config/gcloud:/home/nftuser/.config/gcloud:ro
+    restart: unless-stopped
+    networks:
+      - nft-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    command: ["python", "main.py", "--help"]
+
+  # Optional: Add a simple web interface for monitoring
+  nft-monitor:
+    image: nginx:alpine
+    container_name: nft-monitor
+    ports:
+      - "8080:80"
+    volumes:
+      - ./monitor:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - nft-downloader
+    networks:
+      - nft-network
+    restart: unless-stopped
+    profiles:
+      - monitor
+
+networks:
+  nft-network:
+    driver: bridge
+
+volumes:
+  output:
+    driver: local
+  logs:
+    driver: local 

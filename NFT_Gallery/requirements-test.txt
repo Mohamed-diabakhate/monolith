@@ -1,0 +1,17 @@
+# Test Dependencies for Solana NFT Downloader
+# Excellent Test Coverage Stack
+
+# Core Testing Framework
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+
+# HTTP Testing & Mocking
+responses>=0.23.0
+requests-mock>=1.10.0
+
+# Coverage & Quality
+coverage>=7.0.0
+
+# Docker Testing
+docker>=6.0.0 

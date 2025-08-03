@@ -19,6 +19,7 @@ Create a script that fetches all NFTs held in a **specific Solana wallet**, usin
 | Cloud Client       | `google-cloud-secret-manager`    | Fetches secret at runtime                       |
 | Local FS           | Standard Library `os`, `pathlib` | Manage local folders and filenames              |
 | macOS Integration  | Native Photos via `~/Pictures`   | Auto-indexed by macOS Photos app                |
+| Container          | Docker                           | To make it portable                             |
 
 ---
 

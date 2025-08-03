@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # Main application under test
+  nft-downloader-test:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      - GOOGLE_CLOUD_PROJECT=test-project
+      - TEST_MODE=true
+      - ANKR_API_URL=http://mock-ankr-api:1080
+      - SECRET_MANAGER_ENDPOINT=http://mock-secret-manager:8085
+    volumes:
+      - ./tests:/app/tests
+      - ./test-data:/app/test-data
+      - ./src:/app/src
+    depends_on:
+      - mock-ankr-api
+      - mock-secret-manager
+    networks:
+      - test-network
+    command: ["pytest", "tests/", "-v", "--cov=src", "--cov-report=html", "--cov-report=term"]
+
+  # Mock Ankr API for testing
+  mock-ankr-api:
+    image: mockserver/mockserver:latest
+    ports:
+      - "8080:1080"
+    environment:
+      - MOCKSERVER_INITIALIZATION_JSON_PATH=/config/mock-ankr.json
+    volumes:
+      - ./tests/e2e/mock-config:/config
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1080/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Google Secret Manager Emulator
+  mock-secret-manager:
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+    ports:
+      - "8085:8085"
+    command: ["gcloud", "emulators", "secret-manager", "start", "--host-port=0.0.0.0:8085"]
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Test Results Aggregator
+  test-results:
+    image: nginx:alpine
+    ports:
+      - "8081:80"
+    volumes:
+      - ./test-data/htmlcov:/usr/share/nginx/html
+    networks:
+      - test-network
+    depends_on:
+      - nft-downloader-test
+
+networks:
+  test-network:
+    driver: bridge
+
+volumes:
+  test-data: 

@@ -1,0 +1,7 @@
+# Solana NFT Downloader Dependencies
+
+# HTTP requests for API calls
+requests>=2.31.0
+
+# Additional dependencies for enhanced functionality
+pathlib2>=2.3.7; python_version < "3.4" 

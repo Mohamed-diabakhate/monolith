@@ -1,0 +1,140 @@
+[
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/",
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "type": "JSON",
+        "json": {
+          "jsonrpc": "2.0",
+          "method": "ankr_getNFTsByOwner",
+          "params": {
+            "wallet": "test-wallet-address"
+          }
+        }
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "type": "JSON",
+        "json": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "result": {
+            "assets": [
+              {
+                "contract": "test-contract-1",
+                "tokenId": "1",
+                "name": "Test NFT #1",
+                "description": "A test NFT for testing",
+                "imageUrl": "https://example.com/nft1.jpg",
+                "externalUrl": "https://example.com/nft1",
+                "attributes": [
+                  {
+                    "trait_type": "Rarity",
+                    "value": "Common"
+                  }
+                ]
+              },
+              {
+                "contract": "test-contract-2",
+                "tokenId": "2",
+                "name": "Test NFT #2",
+                "description": "Another test NFT",
+                "imageUrl": "https://example.com/nft2.png",
+                "externalUrl": "https://example.com/nft2",
+                "attributes": [
+                  {
+                    "trait_type": "Rarity",
+                    "value": "Rare"
+                  }
+                ]
+              }
+            ],
+            "nextToken": null
+          }
+        }
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/",
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "type": "JSON",
+        "json": {
+          "jsonrpc": "2.0",
+          "method": "ankr_getNFTsByOwner",
+          "params": {
+            "wallet": "invalid-wallet"
+          }
+        }
+      }
+    },
+    "httpResponse": {
+      "statusCode": 400,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "type": "JSON",
+        "json": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "error": {
+            "code": -32602,
+            "message": "Invalid wallet address"
+          }
+        }
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/",
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "type": "JSON",
+        "json": {
+          "jsonrpc": "2.0",
+          "method": "ankr_getNFTsByOwner",
+          "params": {
+            "wallet": "rate-limited-wallet"
+          }
+        }
+      }
+    },
+    "httpResponse": {
+      "statusCode": 429,
+      "headers": {
+        "Content-Type": ["application/json"],
+        "Retry-After": ["60"]
+      },
+      "body": {
+        "type": "JSON",
+        "json": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "error": {
+            "code": -32000,
+            "message": "Rate limit exceeded"
+          }
+        }
+      }
+    }
+  }
+] 
