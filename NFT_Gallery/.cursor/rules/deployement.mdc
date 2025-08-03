@@ -1,0 +1,135 @@
+---
+description: GCP deployment preparedness checklist for Cloud Functions, Cloud Run, Pub/Sub, Firestore, BigQuery, Cloud Build
+globs:
+  - "**/*"
+  - "**/deployment/**"
+alwaysApply: false
+---
+
+# GCP Deployment Checklist
+
+When you request: “Run the deployment readiness checklist”, the AI will walk through each section, prompting for status and providing guidance.
+
+## ✅ Test Coverage & Quality
+- **Basic** – Confirm unit test coverage ≥ 60%. Tests for basic logic only.
+- **Good** – Integration tests covering Pub/Sub triggers, Firestore operations, Cloud Function logic executed via Cloud Build.
+- **Excellent** – Full end‑to‑end workflows via emulators or staging environment, blocking deploys on failure.
+
+## 🔒 Security Scanning
+- **Basic** – Scan dependencies for known CVEs.
+- **Good** – Detect secrets in code, audit IAM roles, enforce least‑privilege design.
+- **Excellent** – Enforce Binary Authorization policies in build pipelines; use Secret Manager + strict IAM policies.
+
+## 📈 Performance Testing
+- **Basic** – Manual run under expected input volumes.
+- **Good** – Load‑test via Pub/Sub replay and Cloud Run endpoints using tools like k6 or Locust.
+- **Excellent** – Inject latency and failures (chaos testing); simulate higher concurrency and large BigQuery loads.
+
+## ❤️ Health Checks
+- **Basic** – Cloud Run returns HTTP 200 on root endpoint.
+- **Good** – Liveness/readiness probes set up and DLQ (dead-letter topics) enabled for Pub/Sub.
+- **Excellent** – Automated uptime pings and DLQ monitoring with alerts on failures or slow responses.
+
+## ♻️ Rollback Strategy
+- **Basic** – Manual rollback via gcloud deploy or redeploy prior version.
+- **Good** – Retain Cloud Run revisions; easy rollback through CLI/UI.
+- **Excellent** – Cloud Build or Cloud Deploy pipeline includes auto-rollback triggered by alert thresholds or telemetry anomalies.
+
+## 🔔 Monitoring & Alerting
+- **Basic** – Logs collected in Cloud Logging; manual search used.
+- **Good** – Metrics defined in Cloud Monitoring (errors, latency, message queue depth) with alerting policies.
+- **Excellent** – SLO-based policies, trace analysis, dashboards, and incident routing via PagerDuty or Slack.
+
+## 📝 Documentation
+- **Basic** – README per function/service with brief usage and deploy instructions.
+- **Good** – API docs, architecture diagrams, config guidance stored in Notion or GitHub wiki.
+- **Excellent** – Runbooks for common failure modes, deployment rollback procedures, dependency maps, operator guides.
+
+## ⚙️ Configuration Management
+- **Basic** – Use `.env` or environment variables, possibly with some hardcoded values.
+- **Good** – Strict separation of environment-specific values; secrets stored in Secret Manager; deploy-time validation.
+- **Excellent** – Dynamic config distribution via Firestore or Storage; pipelines inject and verify environments automatically.
+
+## 🧬 Database Migration Strategy
+- **Basic** – Manual edits or schema updates in Firestore or BigQuery.
+- **Good** – Use versioned migration scripts stored in Git and manually executed pre-deploy.
+- **Excellent** – Migrations automated in CI/CD with zero-downtime strategies (e.g. staged tables, copy-and-switch, Firestore admin SDK).
+
+---
+
+## 📋 Conversation Prompts
+
+The AI will prompt iteratively:
+
+1. “Let’s run the deployment readiness checklist. Starting with *Test Coverage & Quality*: what’s your current level?”
+2. After user response: offer guidance or recommendations if not at “Excellent”.
+3. Proceed through all categories.
+4. At the end: “Summary – here’s what’s complete and what needs improvement. Would you like a Markdown summary or a draft GitHub issue?”
+
+---
+
+## ✅ Usage Tips
+- Name file **`deployment-checklist.mdc`**, placed under `.cursor/rules/`.
+- Call Rule manually in Cursor chat via `@deployment-checklist` → “Run checklist”.
+- Keep each action prompt short to stay within Cursor’s context window.
+- Adjust descriptions or add CI-specific details as needed.
+
+---
+<!-- version.md -->
+
+# 🚀 GCP Deployment Readiness Summary – `v{{VERSION_LABEL}}` – `{{DATE_ISO}}`
+
+| Deployment Category          | Current Level  | Status | Comments/Notes                                     |
+|-----------------------------|----------------|--------|----------------------------------------------------|
+| Test Coverage & Quality     | {{LEVEL}}      | {{STAT}} | e.g. "Unit ≥60 %, Integration pub/sub → bq – PASS" |
+| Security Scanning           | {{LEVEL}}      | {{STAT}} | e.g. "CVE scan, IAM audit – in progress"           |
+| Performance Testing         | {{LEVEL}}      | {{STAT}} |                                                     |
+| Health Checks               | {{LEVEL}}      | {{STAT}} |                                                     |
+| Rollback Strategy           | {{LEVEL}}      | {{STAT}} |                                                     |
+| Monitoring & Alerting       | {{LEVEL}}      | {{STAT}} |                                                     |
+| Documentation               | {{LEVEL}}      | {{STAT}} |                                                     |
+| Configuration Management    | {{LEVEL}}      | {{STAT}} |                                                     |
+| Database Migration Strategy | {{LEVEL}}      | {{STAT}} |                                                     |
+
+---
+
+## ✅ Summary Overview
+
+- **Completed (✓)**: Categories at **Good** or **Excellent** level with no open gaps.  
+- **In Progress (⚠)**: At **Basic** or mid-level; requires focused improvement.  
+- **Missing (✗)**: Bare-minimum or absent; critical for deployment safety.
+
+---
+
+## 🛠 Notable Gaps & Action Items
+
+### {{CATEGORY_NAME_WITH_ISSUE}}
+- **Current level**: {{CURRENT_LEVEL}}
+- **Gaps**:
+  - [ ] {{ACTION_ITEM_1}}
+  - [ ] {{ACTION_ITEM_2}}
+- **Dependencies**: e.g. `"set up staging path + emulator before integrating E2E"`
+
+_Repeat the block above for each category marked ⚠ or ✗._
+
+---
+
+## 🚦 Next Steps
+
+- Prioritize categories in **⚠ / ✗ order**.
+- Assign owners and due dates.
+- Schedule checkpoints for follow-up.
+
+---
+
+## 🧭 References
+
+- This deployment checklist ties to the `.cursor/rules/deployment-checklist.mdc` cursor rule.
+- Cursor generates this file automatically after the checklist run; once reviewed, commit as part of your CI build artifact or attach to a GitHub issue or Notion page.
+
+---
+
+*Formatting notes:*
+- Version headers use the format **`v<version>`** (e.g. `v0.1.2`, or a Git tag).  
+- Dates should always be **ISO 8601 style** (YYYY‑MM‑DD) for consistency (e.g. `2025-08-03`)  [oai_citation:1‡keepachangelog.com](https://keepachangelog.com/en/1.1.0/?utm_source=chatgpt.com).  
+- Bullet points follow simple, grouped-list style so status tracking remains clear  [oai_citation:2‡keepachangelog.com](https://keepachangelog.com/en/1.1.0/?utm_source=chatgpt.com).
