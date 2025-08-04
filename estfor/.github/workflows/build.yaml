@@ -6,30 +6,33 @@ on:
       - main
       - feature # Temporary: for testing
     paths:
-      - "app/**"
-      - "tests/**"
-      - "requirements*.txt"
-      - "Dockerfile"
-      - "docker-compose*.yml"
-      - "pyproject.toml"
-      - "pytest.ini"
+      - "estfor/app/**"
+      - "estfor/tests/**"
+      - "estfor/requirements*.txt"
+      - "estfor/Dockerfile"
+      - "estfor/docker-compose*.yml"
+      - "estfor/pyproject.toml"
+      - "estfor/pytest.ini"
       - ".github/workflows/build.yaml"
   pull_request:
     branches:
       - main
       - feature # Temporary: for testing
     paths:
-      - "app/**"
-      - "tests/**"
-      - "requirements*.txt"
-      - "Dockerfile"
-      - "docker-compose*.yml"
-      - "pyproject.toml"
-      - "pytest.ini"
+      - "estfor/app/**"
+      - "estfor/tests/**"
+      - "estfor/requirements*.txt"
+      - "estfor/Dockerfile"
+      - "estfor/docker-compose*.yml"
+      - "estfor/pyproject.toml"
+      - "estfor/pytest.ini"
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: estfor
 
     steps:
       - name: Checkout repository
@@ -78,7 +81,7 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./estfor
           push: false
           tags: estfor:latest
           cache-from: type=gha

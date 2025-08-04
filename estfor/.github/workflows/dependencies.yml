@@ -9,19 +9,22 @@ on:
     branches:
       - main
     paths:
-      - "requirements*.txt"
-      - "pyproject.toml"
+      - "estfor/requirements*.txt"
+      - "estfor/pyproject.toml"
       - ".github/workflows/dependencies.yml"
   pull_request:
     branches:
       - main
     paths:
-      - "requirements*.txt"
-      - "pyproject.toml"
+      - "estfor/requirements*.txt"
+      - "estfor/pyproject.toml"
 
 jobs:
   dependency-check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: estfor
 
     steps:
       - name: Checkout repository
