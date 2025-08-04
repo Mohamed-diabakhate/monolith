@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature # Temporary: for testing
     paths:
       - "app/**"
       - "tests/**"
@@ -16,6 +17,7 @@ on:
   pull_request:
     branches:
       - main
+      - feature # Temporary: for testing
     paths:
       - "app/**"
       - "tests/**"
