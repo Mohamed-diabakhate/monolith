@@ -129,7 +129,23 @@ services:
       - "--web.enable-lifecycle"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/alert_rules.yml:/etc/prometheus/alert_rules.yml
       - prometheus-data:/prometheus
+    networks:
+      - estfor-network
+    restart: unless-stopped
+
+  # AlertManager for Alert Management
+  alertmanager:
+    image: prom/alertmanager:latest
+    ports:
+      - "9093:9093"
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+      - "--storage.path=/alertmanager"
+    volumes:
+      - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager-data:/alertmanager
     networks:
       - estfor-network
     restart: unless-stopped
@@ -238,3 +254,4 @@ volumes:
   prometheus-data:
   grafana-data:
   elasticsearch-data:
+  alertmanager-data:

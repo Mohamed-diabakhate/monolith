@@ -98,6 +98,78 @@ The system has been successfully tested and is fully operational:
 - ✅ **Monitoring Stack**: Prometheus, Grafana, and ELK stack operational
 - ✅ **Performance**: Health endpoints responding in < 15ms average
 
+## 🔄 CI/CD Pipeline
+
+### GitHub Actions Workflow
+
+The project includes a comprehensive CI/CD pipeline that runs on changes to relevant files:
+
+#### Build & Test Job
+
+- **Code Quality Checks**: Black formatting, isort imports, flake8 linting, mypy type checking
+- **Security Scanning**: Bandit for Python security issues, Trivy for container vulnerabilities
+- **Testing**: Unit, integration, and E2E tests with coverage reporting
+- **Docker Build**: Multi-stage Docker image build with caching
+- **Container Testing**: Runs tests inside the built container
+
+#### Deployment Jobs
+
+- **Staging Deployment**: Automatic deployment to staging on main branch pushes
+- **Production Deployment**: Manual deployment to production on version tags
+
+#### Quality Gates
+
+- All tests must pass
+- Code coverage requirements met
+- No security vulnerabilities
+- Code formatting standards maintained
+
+### Local Development Setup
+
+#### Pre-commit Hooks
+
+Install pre-commit hooks for automatic code quality checks:
+
+```bash
+# Install pre-commit
+pip install pre-commit
+
+# Install the git hook scripts
+pre-commit install
+
+# Run against all files
+pre-commit run --all-files
+```
+
+#### Code Quality Tools
+
+The project uses several tools for maintaining code quality:
+
+- **Black**: Code formatting
+- **isort**: Import sorting
+- **flake8**: Linting
+- **mypy**: Type checking
+- **bandit**: Security scanning
+- **safety**: Dependency vulnerability scanning
+
+#### Running Tests Locally
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=app --cov-report=html
+
+# Run specific test types
+pytest -m unit      # Unit tests only
+pytest -m integration  # Integration tests only
+pytest -m e2e       # End-to-end tests only
+
+# Run tests in parallel
+pytest -n auto
+```
+
 ### Test Results
 
 ```bash

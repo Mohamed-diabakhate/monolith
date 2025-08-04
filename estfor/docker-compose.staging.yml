@@ -1,0 +1,126 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      target: production
+    image: estfor:staging
+    container_name: estfor-app-staging
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+    environment:
+      - ENVIRONMENT=staging
+      - MONGODB_URL=mongodb://mongo:27017/estfor_staging
+      - REDIS_URL=redis://redis:6379/1
+      - ESTFOR_API_URL=${ESTFOR_API_URL}
+      - ESTFOR_API_KEY=${ESTFOR_API_KEY}
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - estfor-staging
+
+  worker:
+    build:
+      context: .
+      target: worker
+    image: estfor:staging
+    container_name: estfor-worker-staging
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=staging
+      - MONGODB_URL=mongodb://mongo:27017/estfor_staging
+      - REDIS_URL=redis://redis:6379/1
+      - ESTFOR_API_URL=${ESTFOR_API_URL}
+      - ESTFOR_API_KEY=${ESTFOR_API_KEY}
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - estfor-staging
+
+  mongo:
+    image: mongo:7.0
+    container_name: estfor-mongo-staging
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=estfor_staging
+    volumes:
+      - mongo_staging_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - estfor-staging
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: estfor-redis-staging
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_staging_data:/data
+    networks:
+      - estfor-staging
+
+  nginx:
+    image: nginx:alpine
+    container_name: estfor-nginx-staging
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    networks:
+      - estfor-staging
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: estfor-prometheus-staging
+    restart: unless-stopped
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_staging_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=200h"
+      - "--web.enable-lifecycle"
+    networks:
+      - estfor-staging
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: estfor-grafana-staging
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_staging_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - estfor-staging
+
+volumes:
+  mongo_staging_data:
+  redis_staging_data:
+  prometheus_staging_data:
+  grafana_staging_data:
+
+networks:
+  estfor-staging:
+    driver: bridge

@@ -97,6 +97,13 @@ performance-test:
 	k6 run k6/load-test.js
 
 # Code quality commands
+setup-dev:
+	@echo "Setting up development environment..."
+	pip install -r requirements.txt
+	pip install -r requirements-dev.txt
+	pre-commit install
+	@echo "Development environment setup complete."
+
 lint:
 	@echo "Running linting checks..."
 	docker-compose exec app flake8 app/ tests/
