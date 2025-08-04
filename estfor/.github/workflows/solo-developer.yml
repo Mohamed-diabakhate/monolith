@@ -14,7 +14,7 @@ on:
       - "docker-compose*.yml"
       - "pyproject.toml"
       - "pytest.ini"
-      - ".github/workflows/solo-cicd.yml"
+      - ".github/workflows/solo-developer.yml"
 
 jobs:
   # Development Testing (Feature Branch)
@@ -136,4 +136,4 @@ jobs:
           echo "✅ Docker image built successfully"
           echo "📦 Ready for production deployment"
           # Add your production deployment commands here
-          # Example: docker-compose -f docker-compose.prod.yml up -d
+          # Example: docker-compose -f docker-compose.prod.yml up -d 
