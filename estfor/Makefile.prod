@@ -1,0 +1,129 @@
+# EstFor Asset Collection System - Production Makefile
+
+.PHONY: help build-prod deploy-prod start-prod stop-prod restart-prod logs-prod clean-prod test-prod security-scan backup restore health-check
+
+help: ## Show this help message
+	@echo "EstFor Asset Collection System - Production Commands"
+	@echo "=================================================="
+	@echo ""
+	@echo "Available commands:"
+	@echo ""
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
+
+build-prod: ## Build production Docker images
+	@echo "🔨 Building production images..."
+	docker-compose -f docker-compose.prod.yml build --no-cache
+
+deploy-prod: ## Deploy to production (full deployment)
+	@echo "🚀 Deploying to production..."
+	./deploy-production.sh
+
+start-prod: ## Start production services
+	@echo "▶️  Starting production services..."
+	docker-compose -f docker-compose.prod.yml up -d
+
+stop-prod: ## Stop production services
+	@echo "⏹️  Stopping production services..."
+	docker-compose -f docker-compose.prod.yml down
+
+restart-prod: ## Restart production services
+	@echo "🔄 Restarting production services..."
+	docker-compose -f docker-compose.prod.yml restart
+
+logs-prod: ## Show production logs
+	@echo "📋 Showing production logs..."
+	docker-compose -f docker-compose.prod.yml logs -f
+
+clean-prod: ## Clean up production resources
+	@echo "🧹 Cleaning up production resources..."
+	docker-compose -f docker-compose.prod.yml down -v --remove-orphans
+	docker system prune -f
+
+test-prod: ## Run production tests
+	@echo "🧪 Running production tests..."
+	docker-compose -f docker-compose.prod.yml exec app pytest tests/ -v --tb=short
+
+security-scan: ## Run security scan on production images
+	@echo "🔒 Running security scan..."
+	@if command -v trivy &> /dev/null; then \
+		echo "Scanning app image..."; \
+		trivy image --severity HIGH,CRITICAL estfor-app:production; \
+		echo "Scanning worker image..."; \
+		trivy image --severity HIGH,CRITICAL estfor-worker:production; \
+	else \
+		echo "❌ Trivy not found. Install trivy for security scanning."; \
+		echo "   Installation: https://aquasecurity.github.io/trivy/latest/getting-started/installation/"; \
+	fi
+
+backup: ## Create database backup
+	@echo "💾 Creating database backup..."
+	@mkdir -p backups
+	@docker-compose -f docker-compose.prod.yml exec mongodb mongodump --out=/data/backup
+	@docker cp estfor-mongodb-prod:/data/backup ./backups/$(shell date +%Y%m%d_%H%M%S)
+	@echo "✅ Backup created in ./backups/"
+
+restore: ## Restore database from backup (usage: make restore BACKUP_DIR=backups/20231201_120000)
+	@echo "📥 Restoring database from backup..."
+	@if [ -z "$(BACKUP_DIR)" ]; then \
+		echo "❌ Please specify backup directory: make restore BACKUP_DIR=backups/YYYYMMDD_HHMMSS"; \
+		exit 1; \
+	fi
+	@docker cp $(BACKUP_DIR) estfor-mongodb-prod:/data/restore
+	@docker-compose -f docker-compose.prod.yml exec mongodb mongorestore --drop /data/restore
+	@echo "✅ Database restored from $(BACKUP_DIR)"
+
+health-check: ## Run comprehensive health checks
+	@echo "🏥 Running health checks..."
+	@echo "Checking API health..."
+	@curl -f http://localhost:8000/health/ || (echo "❌ API health check failed" && exit 1)
+	@echo "✅ API health check passed"
+	@echo "Checking MongoDB..."
+	@docker-compose -f docker-compose.prod.yml exec -T mongodb mongosh --eval "db.adminCommand('ping')" > /dev/null || (echo "❌ MongoDB health check failed" && exit 1)
+	@echo "✅ MongoDB health check passed"
+	@echo "Checking Redis..."
+	@docker-compose -f docker-compose.prod.yml exec -T redis redis-cli ping > /dev/null || (echo "❌ Redis health check failed" && exit 1)
+	@echo "✅ Redis health check passed"
+	@echo "Checking Prometheus..."
+	@curl -f http://localhost:9090/-/healthy > /dev/null || (echo "❌ Prometheus health check failed" && exit 1)
+	@echo "✅ Prometheus health check passed"
+	@echo "Checking Grafana..."
+	@curl -f http://localhost:3000/api/health > /dev/null || (echo "❌ Grafana health check failed" && exit 1)
+	@echo "✅ Grafana health check passed"
+	@echo "🎉 All health checks passed!"
+
+monitor: ## Show production monitoring dashboard
+	@echo "📊 Production Monitoring Dashboard"
+	@echo "=================================="
+	@echo "API: http://localhost:8000"
+	@echo "API Health: http://localhost:8000/health/"
+	@echo "Prometheus: http://localhost:9090"
+	@echo "Grafana: http://localhost:3000"
+	@echo "cAdvisor: http://localhost:8082"
+	@echo ""
+	@echo "Service Status:"
+	@docker-compose -f docker-compose.prod.yml ps
+
+scale-worker: ## Scale worker instances (usage: make scale-worker COUNT=3)
+	@echo "📈 Scaling worker instances..."
+	@if [ -z "$(COUNT)" ]; then \
+		echo "❌ Please specify count: make scale-worker COUNT=3"; \
+		exit 1; \
+	fi
+	@docker-compose -f docker-compose.prod.yml up -d --scale worker=$(COUNT)
+	@echo "✅ Scaled to $(COUNT) worker instances"
+
+update-prod: ## Update production deployment
+	@echo "🔄 Updating production deployment..."
+	@git pull origin main
+	@make build-prod
+	@make restart-prod
+	@make health-check
+	@echo "✅ Production update completed"
+
+rollback: ## Rollback to previous version
+	@echo "⏪ Rolling back to previous version..."
+	@git checkout HEAD~1
+	@make build-prod
+	@make restart-prod
+	@make health-check
+	@echo "✅ Rollback completed" 

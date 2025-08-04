@@ -1,0 +1,72 @@
+# Prometheus configuration for EstFor Asset Collection System
+# Adapted for local development monitoring stack
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alert_rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # FastAPI application metrics
+  - job_name: "estfor-app"
+    static_configs:
+      - targets: ["app:8000"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
+
+  # Worker service metrics
+  - job_name: "estfor-worker"
+    static_configs:
+      - targets: ["worker:8000"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
+
+  # Redis metrics
+  - job_name: "redis"
+    static_configs:
+      - targets: ["redis:6379"]
+
+  # MongoDB metrics (if using MongoDB exporter)
+  - job_name: "mongodb"
+    static_configs:
+      - targets: ["mongodb-exporter:9216"]
+    scrape_interval: 10s
+
+  # cAdvisor container metrics
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080"]
+    scrape_interval: 10s
+
+  # Node exporter (if running on host)
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["host.docker.internal:9100"]
+    scrape_interval: 15s
+
+  # Elasticsearch metrics
+  - job_name: "elasticsearch"
+    static_configs:
+      - targets: ["elasticsearch:9200"]
+    metrics_path: "/_prometheus/metrics"
+    scrape_interval: 30s
+
+  # Logstash metrics
+  - job_name: "logstash"
+    static_configs:
+      - targets: ["logstash:9600"]
+    metrics_path: "/node/stats/prometheus"
+    scrape_interval: 30s
