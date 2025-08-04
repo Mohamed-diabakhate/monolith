@@ -82,6 +82,14 @@ The dependency management workflow triggers on:
 
 The pipeline will automatically trigger when:
 
+**Events occur:**
+
+1. **Push to main**: Direct commits pushed to the main branch
+2. **Pull Request to main**: PRs created or updated targeting main branch
+3. **Merge to main**: When PRs are merged into main branch
+
+**AND relevant files change:**
+
 1. **Code Changes**: Any modification to application code in `app/` directory
 2. **Test Changes**: Updates to test files in `tests/` directory
 3. **Dependency Updates**: Changes to `requirements.txt` or `requirements-dev.txt`
@@ -101,7 +109,7 @@ The pipeline will NOT trigger for:
 
 ### Staging Deployment
 
-- **Trigger**: Automatic on pushes to `main` branch
+- **Trigger**: Automatic on pushes to `main` branch (including merges)
 - **Condition**: All tests pass and quality gates met
 - **Environment**: Staging environment
 

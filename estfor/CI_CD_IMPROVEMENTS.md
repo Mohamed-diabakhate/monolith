@@ -21,6 +21,7 @@ This document outlines the comprehensive improvements made to the EstFor project
 - **Test Coverage**: Implemented coverage reporting with Codecov integration
 - **Docker Optimization**: Added Docker Buildx with layer caching
 - **Multi-Environment Deployment**: Added staging and production deployment jobs
+- **Branch-Specific Triggers**: Configured to run on main branch pushes and PRs
 
 ### 2. Code Quality Configuration (`pyproject.toml`)
 

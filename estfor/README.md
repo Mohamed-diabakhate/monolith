@@ -102,7 +102,7 @@ The system has been successfully tested and is fully operational:
 
 ### GitHub Actions Workflow
 
-The project includes a comprehensive CI/CD pipeline that runs on changes to relevant files:
+The project includes a comprehensive CI/CD pipeline that runs on pushes and pull requests to the main branch:
 
 #### Build & Test Job
 
@@ -114,7 +114,7 @@ The project includes a comprehensive CI/CD pipeline that runs on changes to rele
 
 #### Deployment Jobs
 
-- **Staging Deployment**: Automatic deployment to staging on main branch pushes
+- **Staging Deployment**: Automatic deployment to staging on main branch pushes (including merges)
 - **Production Deployment**: Manual deployment to production on version tags
 
 #### Quality Gates
