@@ -2,6 +2,8 @@
 
 This document outlines the setup of a complete local monitoring stack using Docker on macOS. It includes **Prometheus**, **Grafana**, **cAdvisor**, and the **ELK Stack** (Elasticsearch, Kibana) to track metrics and logs for Docker containers and the host machine.
 
+**✅ Status: Fully Integrated with EstFor Project**
+
 ---
 
 ## ✅ Components Overview
@@ -79,3 +81,19 @@ version: '3.7'services:  elasticsearch:    image: docker.elastic.co/elasticsearc
 - 📈 Add **node-exporter** for host-level system metrics.
 - 🔔 Configure **Grafana alerts** based on metric thresholds.
 - 🔒 Harden security in ELK (enable auth, use TLS) for production setups.
+
+## 🚀 Quick Start
+
+```bash
+# Start monitoring stack only
+./start-monitoring.sh
+
+# Start full application with monitoring
+docker-compose up -d
+
+# Access monitoring tools
+# Prometheus: http://localhost:9090
+# Grafana: http://localhost:3000 (admin/admin)
+# cAdvisor: http://localhost:8080
+# Kibana: http://localhost:5601
+```

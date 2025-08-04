@@ -1,22 +1,33 @@
 """
-Pytest configuration and fixtures for comprehensive testing.
+Test configuration and fixtures for EstFor Asset Collection System.
 """
 
+import os
 import pytest
 import asyncio
-import os
-import tempfile
 from typing import AsyncGenerator, Generator
-from unittest.mock import Mock, patch
+from motor.motor_asyncio import AsyncIOMotorClient
+from bson import ObjectId
+import structlog
 
-import httpx
-from fastapi.testclient import TestClient
-from google.cloud import firestore
-from celery import Celery
-
-from app.main import app
 from app.config import settings
-from app.database import init_firestore, db
+from app.database import init_mongodb, close_mongodb, get_collection
+
+# Configure test logging
+structlog.configure(
+    processors=[
+        structlog.stdlib.filter_by_level,
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.JSONRenderer()
+    ],
+    logger_factory=structlog.stdlib.LoggerFactory(),
+)
+
+logger = structlog.get_logger()
+
+# Test database configuration
+TEST_DATABASE = "estfor_test"
+TEST_COLLECTION = "all_assets_test"
 
 
 @pytest.fixture(scope="session")
@@ -28,231 +39,177 @@ def event_loop():
 
 
 @pytest.fixture(scope="session")
-def test_settings():
-    """Test settings with emulator configuration."""
+async def mongodb_client():
+    """MongoDB client for testing."""
     # Override settings for testing
-    os.environ["ENVIRONMENT"] = "test"
-    os.environ["FIRESTORE_EMULATOR_HOST"] = "localhost:8080"
-    os.environ["ESTFOR_API_URL"] = "https://api.estfor.com"
-    os.environ["ESTFOR_API_KEY"] = "test-api-key"
-    os.environ["REDIS_URL"] = "redis://localhost:6379/0"
-    os.environ["CELERY_BROKER_URL"] = "redis://localhost:6379/1"
-    os.environ["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/2"
-    return settings
-
-
-@pytest.fixture(scope="session")
-async def firestore_client():
-    """Firestore client for testing."""
-    # Initialize Firestore emulator connection
-    await init_firestore()
-    yield db
-    # Cleanup
-    if db:
-        # Clear test data
-        collection_ref = db.collection(settings.FIRESTORE_COLLECTION)
-        docs = collection_ref.stream()
-        for doc in docs:
-            doc.reference.delete()
-
-
-@pytest.fixture
-def test_client() -> Generator:
-    """FastAPI test client."""
-    with TestClient(app) as client:
-        yield client
-
-
-@pytest.fixture
-def mock_estfor_api():
-    """Mock EstFor API responses."""
-    mock_assets = [
-        {
-            "id": "asset_1",
-            "name": "Test Sword",
-            "type": "weapon",
-            "rarity": "common",
-            "description": "A basic test sword"
-        },
-        {
-            "id": "asset_2", 
-            "name": "Test Shield",
-            "type": "armor",
-            "rarity": "rare",
-            "description": "A magical test shield"
-        }
-    ]
+    original_uri = settings.MONGODB_URI
+    original_db = settings.MONGODB_DATABASE
+    original_collection = settings.MONGODB_COLLECTION
     
-    with patch("app.services.estfor_client.EstForClient.get_assets") as mock_get_assets:
-        mock_get_assets.return_value = mock_assets
-        yield mock_get_assets
+    # Use test database
+    test_uri = original_uri.replace("/estfor?", "/estfor_test?")
+    settings.MONGODB_URI = test_uri
+    settings.MONGODB_DATABASE = TEST_DATABASE
+    settings.MONGODB_COLLECTION = TEST_COLLECTION
+    
+    # Initialize MongoDB connection
+    await init_mongodb()
+    
+    yield
+    
+    # Cleanup
+    await close_mongodb()
+    
+    # Restore original settings
+    settings.MONGODB_URI = original_uri
+    settings.MONGODB_DATABASE = original_db
+    settings.MONGODB_COLLECTION = original_collection
 
 
 @pytest.fixture
-def mock_http_client():
-    """Mock HTTP client for external API calls."""
-    with patch("httpx.AsyncClient") as mock_client:
-        mock_response = Mock()
-        mock_response.json.return_value = {"status": "success"}
-        mock_response.raise_for_status.return_value = None
-        mock_client.return_value.__aenter__.return_value.get.return_value = mock_response
-        yield mock_client
-
-
-@pytest.fixture
-def celery_app():
-    """Celery app for testing."""
-    test_celery = Celery(
-        "test_estfor",
-        broker="memory://",
-        backend="rpc://"
-    )
-    test_celery.conf.update(
-        task_always_eager=True,
-        task_eager_propagates=True,
-        task_serializer="json",
-        accept_content=["json"],
-        result_serializer="json",
-        timezone="UTC",
-        enable_utc=True,
-    )
-    return test_celery
+async def clean_database(mongodb_client):
+    """Clean the test database before each test."""
+    collection_ref = get_collection()
+    
+    # Clear all documents
+    await collection_ref.delete_many({})
+    
+    yield
+    
+    # Clean up after test
+    await collection_ref.delete_many({})
 
 
 @pytest.fixture
 def sample_asset_data():
     """Sample asset data for testing."""
     return {
-        "name": "Test Asset",
+        "asset_id": "test_asset_001",
+        "name": "Test Weapon",
         "type": "weapon",
-        "rarity": "common",
-        "description": "A test asset for unit testing"
-    }
-
-
-@pytest.fixture
-def sample_asset_response():
-    """Sample asset response data."""
-    return {
-        "id": "test_asset_id",
-        "name": "Test Asset",
-        "type": "weapon",
-        "rarity": "common",
-        "description": "A test asset for unit testing",
-        "created_at": "2024-01-01T00:00:00Z",
-        "updated_at": "2024-01-01T00:00:00Z"
-    }
-
-
-@pytest.fixture
-def mock_prometheus_metrics():
-    """Mock Prometheus metrics."""
-    with patch("prometheus_client.Counter") as mock_counter, \
-         patch("prometheus_client.Histogram") as mock_histogram:
-        
-        mock_counter.return_value.inc.return_value = None
-        mock_histogram.return_value.observe.return_value = None
-        
-        yield {
-            "counter": mock_counter,
-            "histogram": mock_histogram
+        "description": "A test weapon for unit testing",
+        "metadata": {
+            "rarity": "rare",
+            "level": 5,
+            "damage": 100
         }
+    }
 
 
 @pytest.fixture
-def mock_redis():
-    """Mock Redis client."""
-    with patch("redis.Redis") as mock_redis_client:
-        mock_redis_client.return_value.ping.return_value = True
-        mock_redis_client.return_value.get.return_value = None
-        mock_redis_client.return_value.set.return_value = True
-        yield mock_redis_client
-
-
-@pytest.fixture
-def temp_dir():
-    """Temporary directory for test files."""
-    with tempfile.TemporaryDirectory() as temp_dir:
-        yield temp_dir
-
-
-@pytest.fixture
-def mock_logger():
-    """Mock structured logger."""
-    with patch("structlog.get_logger") as mock_logger:
-        mock_logger.return_value.info.return_value = None
-        mock_logger.return_value.error.return_value = None
-        mock_logger.return_value.warning.return_value = None
-        yield mock_logger
-
-
-# Performance testing fixtures
-@pytest.fixture
-def performance_test_data():
-    """Large dataset for performance testing."""
+def multiple_assets_data():
+    """Multiple sample assets for testing."""
     return [
         {
-            "id": f"asset_{i}",
-            "name": f"Performance Test Asset {i}",
-            "type": "weapon" if i % 2 == 0 else "armor",
-            "rarity": "common" if i % 3 == 0 else "rare" if i % 3 == 1 else "epic",
-            "description": f"Performance test asset number {i}"
+            "asset_id": "test_asset_001",
+            "name": "Test Weapon 1",
+            "type": "weapon",
+            "description": "First test weapon",
+            "metadata": {"rarity": "common", "level": 1}
+        },
+        {
+            "asset_id": "test_asset_002",
+            "name": "Test Armor 1",
+            "type": "armor",
+            "description": "First test armor",
+            "metadata": {"rarity": "uncommon", "level": 2}
+        },
+        {
+            "asset_id": "test_asset_003",
+            "name": "Test Potion 1",
+            "type": "consumable",
+            "description": "First test potion",
+            "metadata": {"rarity": "common", "level": 1}
         }
-        for i in range(1000)
     ]
 
 
-# Security testing fixtures
 @pytest.fixture
-def malicious_input_data():
-    """Malicious input data for security testing."""
-    return {
-        "name": "<script>alert('xss')</script>",
-        "type": "'; DROP TABLE assets; --",
-        "rarity": "../../../etc/passwd",
-        "description": "'; INSERT INTO users VALUES ('admin', 'password'); --"
-    }
+async def populated_database(clean_database, multiple_assets_data):
+    """Database populated with test assets."""
+    collection_ref = get_collection()
+    
+    # Insert test assets
+    for asset_data in multiple_assets_data:
+        await collection_ref.insert_one(asset_data)
+    
+    return multiple_assets_data
 
 
-# Integration testing fixtures
 @pytest.fixture
-async def integration_test_client():
-    """Integration test client with real database."""
-    # Use real Firestore emulator
-    await init_firestore()
+def integration_test_client():
+    """Integration test client."""
+    from fastapi.testclient import TestClient
+    from app.main import app
     
     with TestClient(app) as client:
         yield client
+
+
+@pytest.fixture
+async def performance_test_data():
+    """Large dataset for performance testing."""
+    assets = []
+    for i in range(100):
+        assets.append({
+            "asset_id": f"perf_asset_{i:03d}",
+            "name": f"Performance Asset {i}",
+            "type": "weapon" if i % 3 == 0 else "armor" if i % 3 == 1 else "consumable",
+            "description": f"Performance test asset number {i}",
+            "metadata": {
+                "rarity": ["common", "uncommon", "rare", "epic"][i % 4],
+                "level": (i % 20) + 1,
+                "value": i * 100
+            }
+        })
+    return assets
+
+
+# Service health check configuration for integration tests
+SERVICE_HEALTH_CHECKS = {
+    "app": {"port": 8000, "health_check": "/health"},
+    "worker": {"port": 8000, "health_check": "/health"},
+    "mongodb": {"port": 27017, "health_check": "ping"},
+    "redis": {"port": 6379, "health_check": "ping"},
+    "prometheus": {"port": 9090, "health_check": "/-/healthy"},
+    "grafana": {"port": 3000, "health_check": "/api/health"},
+}
+
+
+@pytest.fixture(scope="session")
+def docker_services():
+    """Docker services for integration testing."""
+    import subprocess
+    import time
     
-    # Cleanup
-    if db:
-        collection_ref = db.collection(settings.FIRESTORE_COLLECTION)
-        docs = collection_ref.stream()
-        for doc in docs:
-            doc.reference.delete()
+    # Start services
+    subprocess.run(["docker-compose", "up", "-d"], check=True)
+    
+    # Wait for services to be ready
+    time.sleep(30)
+    
+    yield
+    
+    # Stop services
+    subprocess.run(["docker-compose", "down"], check=True)
 
 
-# E2E testing fixtures
 @pytest.fixture
-def docker_compose_services():
-    """Docker Compose services for E2E testing."""
-    return {
-        "app": {"port": 8000, "health_check": "/health"},
-        "firestore": {"port": 8080, "health_check": "/"},
-        "redis": {"port": 6379, "health_check": "ping"},
-        "prometheus": {"port": 9090, "health_check": "/metrics"},
-        "grafana": {"port": 3000, "health_check": "/api/health"}
-    }
-
-
-# Load testing fixtures
-@pytest.fixture
-def load_test_scenarios():
-    """Load testing scenarios for K6."""
-    return {
-        "smoke": {"vus": 1, "duration": "30s"},
-        "load": {"vus": 10, "duration": "2m"},
-        "stress": {"vus": 50, "duration": "5m"},
-        "spike": {"vus": 100, "duration": "1m"},
-        "breakpoint": {"vus": 200, "duration": "10m"}
-    } 
+async def mongodb_connection_test(mongodb_client):
+    """Test MongoDB connection and basic operations."""
+    collection_ref = get_collection()
+    
+    # Test basic operations
+    test_doc = {"test": "connection", "timestamp": "now"}
+    result = await collection_ref.insert_one(test_doc)
+    assert result.inserted_id
+    
+    # Verify document was inserted
+    doc = await collection_ref.find_one({"_id": result.inserted_id})
+    assert doc is not None
+    assert doc["test"] == "connection"
+    
+    # Clean up
+    await collection_ref.delete_one({"_id": result.inserted_id})
+    
+    return True 

@@ -1,63 +1,67 @@
 # Prometheus configuration for EstFor Asset Collection System
+# Adapted for local development monitoring stack
 
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
 
 rule_files:
-  - "rules/*.yml"
-
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets:
-            - alertmanager:9093
+  # - "first_rules.yml"
+  # - "second_rules.yml"
 
 scrape_configs:
-  # EstFor App metrics
+  # Prometheus itself
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # FastAPI application metrics
   - job_name: "estfor-app"
     static_configs:
       - targets: ["app:8000"]
     metrics_path: "/metrics"
     scrape_interval: 10s
-    scrape_timeout: 5s
-    honor_labels: true
 
-  # EstFor Worker metrics
+  # Worker service metrics
   - job_name: "estfor-worker"
     static_configs:
       - targets: ["worker:8000"]
     metrics_path: "/metrics"
     scrape_interval: 10s
-    scrape_timeout: 5s
-    honor_labels: true
-
-  # Firestore emulator metrics (if available)
-  - job_name: "firestore"
-    static_configs:
-      - targets: ["firestore:8080"]
-    metrics_path: "/metrics"
-    scrape_interval: 30s
-    scrape_timeout: 10s
 
   # Redis metrics
   - job_name: "redis"
     static_configs:
       - targets: ["redis:6379"]
-    metrics_path: "/metrics"
-    scrape_interval: 30s
-    scrape_timeout: 10s
 
-  # Prometheus self-monitoring
-  - job_name: "prometheus"
+  # MongoDB metrics (if using MongoDB exporter)
+  - job_name: "mongodb"
     static_configs:
-      - targets: ["localhost:9090"]
-    scrape_interval: 30s
+      - targets: ["mongodb-exporter:9216"]
+    scrape_interval: 10s
 
-  # Node exporter (if available)
+  # cAdvisor container metrics
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080"]
+    scrape_interval: 10s
+
+  # Node exporter (if running on host)
   - job_name: "node-exporter"
     static_configs:
-      - targets: ["node-exporter:9100"]
+      - targets: ["host.docker.internal:9100"]
+    scrape_interval: 15s
+
+  # Elasticsearch metrics
+  - job_name: "elasticsearch"
+    static_configs:
+      - targets: ["elasticsearch:9200"]
+    metrics_path: "/_prometheus/metrics"
     scrape_interval: 30s
-# Recording rules for common queries
-# (Defined in global rule_files section above)
+
+  # Logstash metrics
+  - job_name: "logstash"
+    static_configs:
+      - targets: ["logstash:9600"]
+    metrics_path: "/node/stats/prometheus"
+    scrape_interval: 30s

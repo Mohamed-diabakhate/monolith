@@ -2,25 +2,15 @@
 Main FastAPI application for EstFor Asset Collection System.
 """
 
-import logging
-import time
-from contextlib import asynccontextmanager
-from typing import Dict, Any
-
 import structlog
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
+from contextlib import asynccontextmanager
 
 from app.config import settings
-from app.database import init_firestore
 from app.routers import assets, health
-from app.middleware import RequestLoggingMiddleware
-from app.metrics import setup_metrics
+from app.database import init_mongodb, close_mongodb
 
 # Configure structured logging
 structlog.configure(
@@ -43,41 +33,35 @@ structlog.configure(
 
 logger = structlog.get_logger()
 
-# Rate limiter
-limiter = Limiter(key_func=get_remote_address)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager."""
     # Startup
-    logger.info("Starting EstFor Asset Collection System", version=app.version)
+    logger.info("Starting EstFor Asset Collection System")
     
-    # Initialize database
-    await init_firestore()
-    logger.info("Database initialized successfully")
-    
-    # Setup metrics
-    setup_metrics()
-    logger.info("Metrics setup completed")
+    try:
+        # Initialize MongoDB
+        await init_mongodb()
+        logger.info("MongoDB initialized successfully")
+    except Exception as e:
+        logger.error("Failed to initialize MongoDB", error=str(e))
+        raise
     
     yield
     
     # Shutdown
     logger.info("Shutting down EstFor Asset Collection System")
+    await close_mongodb()
+
 
 # Create FastAPI application
 app = FastAPI(
     title="EstFor Asset Collection System",
-    description="A system for collecting and storing EstFor Kingdom assets in Firestore",
+    description="A system for collecting and storing EstFor Kingdom assets",
     version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
     lifespan=lifespan
 )
-
-# Add rate limiting
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Add CORS middleware
 app.add_middleware(
@@ -88,69 +72,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add request logging middleware
-app.add_middleware(RequestLoggingMiddleware)
-
 # Include routers
 app.include_router(health.router, prefix="/health", tags=["health"])
 app.include_router(assets.router, prefix="/assets", tags=["assets"])
 
-# Prometheus metrics endpoint
-@app.get("/metrics")
-async def metrics():
-    """Prometheus metrics endpoint."""
-    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
-# Root endpoint
 @app.get("/")
-@limiter.limit("10/minute")
-async def root(request: Request):
-    """Root endpoint with basic information."""
+async def root():
+    """Root endpoint."""
     return {
-        "name": "EstFor Asset Collection System",
+        "message": "EstFor Asset Collection System",
         "version": "1.0.0",
-        "status": "healthy",
-        "docs": "/docs",
-        "health": "/health"
+        "status": "running"
     }
 
-# Global exception handler
+
 @app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    """Global exception handler with structured logging."""
-    logger.error(
-        "Unhandled exception",
-        path=request.url.path,
-        method=request.method,
-        error=str(exc),
-        exc_info=True
-    )
-    
+async def global_exception_handler(request, exc):
+    """Global exception handler."""
+    logger.error("Unhandled exception", error=str(exc), path=request.url.path)
     return JSONResponse(
         status_code=500,
-        content={
-            "error": "Internal server error",
-            "message": "An unexpected error occurred",
-            "request_id": getattr(request.state, "request_id", "unknown")
-        }
-    )
-
-# Request ID middleware
-@app.middleware("http")
-async def add_request_id(request: Request, call_next):
-    """Add request ID to all requests."""
-    import uuid
-    request.state.request_id = str(uuid.uuid4())
-    response = await call_next(request)
-    response.headers["X-Request-ID"] = request.state.request_id
-    return response
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(
-        "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=settings.ENVIRONMENT == "development",
-        log_config=None
+        content={"detail": "Internal server error"}
     ) 

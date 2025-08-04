@@ -16,33 +16,45 @@ class EstForClient:
     
     def __init__(self):
         self.base_url = settings.ESTFOR_API_URL
-        self.api_key = settings.ESTFOR_API_KEY
+        # EstFor API doesn't require authentication
         self.headers = {
-            "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
         }
     
-    async def get_assets(self, limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]:
-        """Fetch assets from EstFor API."""
+    async def get_assets(self, limit: int = 100, offset: int = 0, asset_type: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Fetch items from EstFor API."""
         try:
             async with httpx.AsyncClient() as client:
+                params = {"limit": limit, "offset": offset}
+                if asset_type:
+                    params["type"] = asset_type
+                
                 response = await client.get(
-                    f"{self.base_url}/assets",
+                    f"{self.base_url}/items",
                     headers=self.headers,
-                    params={"limit": limit, "offset": offset}
+                    params=params
                 )
                 response.raise_for_status()
-                return response.json()
+                data = response.json()
+                
+                # Handle the API response structure: {"items": [...]}
+                if isinstance(data, dict) and "items" in data:
+                    return data["items"]
+                elif isinstance(data, list):
+                    return data
+                else:
+                    logger.warning("Unexpected API response structure", data=data)
+                    return []
         except Exception as e:
-            logger.error("Failed to fetch assets from EstFor API", error=str(e))
+            logger.error("Failed to fetch items from EstFor API", error=str(e))
             raise
     
     async def get_asset_by_id(self, asset_id: str) -> Optional[Dict[str, Any]]:
-        """Fetch a specific asset by ID."""
+        """Fetch a specific item by ID."""
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.get(
-                    f"{self.base_url}/assets/{asset_id}",
+                    f"{self.base_url}/items/{asset_id}",
                     headers=self.headers
                 )
                 if response.status_code == 404:
@@ -50,7 +62,7 @@ class EstForClient:
                 response.raise_for_status()
                 return response.json()
         except Exception as e:
-            logger.error("Failed to fetch asset from EstFor API", error=str(e), asset_id=asset_id)
+            logger.error("Failed to fetch item from EstFor API", error=str(e), asset_id=asset_id)
             raise
     
     async def search_assets(self, query: str) -> List[Dict[str, Any]]:
@@ -66,6 +78,20 @@ class EstForClient:
                 return response.json()
         except Exception as e:
             logger.error("Failed to search assets from EstFor API", error=str(e), query=query)
+            raise
+    
+    async def get_asset_stats(self) -> Dict[str, Any]:
+        """Get asset statistics from EstFor API."""
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(
+                    f"{self.base_url}/assets/stats",
+                    headers=self.headers
+                )
+                response.raise_for_status()
+                return response.json()
+        except Exception as e:
+            logger.error("Failed to fetch asset stats from EstFor API", error=str(e))
             raise
 
 

@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # Main FastAPI Application
   app:
@@ -15,7 +13,7 @@ services:
     env_file:
       - .env
     depends_on:
-      firestore:
+      mongodb:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -49,7 +47,7 @@ services:
     env_file:
       - .env
     depends_on:
-      firestore:
+      mongodb:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -77,17 +75,17 @@ services:
           memory: 128M
           cpus: "0.1"
 
-  # Firestore Emulator
-  firestore:
-    image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-    command: >
-      gcloud emulators firestore start
-      --host-port=0.0.0.0:8080
-      --project=estfor
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
     ports:
-      - "8080:8080"
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=Mongo
+      - MONGO_INITDB_ROOT_PASSWORD=Mongo123456
+      - MONGO_INITDB_DATABASE=estfor
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -95,7 +93,8 @@ services:
     networks:
       - estfor-network
     volumes:
-      - firestore-data:/firestore-data
+      - mongodb-data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
     restart: unless-stopped
 
   # Redis for Caching and Job Queue
@@ -208,6 +207,24 @@ services:
       - estfor-network
     restart: unless-stopped
 
+  # cAdvisor for Container Metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    privileged: true
+    ports:
+      - "8082:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    networks:
+      - estfor-network
+    restart: unless-stopped
+
 networks:
   estfor-network:
     driver: bridge
@@ -216,7 +233,7 @@ networks:
         - subnet: 172.20.0.0/16
 
 volumes:
-  firestore-data:
+  mongodb-data:
   redis-data:
   prometheus-data:
   grafana-data:

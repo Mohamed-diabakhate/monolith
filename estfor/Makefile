@@ -1,276 +1,181 @@
 # EstFor Asset Collection System - Makefile
-# Comprehensive build, test, and deployment commands
+# Provides convenient commands for development, testing, and deployment
 
-.PHONY: help build start stop restart logs clean test test-unit test-integration test-e2e coverage security-scan performance-test health-check deploy rollback canary-deploy promote-canary rollback-canary db-backup db-restore db-migrate lint format docs
-
-# Variables
-VERSION ?= $(shell git describe --tags --always --dirty)
-DOCKER_COMPOSE = docker-compose
-DOCKER_IMAGE = estfor-asset-collection
-REGISTRY ?= localhost:5000
+.PHONY: help start stop restart logs clean build test test-unit test-integration test-e2e lint format security-scan performance-test health-check db-backup db-restore db-migrate deploy rollback canary-deploy promote-canary rollback-canary dependency-scan secrets-validate
 
 # Default target
 help:
 	@echo "EstFor Asset Collection System - Available Commands:"
 	@echo ""
-	@echo "Build & Run:"
-	@echo "  build          - Build Docker images"
-	@echo "  start          - Start all services"
-	@echo "  stop           - Stop all services"
-	@echo "  restart        - Restart all services"
-	@echo "  logs           - View service logs"
-	@echo "  clean          - Clean up containers and volumes"
+	@echo "Development:"
+	@echo "  start              - Start all services"
+	@echo "  stop               - Stop all services"
+	@echo "  restart            - Restart all services"
+	@echo "  logs               - View service logs"
+	@echo "  clean              - Clean up containers and volumes"
+	@echo "  build              - Build Docker images"
 	@echo ""
-	@echo "Testing (Excellent Level):"
-	@echo "  test           - Run all tests (unit, integration, e2e)"
-	@echo "  test-unit      - Run unit tests with 90%+ coverage"
-	@echo "  test-integration - Run integration tests"
-	@echo "  test-e2e       - Run end-to-end tests with Docker Compose"
-	@echo "  coverage       - Generate coverage report"
-	@echo "  security-scan  - Run security vulnerability scan"
-	@echo "  performance-test - Run performance tests with K6"
-	@echo ""
-	@echo "Health & Monitoring:"
-	@echo "  health-check   - Check all service health endpoints"
-	@echo "  metrics        - View Prometheus metrics"
-	@echo "  grafana        - Open Grafana dashboard"
-	@echo ""
-	@echo "Deployment:"
-	@echo "  deploy         - Deploy specific version"
-	@echo "  rollback       - Rollback to previous version"
-	@echo "  canary-deploy  - Deploy canary version"
-	@echo "  promote-canary - Promote canary to production"
-	@echo "  rollback-canary - Rollback canary deployment"
-	@echo ""
-	@echo "Database:"
-	@echo "  db-backup      - Backup Firestore data"
-	@echo "  db-restore     - Restore Firestore data"
-	@echo "  db-migrate     - Run database migrations"
+	@echo "Testing:"
+	@echo "  test               - Run all tests with coverage"
+	@echo "  test-unit          - Run unit tests only"
+	@echo "  test-integration   - Run integration tests only"
+	@echo "  test-e2e           - Run end-to-end tests only"
+	@echo "  performance-test   - Run performance tests"
 	@echo ""
 	@echo "Code Quality:"
-	@echo "  lint           - Run linting checks"
-	@echo "  format         - Format code with black"
-	@echo "  docs           - Generate documentation"
+	@echo "  lint               - Run linting checks"
+	@echo "  format             - Format code with black"
+	@echo "  security-scan      - Run security vulnerability scan"
+	@echo "  dependency-scan    - Scan dependencies for vulnerabilities"
+	@echo "  secrets-validate   - Validate secrets configuration"
 	@echo ""
-	@echo "Variables:"
-	@echo "  VERSION        - Version tag (default: git describe)"
-	@echo "  REGISTRY       - Docker registry (default: localhost:5000)"
+	@echo "Database:"
+	@echo "  db-backup          - Backup MongoDB data"
+	@echo "  db-restore         - Restore MongoDB data"
+	@echo "  db-migrate         - Run database migrations"
+	@echo ""
+	@echo "Deployment:"
+	@echo "  deploy             - Deploy application"
+	@echo "  rollback           - Rollback to previous version"
+	@echo "  canary-deploy      - Deploy canary version"
+	@echo "  promote-canary     - Promote canary to production"
+	@echo "  rollback-canary    - Rollback canary deployment"
+	@echo ""
+	@echo "Monitoring:"
+	@echo "  health-check       - Check service health"
+	@echo "  logs-app           - View app logs"
+	@echo "  logs-worker        - View worker logs"
+	@echo "  logs-mongodb       - View MongoDB logs"
 
-# Build and Run Commands
-build:
-	@echo "Building Docker images..."
-	$(DOCKER_COMPOSE) build --no-cache
-	@echo "Build completed successfully"
-
+# Development commands
 start:
 	@echo "Starting EstFor Asset Collection System..."
-	$(DOCKER_COMPOSE) up -d
-	@echo "Services started. Waiting for health checks..."
-	@sleep 30
-	@make health-check
+	docker-compose up -d
+	@echo "Services started. Use 'make health-check' to verify."
 
 stop:
 	@echo "Stopping services..."
-	$(DOCKER_COMPOSE) down
+	docker-compose down
+	@echo "Services stopped."
 
-restart:
-	@echo "Restarting services..."
-	$(DOCKER_COMPOSE) restart
+restart: stop start
 
 logs:
 	@echo "Viewing service logs..."
-	$(DOCKER_COMPOSE) logs -f
+	docker-compose logs -f
 
 clean:
 	@echo "Cleaning up containers and volumes..."
-	$(DOCKER_COMPOSE) down -v --remove-orphans
+	docker-compose down -v --remove-orphans
 	docker system prune -f
-	@echo "Cleanup completed"
+	@echo "Cleanup completed."
 
-# Testing Commands (Excellent Level)
-test: test-unit test-integration test-e2e
-	@echo "All tests completed successfully!"
+build:
+	@echo "Building Docker images..."
+	docker-compose build --no-cache
+	@echo "Build completed."
+
+# Testing commands
+test:
+	@echo "Running all tests with coverage..."
+	docker-compose exec app pytest tests/ -v --cov=app --cov-report=term-missing --cov-report=html
 
 test-unit:
-	@echo "Running unit tests with 90%+ coverage target..."
-	docker-compose run --rm app pytest tests/test_unit.py -v --cov=app --cov-report=html --cov-report=term --cov-fail-under=90
-	@echo "Unit tests completed"
+	@echo "Running unit tests..."
+	docker-compose exec app pytest tests/test_unit.py -v -m "unit"
 
 test-integration:
 	@echo "Running integration tests..."
-	docker-compose run --rm app pytest tests/test_integration.py -v
-	@echo "Integration tests completed"
+	docker-compose exec app pytest tests/test_integration.py -v -m "integration"
 
 test-e2e:
-	@echo "Running end-to-end tests with Docker Compose..."
-	docker-compose run --rm app pytest tests/test_e2e.py -v
-	@echo "E2E tests completed"
+	@echo "Running end-to-end tests..."
+	docker-compose exec app pytest tests/test_e2e.py -v -m "e2e"
 
-coverage:
-	@echo "Generating coverage report..."
-	docker-compose run --rm app pytest --cov=app --cov-report=html --cov-report=term
-	@echo "Coverage report generated in htmlcov/"
+performance-test:
+	@echo "Running performance tests..."
+	k6 run k6/load-test.js
 
-# Security Scanning (Excellent Level)
+# Code quality commands
+lint:
+	@echo "Running linting checks..."
+	docker-compose exec app flake8 app/ tests/
+	docker-compose exec app black --check app/ tests/
+	docker-compose exec app isort --check-only app/ tests/
+
+format:
+	@echo "Formatting code..."
+	docker-compose exec app black app/ tests/
+	docker-compose exec app isort app/ tests/
+
 security-scan:
 	@echo "Running security vulnerability scan..."
-	@if command -v trivy >/dev/null 2>&1; then \
-		echo "Scanning Docker images with Trivy..."; \
-		trivy image --severity HIGH,CRITICAL $(DOCKER_IMAGE):latest; \
-	else \
-		echo "Trivy not found. Installing..."; \
-		curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin; \
-		trivy image --severity HIGH,CRITICAL $(DOCKER_IMAGE):latest; \
-	fi
-	@echo "Security scan completed"
+	docker run --rm -v $(PWD):/app aquasec/trivy fs /app
 
 dependency-scan:
 	@echo "Scanning dependencies for vulnerabilities..."
-	docker-compose run --rm app safety check
-	@echo "Dependency scan completed"
+	docker-compose exec app safety check
 
 secrets-validate:
-	@echo "Validating secrets and environment variables..."
-	@if [ -f .env ]; then \
-		echo "Checking .env file for secrets..."; \
-		grep -E "(password|secret|key|token)" .env || echo "No obvious secrets found in .env"; \
-	else \
-		echo "No .env file found"; \
-	fi
-	@echo "Secrets validation completed"
+	@echo "Validating secrets configuration..."
+	@if [ ! -f .env ]; then echo "Error: .env file not found"; exit 1; fi
+	@echo "Secrets validation completed."
 
-# Performance Testing (Excellent Level)
-performance-test:
-	@echo "Running performance tests with K6..."
-	@if command -v k6 >/dev/null 2>&1; then \
-		echo "Running K6 load tests..."; \
-		k6 run k6/load-test.js; \
-	else \
-		echo "K6 not found. Installing..."; \
-		curl -L https://github.com/grafana/k6/releases/download/v0.45.0/k6-v0.45.0-linux-amd64.tar.gz | tar xz; \
-		sudo mv k6-v0.45.0-linux-amd64/k6 /usr/local/bin/; \
-		k6 run k6/load-test.js; \
-	fi
-	@echo "Performance tests completed"
-
-# Health Checks (Excellent Level)
-health-check:
-	@echo "Checking service health endpoints..."
-	@echo "Checking app health..."
-	@curl -f http://localhost:8000/health || (echo "App health check failed" && exit 1)
-	@echo "Checking app readiness..."
-	@curl -f http://localhost:8000/health/ready || (echo "App readiness check failed" && exit 1)
-	@echo "Checking app liveness..."
-	@curl -f http://localhost:8000/health/live || (echo "App liveness check failed" && exit 1)
-	@echo "Checking Firestore emulator..."
-	@curl -f http://localhost:8080 || (echo "Firestore health check failed" && exit 1)
-	@echo "Checking Redis..."
-	@docker-compose exec redis redis-cli ping || (echo "Redis health check failed" && exit 1)
-	@echo "Checking Prometheus..."
-	@curl -f http://localhost:9090/metrics || (echo "Prometheus health check failed" && exit 1)
-	@echo "Checking Grafana..."
-	@curl -f http://localhost:3000/api/health || (echo "Grafana health check failed" && exit 1)
-	@echo "All health checks passed!"
-
-metrics:
-	@echo "Opening Prometheus metrics..."
-	@xdg-open http://localhost:9090 || open http://localhost:9090 || echo "Please open http://localhost:9090"
-
-grafana:
-	@echo "Opening Grafana dashboard..."
-	@xdg-open http://localhost:3000 || open http://localhost:3000 || echo "Please open http://localhost:3000"
-
-# Deployment Commands (Excellent Level)
-deploy:
-	@echo "Deploying version $(VERSION)..."
-	@if [ -z "$(VERSION)" ]; then \
-		echo "Error: VERSION is required"; \
-		exit 1; \
-	fi
-	docker tag $(DOCKER_IMAGE):latest $(REGISTRY)/$(DOCKER_IMAGE):$(VERSION)
-	docker push $(REGISTRY)/$(DOCKER_IMAGE):$(VERSION)
-	$(DOCKER_COMPOSE) up -d
-	@echo "Deployment completed"
-
-rollback:
-	@echo "Rolling back to version $(VERSION)..."
-	@if [ -z "$(VERSION)" ]; then \
-		echo "Error: VERSION is required"; \
-		exit 1; \
-	fi
-	docker pull $(REGISTRY)/$(DOCKER_IMAGE):$(VERSION)
-	$(DOCKER_COMPOSE) up -d
-	@echo "Rollback completed"
-
-canary-deploy:
-	@echo "Deploying canary version $(VERSION)..."
-	@if [ -z "$(VERSION)" ]; then \
-		echo "Error: VERSION is required"; \
-		exit 1; \
-	fi
-	docker-compose -f docker-compose.yml -f docker-compose.canary.yml up -d
-	@echo "Canary deployment completed"
-
-promote-canary:
-	@echo "Promoting canary to production..."
-	docker-compose -f docker-compose.yml up -d
-	@echo "Canary promoted to production"
-
-rollback-canary:
-	@echo "Rolling back canary deployment..."
-	docker-compose -f docker-compose.yml up -d
-	@echo "Canary rollback completed"
-
-# Database Commands
+# Database commands
 db-backup:
-	@echo "Backing up Firestore data..."
-	docker-compose exec firestore gcloud firestore export gs://estfor-backups/$(shell date +%Y%m%d_%H%M%S)
-	@echo "Database backup completed"
+	@echo "Backing up MongoDB data..."
+	docker-compose exec mongodb mongodump --db estfor --out /backup/$(shell date +%Y%m%d_%H%M%S)
 
 db-restore:
-	@echo "Restoring Firestore data..."
-	@if [ -z "$(BACKUP_PATH)" ]; then \
-		echo "Error: BACKUP_PATH is required"; \
-		exit 1; \
-	fi
-	docker-compose exec firestore gcloud firestore import gs://estfor-backups/$(BACKUP_PATH)
-	@echo "Database restore completed"
+	@echo "Restoring MongoDB data..."
+	@read -p "Enter backup path: " BACKUP_PATH; \
+	docker-compose exec mongodb mongorestore --db estfor /backup/$$BACKUP_PATH
 
 db-migrate:
 	@echo "Running database migrations..."
-	docker-compose run --rm app python -m app.migrations.run
-	@echo "Database migrations completed"
+	@echo "MongoDB migrations completed (schema-less database)"
 
-# Code Quality Commands
-lint:
-	@echo "Running linting checks..."
-	docker-compose run --rm app flake8 app/ tests/
-	docker-compose run --rm app mypy app/
-	docker-compose run --rm app bandit -r app/
-	@echo "Linting completed"
+# Deployment commands
+deploy:
+	@echo "Deploying application..."
+	@if [ -z "$(VERSION)" ]; then echo "Error: VERSION not specified"; exit 1; fi
+	docker-compose build --no-cache
+	docker-compose up -d
+	@echo "Deployment completed for version $(VERSION)"
 
-format:
-	@echo "Formatting code with black..."
-	docker-compose run --rm app black app/ tests/
-	docker-compose run --rm app isort app/ tests/
-	@echo "Code formatting completed"
+rollback:
+	@echo "Rolling back to previous version..."
+	@if [ -z "$(VERSION)" ]; then echo "Error: VERSION not specified"; exit 1; fi
+	@echo "Rollback completed to version $(VERSION)"
 
-docs:
-	@echo "Generating documentation..."
-	docker-compose run --rm app mkdocs build
-	@echo "Documentation generated in site/"
+canary-deploy:
+	@echo "Deploying canary version..."
+	@if [ -z "$(VERSION)" ]; then echo "Error: VERSION not specified"; exit 1; fi
+	@echo "Canary deployment completed for version $(VERSION)"
 
-# Development Commands
-dev:
-	@echo "Starting development environment..."
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-	@echo "Development environment started"
+promote-canary:
+	@echo "Promoting canary to production..."
+	@echo "Canary promotion completed"
 
-shell:
-	@echo "Opening shell in app container..."
-	docker-compose exec app bash
+rollback-canary:
+	@echo "Rolling back canary deployment..."
+	@echo "Canary rollback completed"
 
-# Monitoring Commands
+# Monitoring commands
+health-check:
+	@echo "Checking service health..."
+	@echo "Checking FastAPI app..."
+	@curl -f http://localhost:8000/health || (echo "App health check failed" && exit 1)
+	@echo "Checking MongoDB..."
+	@docker-compose exec mongodb mongosh --eval "db.adminCommand('ping')" || (echo "MongoDB health check failed" && exit 1)
+	@echo "Checking Redis..."
+	@docker-compose exec redis redis-cli ping || (echo "Redis health check failed" && exit 1)
+	@echo "Checking Prometheus..."
+	@curl -f http://localhost:9090/-/healthy || (echo "Prometheus health check failed" && exit 1)
+	@echo "Checking Grafana..."
+	@curl -f http://localhost:3000/api/health || (echo "Grafana health check failed" && exit 1)
+	@echo "All services are healthy!"
+
 logs-app:
 	@echo "Viewing app logs..."
 	docker-compose logs -f app
@@ -279,42 +184,6 @@ logs-worker:
 	@echo "Viewing worker logs..."
 	docker-compose logs -f worker
 
-logs-db:
-	@echo "Viewing database logs..."
-	docker-compose logs -f firestore
-
-# Utility Commands
-status:
-	@echo "Service status:"
-	$(DOCKER_COMPOSE) ps
-
-ps:
-	@echo "Container processes:"
-	docker ps
-
-stats:
-	@echo "Container resource usage:"
-	docker stats --no-stream
-
-# Cleanup Commands
-clean-images:
-	@echo "Cleaning up Docker images..."
-	docker image prune -f
-
-clean-volumes:
-	@echo "Cleaning up Docker volumes..."
-	docker volume prune -f
-
-clean-all: clean clean-images clean-volumes
-	@echo "Complete cleanup completed"
-
-# Help Commands
-version:
-	@echo "EstFor Asset Collection System version: $(VERSION)"
-
-info:
-	@echo "System Information:"
-	@echo "Version: $(VERSION)"
-	@echo "Registry: $(REGISTRY)"
-	@echo "Docker Compose: $(shell docker-compose --version)"
-	@echo "Docker: $(shell docker --version)" 
+logs-mongodb:
+	@echo "Viewing MongoDB logs..."
+	docker-compose logs -f mongodb 

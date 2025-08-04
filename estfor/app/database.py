@@ -1,85 +1,99 @@
 """
-Database configuration and operations for Firestore.
+Database configuration and operations for MongoDB.
 """
 
 import os
 from typing import Optional, Dict, Any, List
+from datetime import datetime
 import structlog
-
-from google.cloud import firestore
-from google.auth import default
+from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo.errors import PyMongoError, DuplicateKeyError
+from bson import ObjectId
 
 from app.config import settings
 
 logger = structlog.get_logger()
 
-# Global Firestore client
-db: Optional[firestore.Client] = None
+# Global MongoDB client
+client: Optional[AsyncIOMotorClient] = None
+db = None
+collection = None
 
 
-async def init_firestore() -> None:
-    """Initialize Firestore client."""
-    global db
+async def init_mongodb() -> None:
+    """Initialize MongoDB client."""
+    global client, db, collection
     
     try:
-        # Check if we're using the emulator
-        if settings.ENVIRONMENT in ["development", "test"]:
-            os.environ["FIRESTORE_EMULATOR_HOST"] = f"{settings.FIRESTORE_EMULATOR_HOST}:{settings.FIRESTORE_EMULATOR_PORT}"
-            logger.info("Using Firestore emulator", host=settings.FIRESTORE_EMULATOR_HOST)
+        # Initialize MongoDB client
+        client = AsyncIOMotorClient(
+            settings.MONGODB_URI,
+            maxPoolSize=settings.MONGODB_MAX_POOL_SIZE,
+            serverSelectionTimeoutMS=5000
+        )
         
-        # Initialize Firestore client
-        db = firestore.Client(project=settings.FIRESTORE_PROJECT_ID)
+        # Get database and collection
+        db = client[settings.MONGODB_DATABASE]
+        collection = db[settings.MONGODB_COLLECTION]
         
         # Test connection
         await test_connection()
         
-        logger.info("Firestore initialized successfully", project=settings.FIRESTORE_PROJECT_ID)
+        logger.info("MongoDB initialized successfully", 
+                   database=settings.MONGODB_DATABASE,
+                   collection=settings.MONGODB_COLLECTION)
         
     except Exception as e:
-        logger.error("Failed to initialize Firestore", error=str(e))
+        logger.error("Failed to initialize MongoDB", error=str(e))
         raise
 
 
 async def test_connection() -> bool:
-    """Test Firestore connection."""
-    if not db:
-        raise RuntimeError("Firestore not initialized")
+    """Test MongoDB connection."""
+    if not client:
+        raise RuntimeError("MongoDB not initialized")
     
     try:
         # Simple test query
-        collection_ref = db.collection(settings.FIRESTORE_COLLECTION)
-        docs = collection_ref.limit(1).stream()
-        list(docs)  # Force execution
+        await client.admin.command('ping')
         return True
     except Exception as e:
-        logger.error("Firestore connection test failed", error=str(e))
+        logger.error("MongoDB connection test failed", error=str(e))
         return False
 
 
-def get_collection() -> firestore.CollectionReference:
+def get_collection():
     """Get the assets collection reference."""
-    if not db:
-        raise RuntimeError("Firestore not initialized")
+    if collection is None:
+        raise RuntimeError("MongoDB not initialized")
     
-    return db.collection(settings.FIRESTORE_COLLECTION)
+    return collection
 
 
 async def store_asset(asset_data: Dict[str, Any]) -> str:
-    """Store an asset in Firestore."""
+    """Store an asset in MongoDB."""
     try:
         collection_ref = get_collection()
         
-        # Add timestamp
-        asset_data["created_at"] = firestore.SERVER_TIMESTAMP
-        asset_data["updated_at"] = firestore.SERVER_TIMESTAMP
+        # Transform API data to match database schema
+        # API returns 'id' but database expects 'asset_id'
+        if 'id' in asset_data and 'asset_id' not in asset_data:
+            asset_data['asset_id'] = asset_data['id']
+        
+        # Add timestamps
+        asset_data["created_at"] = datetime.utcnow()
+        asset_data["updated_at"] = datetime.utcnow()
         
         # Store document
-        doc_ref = collection_ref.add(asset_data)[1]
+        result = await collection_ref.insert_one(asset_data)
         
-        logger.info("Asset stored successfully", asset_id=doc_ref.id)
-        return doc_ref.id
+        logger.info("Asset stored successfully", asset_id=str(result.inserted_id))
+        return str(result.inserted_id)
         
-    except Exception as e:
+    except DuplicateKeyError as e:
+        logger.error("Duplicate asset key", error=str(e), asset_data=asset_data)
+        raise
+    except PyMongoError as e:
         logger.error("Failed to store asset", error=str(e), asset_data=asset_data)
         raise
 
@@ -88,14 +102,22 @@ async def get_asset(asset_id: str) -> Optional[Dict[str, Any]]:
     """Get an asset by ID."""
     try:
         collection_ref = get_collection()
-        doc_ref = collection_ref.document(asset_id)
-        doc = doc_ref.get()
         
-        if doc.exists:
-            return {"id": doc.id, **doc.to_dict()}
+        # Validate ObjectId format
+        if not ObjectId.is_valid(asset_id):
+            logger.warning("Invalid ObjectId format", asset_id=asset_id)
+            return None
+        
+        doc = await collection_ref.find_one({"_id": ObjectId(asset_id)})
+        
+        if doc:
+            # Convert ObjectId to string for JSON serialization
+            doc["id"] = str(doc["_id"])
+            del doc["_id"]
+            return doc
         return None
         
-    except Exception as e:
+    except PyMongoError as e:
         logger.error("Failed to get asset", error=str(e), asset_id=asset_id)
         raise
 
@@ -104,20 +126,20 @@ async def list_assets(limit: int = 100, offset: int = 0) -> List[Dict[str, Any]]
     """List assets with pagination."""
     try:
         collection_ref = get_collection()
-        query = collection_ref.order_by("created_at", direction=firestore.Query.DESCENDING)
         
-        if offset > 0:
-            query = query.offset(offset)
-        
-        docs = query.limit(limit).stream()
+        # Use skip and limit for pagination
+        cursor = collection_ref.find().sort("created_at", -1).skip(offset).limit(limit)
         
         assets = []
-        for doc in docs:
-            assets.append({"id": doc.id, **doc.to_dict()})
+        async for doc in cursor:
+            # Convert ObjectId to string for JSON serialization
+            doc["id"] = str(doc["_id"])
+            del doc["_id"]
+            assets.append(doc)
         
         return assets
         
-    except Exception as e:
+    except PyMongoError as e:
         logger.error("Failed to list assets", error=str(e))
         raise
 
@@ -126,17 +148,28 @@ async def update_asset(asset_id: str, asset_data: Dict[str, Any]) -> bool:
     """Update an asset."""
     try:
         collection_ref = get_collection()
-        doc_ref = collection_ref.document(asset_id)
+        
+        # Validate ObjectId format
+        if not ObjectId.is_valid(asset_id):
+            logger.warning("Invalid ObjectId format", asset_id=asset_id)
+            return False
         
         # Add update timestamp
-        asset_data["updated_at"] = firestore.SERVER_TIMESTAMP
+        asset_data["updated_at"] = datetime.utcnow()
         
-        doc_ref.update(asset_data)
+        result = await collection_ref.update_one(
+            {"_id": ObjectId(asset_id)},
+            {"$set": asset_data}
+        )
         
-        logger.info("Asset updated successfully", asset_id=asset_id)
-        return True
+        if result.matched_count > 0:
+            logger.info("Asset updated successfully", asset_id=asset_id)
+            return True
+        else:
+            logger.warning("Asset not found for update", asset_id=asset_id)
+            return False
         
-    except Exception as e:
+    except PyMongoError as e:
         logger.error("Failed to update asset", error=str(e), asset_id=asset_id)
         raise
 
@@ -145,13 +178,22 @@ async def delete_asset(asset_id: str) -> bool:
     """Delete an asset."""
     try:
         collection_ref = get_collection()
-        doc_ref = collection_ref.document(asset_id)
-        doc_ref.delete()
         
-        logger.info("Asset deleted successfully", asset_id=asset_id)
-        return True
+        # Validate ObjectId format
+        if not ObjectId.is_valid(asset_id):
+            logger.warning("Invalid ObjectId format", asset_id=asset_id)
+            return False
         
-    except Exception as e:
+        result = await collection_ref.delete_one({"_id": ObjectId(asset_id)})
+        
+        if result.deleted_count > 0:
+            logger.info("Asset deleted successfully", asset_id=asset_id)
+            return True
+        else:
+            logger.warning("Asset not found for deletion", asset_id=asset_id)
+            return False
+        
+    except PyMongoError as e:
         logger.error("Failed to delete asset", error=str(e), asset_id=asset_id)
         raise
 
@@ -160,9 +202,17 @@ async def get_asset_count() -> int:
     """Get total number of assets."""
     try:
         collection_ref = get_collection()
-        docs = collection_ref.stream()
-        return len(list(docs))
+        count = await collection_ref.count_documents({})
+        return count
         
-    except Exception as e:
+    except PyMongoError as e:
         logger.error("Failed to get asset count", error=str(e))
-        raise 
+        raise
+
+
+async def close_mongodb() -> None:
+    """Close MongoDB connection."""
+    global client
+    if client:
+        client.close()
+        logger.info("MongoDB connection closed") 

@@ -33,6 +33,9 @@ FROM base as development
 # Install development dependencies
 RUN pip install --no-cache-dir -r requirements-dev.txt
 
+# Install pytest and testing tools
+RUN pip install --no-cache-dir pytest pytest-asyncio pytest-cov
+
 # Copy application code
 COPY . .
 

@@ -3,7 +3,8 @@ Configuration settings for the EstFor Asset Collection System.
 """
 
 from typing import List
-from pydantic import BaseSettings, Field
+from pydantic import Field
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -21,14 +22,15 @@ class Settings(BaseSettings):
     
     # EstFor API Configuration
     ESTFOR_API_URL: str = Field(env="ESTFOR_API_URL")
-    ESTFOR_API_KEY: str = Field(env="ESTFOR_API_KEY")
+    # EstFor API doesn't require authentication
+    # ESTFOR_API_KEY: str = Field(env="ESTFOR_API_KEY")
     ESTFOR_RATE_LIMIT: int = Field(default=100, env="ESTFOR_RATE_LIMIT")
     
-    # Firestore Configuration
-    FIRESTORE_PROJECT_ID: str = Field(default="estfor", env="FIRESTORE_PROJECT_ID")
-    FIRESTORE_COLLECTION: str = Field(default="all_assets", env="FIRESTORE_COLLECTION")
-    FIRESTORE_EMULATOR_HOST: str = Field(default="firestore:8080", env="FIRESTORE_EMULATOR_HOST")
-    FIRESTORE_EMULATOR_PORT: int = Field(default=8080, env="FIRESTORE_EMULATOR_PORT")
+    # MongoDB Configuration
+    MONGODB_URI: str = Field(env="MONGODB_URI")
+    MONGODB_DATABASE: str = Field(default="estfor", env="MONGODB_DATABASE")
+    MONGODB_COLLECTION: str = Field(default="all_assets", env="MONGODB_COLLECTION")
+    MONGODB_MAX_POOL_SIZE: int = Field(default=10, env="MONGODB_MAX_POOL_SIZE")
     
     # Redis Configuration
     REDIS_URL: str = Field(default="redis://redis:6379/0", env="REDIS_URL")
