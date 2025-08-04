@@ -1,0 +1,99 @@
+---
+
+description: "Local Docker-based deployment readiness checklist (pre‑launch)"
+alwaysApply: false
+---
+
+# 🚀 Local Deployment Checklist (Docker Containers)
+
+Use this rule to guide a local deployment readiness flow before shipping. Cursor will present each item with prompts and check status in sequence.
+
+## 1. Test Coverage & Quality
+
+- **Basic**: Unit tests pass locally. Coverage >= 60%.
+- **Good**: Integration tests cover Docker services (e.g. service-to-service calls, local database).
+- **Excellent**: End-to-end smoke tests via `docker-compose up` cleanup teardown.
+
+When asked, verify: "Are all tests passing? Show coverage report."
+
+## 2. Security Scanning
+
+- **Basic**: Run `trivy` or `snyk` scan on Docker images to catch CVEs.
+- **Good**: Scan environment variable files (`.env`) for secrets or plaintext tokens.
+- **Excellent**: Validate local image signatures or policy files (e.g., image provenance).
+
+Prompt: "Show me scan results and fix recommendations."
+
+## 3. Performance Testing
+
+- **Basic**: Manual local load test of endpoints (Docker CPU/memory).
+- **Good**: Use `k6` or `locust` container to simulate HTTP or queue load.
+- **Excellent**: Inject delays or failure modes into dependent containers to test resilience.
+
+Ask: “What performance metrics and latencies are observed locally?”
+
+## 4. Health Checks
+
+- **Basic**: Each service container returns HTTP 200 on `/health`.
+- **Good**: Include liveness & readiness probes in Docker Compose config.
+- **Excellent**: Simulate unhealthy states and confirm automatic failure detection.
+
+Prompt: “Validate health-check endpoints and error handling.”
+
+## 5. Rollback Strategy
+
+- **Basic**: You can stop and restart individual containers easily.
+- **Good**: Use versioned tags (e.g., `myapp:latest`, `myapp:v1.2`) and compose override files.
+- **Excellent**: Canary-like rollout simulation locally, switching versions on the fly.
+
+Ask: “Demonstrate rollback steps using container tags.”
+
+## 6. Monitoring & Alerting
+
+- **Basic**: TX/RX logs visible via `docker logs`.
+- **Good**: Local aggregated logging (elk/Prometheus via containers).
+- **Excellent**: Metrics collection and alert simulation (e.g. high error rate triggers warning).
+
+Prompt: “Show local logs and alert triggers.”
+
+## 7. Documentation
+
+- **Basic**: README includes Docker commands to build, run, and test.
+- **Good**: Contains architecture of containers, env variable list, dependency graph.
+- **Excellent**: Runbook or `local-deploy.md` with step-by-step troubleshooting and environment cleanup.
+
+Ask: “Open the documentation for deployment steps and verify completeness.”
+
+## 8. Configuration Management
+
+- **Basic**: `.env` file with environment variables.
+- **Good**: Different `.env` files per environment (`.env.dev`, `.env.test`).
+- **Excellent**: Use Docker secrets or mounted config files outside code, validated at runtime.
+
+Prompt: “Validate config injection and schema correctness.”
+
+## 9. Database Migration Strategy
+
+- **Basic**: Manual schema scripts run in local database container.
+- **Good**: Versioned migration scripts (e.g., Flyway, Liquibase) executed on startup.
+- **Excellent**: Zero-downtime migration simulation: shadow tables or schema switch locally.
+
+Ask: “Run migrations and confirm data integrity after restart.”
+
+---
+
+# ✅ How to Use:
+
+1. In Cursor IDE chat, prompt:
+    
+    **“Start local deployment checklist.”**
+    
+    Cursor will reference this `.mdc` rule and guide you through each section.
+    
+2. For each category, answer when prompted (e.g. “Unit tests pass—coverage 75%”), or ask Cursor to show logs/results.
+3. If a check fails, Cursor should pause and ask clarifying questions (e.g. “Test suite failed on Firestore emulator, provide output”).
+4. At the end, ask:
+    
+    **“Summarize missing or incomplete deployment readiness steps.”**
+    
+    Cursor will produce a Markdown summary or even draft a GitHub issue.
