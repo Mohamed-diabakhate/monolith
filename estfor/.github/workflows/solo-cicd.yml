@@ -7,13 +7,13 @@ on:
       - feature
       - main
     paths:
-      - "estfor/app/**"
-      - "estfor/tests/**"
-      - "estfor/requirements*.txt"
-      - "estfor/Dockerfile"
-      - "estfor/docker-compose*.yml"
-      - "estfor/pyproject.toml"
-      - "estfor/pytest.ini"
+      - "app/**"
+      - "tests/**"
+      - "requirements*.txt"
+      - "Dockerfile"
+      - "docker-compose*.yml"
+      - "pyproject.toml"
+      - "pytest.ini"
       - ".github/workflows/solo-cicd.yml"
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
     if: github.ref == 'refs/heads/feature'
     defaults:
       run:
-        working-directory: estfor
+        working-directory: .
 
     steps:
       - name: Checkout repository
@@ -64,7 +64,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     defaults:
       run:
-        working-directory: estfor
+        working-directory: .
 
     steps:
       - name: Checkout repository
@@ -108,7 +108,7 @@ jobs:
       - name: Build production Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./estfor
+          context: .
           push: false
           tags: estfor:production
           cache-from: type=gha
