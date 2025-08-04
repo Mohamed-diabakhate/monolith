@@ -57,7 +57,7 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI application
 app = FastAPI(
-    title="EstFor Asset Collection System - GitHub Actions Test",
+    title="EstFor Asset Collection System - Fixed Workflow Test",
     description="A system for collecting and storing EstFor Kingdom assets",
     version="1.0.0",
     lifespan=lifespan
