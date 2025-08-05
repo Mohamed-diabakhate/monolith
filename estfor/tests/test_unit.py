@@ -7,15 +7,25 @@ Target: 90%+ coverage
 import pytest
 from unittest.mock import Mock, patch, AsyncMock
 from fastapi import HTTPException
+from pydantic import BaseModel
+from typing import Optional
 
 from app.config import Settings
 from app.database import (
-    init_firestore, test_connection, store_asset, get_asset,
+    init_mongodb, test_connection, store_asset, get_asset,
     list_assets, update_asset, delete_asset, get_asset_count
 )
 from app.services.estfor_client import EstForClient
-from app.routers.assets import AssetResponse, AssetCreate
+from app.routers.assets import AssetResponse
 from app.tasks import collect_assets_task, update_asset_task
+
+# Simple AssetCreate model for testing
+class AssetCreate(BaseModel):
+    """Asset creation model for testing."""
+    name: str
+    type: str
+    rarity: Optional[str] = None
+    description: Optional[str] = None
 
 
 class TestConfig:
@@ -27,8 +37,8 @@ class TestConfig:
         assert settings.ENVIRONMENT == "development"
         assert settings.LOG_LEVEL == "INFO"
         assert settings.API_PORT == 8000
-        assert settings.FIRESTORE_PROJECT_ID == "estfor"
-        assert settings.FIRESTORE_COLLECTION == "all_assets"
+        assert settings.MONGODB_DATABASE == "estfor"
+        assert settings.MONGODB_COLLECTION == "all_assets"
     
     def test_settings_environment_override(self):
         """Test environment variable override."""
@@ -49,21 +59,21 @@ class TestDatabase:
     """Unit tests for database operations."""
     
     @pytest.mark.asyncio
-    async def test_init_firestore_success(self, mock_logger):
-        """Test successful Firestore initialization."""
-        with patch('app.database.firestore.Client') as mock_client:
+    async def test_init_mongodb_success(self, mock_logger):
+        """Test successful MongoDB initialization."""
+        with patch('app.database.AsyncIOMotorClient') as mock_client:
             mock_client.return_value = Mock()
             
-            await init_firestore()
+            await init_mongodb()
             
             mock_client.assert_called_once()
     
     @pytest.mark.asyncio
-    async def test_init_firestore_failure(self, mock_logger):
-        """Test Firestore initialization failure."""
-        with patch('app.database.firestore.Client', side_effect=Exception("Connection failed")):
+    async def test_init_mongodb_failure(self, mock_logger):
+        """Test MongoDB initialization failure."""
+        with patch('app.database.AsyncIOMotorClient', side_effect=Exception("Connection failed")):
             with pytest.raises(Exception):
-                await init_firestore()
+                await init_mongodb()
     
     @pytest.mark.asyncio
     async def test_test_connection_success(self, firestore_client):
@@ -74,8 +84,8 @@ class TestDatabase:
     @pytest.mark.asyncio
     async def test_test_connection_failure(self):
         """Test database connection failure."""
-        with patch('app.database.db', None):
-            with pytest.raises(RuntimeError, match="Firestore not initialized"):
+        with patch('app.database.client', None):
+            with pytest.raises(RuntimeError, match="MongoDB not initialized"):
                 await test_connection()
     
     @pytest.mark.asyncio
