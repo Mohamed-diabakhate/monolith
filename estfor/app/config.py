@@ -21,13 +21,13 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: List[str] = Field(default=["*"], env="ALLOWED_ORIGINS")
     
     # EstFor API Configuration
-    ESTFOR_API_URL: str = Field(env="ESTFOR_API_URL")
+    ESTFOR_API_URL: str = Field(default="https://api.estfor.com", env="ESTFOR_API_URL")
     # EstFor API doesn't require authentication
     # ESTFOR_API_KEY: str = Field(env="ESTFOR_API_KEY")
     ESTFOR_RATE_LIMIT: int = Field(default=100, env="ESTFOR_RATE_LIMIT")
     
     # MongoDB Configuration
-    MONGODB_URI: str = Field(env="MONGODB_URI")
+    MONGODB_URI: str = Field(default="mongodb://localhost:27017/", env="MONGODB_URI")
     MONGODB_DATABASE: str = Field(default="estfor", env="MONGODB_DATABASE")
     MONGODB_COLLECTION: str = Field(default="all_assets", env="MONGODB_COLLECTION")
     MONGODB_MAX_POOL_SIZE: int = Field(default=10, env="MONGODB_MAX_POOL_SIZE")
