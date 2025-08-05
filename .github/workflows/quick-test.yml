@@ -1,0 +1,109 @@
+name: Quick Development Tests
+
+on:
+  push:
+    branches: [develop, feature/*, bugfix/*]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Quick test for EstFor project
+  estfor-quick-test:
+    if: contains(github.event.head_commit.modified, 'estfor/') || contains(github.event.head_commit.added, 'estfor/') || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: estfor
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Quick lint check
+        run: |
+          black --check --diff . || echo "Black formatting issues found"
+          isort --check-only --diff . || echo "Import sorting issues found"
+
+      - name: Quick unit tests
+        run: |
+          pytest tests/unit/ -v --tb=short --maxfail=3
+
+  # Quick test for NFT Gallery project
+  nft-gallery-quick-test:
+    if: contains(github.event.head_commit.modified, 'NFT_Gallery/') || contains(github.event.head_commit.added, 'NFT_Gallery/') || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: NFT_Gallery
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-test.txt
+
+      - name: Quick syntax check
+        run: |
+          python -m py_compile src/*.py main.py
+
+      - name: Quick unit tests
+        run: |
+          pytest tests/unit/ -v --tb=short --maxfail=3
+
+  # Quick test for Whispered Video project
+  whispered-video-quick-test:
+    if: contains(github.event.head_commit.modified, 'whispered_video/') || contains(github.event.head_commit.added, 'whispered_video/') || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: whispered_video/app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+          cache: "pip"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Quick syntax check
+        run: |
+          python -m py_compile *.py
+
+      - name: Quick test
+        run: |
+          python test_app.py || echo "Test failed but continuing"

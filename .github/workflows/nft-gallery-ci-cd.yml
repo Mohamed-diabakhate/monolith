@@ -1,0 +1,241 @@
+name: NFT Gallery CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "NFT_Gallery/**"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "NFT_Gallery/**"
+
+env:
+  PROJECT_DIR: NFT_Gallery
+  DOCKER_IMAGE: nft-gallery-app
+  DOCKER_TAG: ${{ github.sha }}
+
+jobs:
+  # Quick Development Tests (Feature Branches)
+  quick-test:
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-test.txt
+
+      - name: Run linting
+        run: |
+          flake8 src/ main.py
+          python -m py_compile src/*.py main.py
+
+      - name: Run unit tests
+        run: |
+          pytest tests/unit/ -v --cov=src --cov-report=xml --cov-report=term-missing
+          coverage report --fail-under=60
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ${{ env.PROJECT_DIR }}/coverage.xml
+          flags: nft-gallery-unit
+          name: nft-gallery-unit-coverage
+
+  # Comprehensive Testing (Main Branch)
+  comprehensive-test:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-test.txt
+
+      - name: Run all tests
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: |
+          pytest tests/ -v --cov=src --cov-report=xml --cov-report=term-missing --cov-report=html
+          coverage report --fail-under=70
+
+      - name: Run security scan
+        run: |
+          bandit -r src/ -f json -o bandit-report.json || true
+          safety check --json --output safety-report.json || true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ${{ env.PROJECT_DIR }}/coverage.xml
+          flags: nft-gallery-comprehensive
+          name: nft-gallery-comprehensive-coverage
+
+      - name: Upload security reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: nft-gallery-security-reports
+          path: |
+            ${{ env.PROJECT_DIR }}/bandit-report.json
+            ${{ env.PROJECT_DIR }}/safety-report.json
+
+  # Docker Build and Security Scan
+  docker-build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: comprehensive-test
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }} .
+          docker build -t ${{ env.DOCKER_IMAGE }}:latest .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
+          format: "sarif"
+          output: "trivy-results.sarif"
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"
+
+      - name: Save Docker image
+        run: |
+          docker save ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }} -o /tmp/docker-image.tar
+
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nft-gallery-docker-image
+          path: /tmp/docker-image.tar
+
+  # Integration Testing
+  integration-test:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: docker-build
+    defaults:
+      run:
+        working-directory: ${{ env.PROJECT_DIR }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Docker image
+        uses: actions/download-artifact@v3
+        with:
+          name: nft-gallery-docker-image
+          path: /tmp
+
+      - name: Load Docker image
+        run: |
+          docker load -i /tmp/docker-image.tar
+
+      - name: Start application
+        run: |
+          docker-compose up -d
+          sleep 30  # Wait for services to be ready
+
+      - name: Run integration tests
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: |
+          pytest tests/integration/ -v
+
+      - name: Run E2E tests
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        run: |
+          pytest tests/e2e/ -v
+
+      - name: Cleanup
+        if: always()
+        run: docker-compose down
+
+  # Production Deployment
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [comprehensive-test, docker-build, integration-test]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Docker image
+        uses: actions/download-artifact@v3
+        with:
+          name: nft-gallery-docker-image
+          path: /tmp
+
+      - name: Load Docker image
+        run: |
+          docker load -i /tmp/docker-image.tar
+
+      - name: Deploy to production
+        run: |
+          echo "Deploying NFT Gallery to production..."
+          # Add your production deployment commands here
+          # Example: docker-compose -f docker-compose.prod.yml up -d
+
+      - name: Health check
+        run: |
+          echo "Running health checks..."
+          # Add health check commands here
+          # Example: curl -f http://your-app-url/health
+
+      - name: Notify deployment success
+        if: success()
+        run: |
+          echo "NFT Gallery production deployment successful!"
+          # Add notification logic here (Slack, email, etc.)
+
+      - name: Notify deployment failure
+        if: failure()
+        run: |
+          echo "NFT Gallery production deployment failed!"
+          # Add failure notification logic here
