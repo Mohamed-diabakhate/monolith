@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 
 from app.config import settings
-from app.routers import assets, health
+from app.routers import assets, health, game_assets
 from app.database import init_mongodb, close_mongodb
 
 # Configure structured logging
@@ -75,6 +75,7 @@ app.add_middleware(
 # Include routers
 app.include_router(health.router, prefix="/health", tags=["health"])
 app.include_router(assets.router, prefix="/assets", tags=["assets"])
+app.include_router(game_assets.router)
 
 
 @app.get("/")

@@ -1,6 +1,6 @@
 # EstFor Asset Collection System
 
-A Docker-based system for collecting and storing EstFor Kingdom assets in MongoDB.
+A comprehensive Docker-based system for collecting, storing, and managing EstFor Kingdom assets with integrated game definitions and type-safe API endpoints.
 
 ## 🏗️ Architecture
 
@@ -16,6 +16,32 @@ A Docker-based system for collecting and storing EstFor Kingdom assets in MongoD
 │   (Metrics)     │    │  (Dashboards)   │    │   (Logging)     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
+
+## ✨ Features
+
+### 🎮 EstFor Kingdom Integration
+- **Type-Safe Game Constants**: Auto-generated Python enums from official TypeScript definitions
+- **20+ Game Enums**: Skills, equipment positions, boost types, activity types, etc.
+- **2,400+ Game Constants**: Item IDs, equipment stats, and game values
+- **Pydantic Models**: Validated models for players, equipment, skills, and activities
+- **Game Data APIs**: RESTful endpoints for items, skills, boosts, and equipment
+
+### 🔄 Asset Collection System
+- **Automated Collection**: Background workers for continuous asset gathering
+- **MongoDB Storage**: Document-based storage with indexing and performance optimization
+- **Real-time Processing**: Async processing with Celery and Redis
+
+### 📊 Comprehensive Monitoring
+- **Metrics Collection**: Prometheus with custom business metrics
+- **Visualization**: Grafana dashboards for system and business metrics  
+- **Centralized Logging**: ELK stack for log aggregation and analysis
+- **Performance Monitoring**: Response time, throughput, and error rate tracking
+
+### 🛡️ Production-Ready
+- **Multi-stage Docker Build**: Optimized images for development and production
+- **Health Checks**: Readiness and liveness probes for Kubernetes deployment
+- **Security Scanning**: Container and dependency vulnerability detection
+- **CI/CD Pipeline**: Automated testing, building, and deployment
 
 ## 🚀 Quick Start
 
@@ -59,6 +85,7 @@ A Docker-based system for collecting and storing EstFor Kingdom assets in MongoD
 4. **Access Services**
    - API: http://localhost:8000
    - API Docs: http://localhost:8000/docs
+   - Game Assets API: http://localhost:8000/api/game/
    - Grafana: http://localhost:3000 (admin/admin)
    - Prometheus: http://localhost:9090
    - Kibana: http://localhost:5601
@@ -96,6 +123,7 @@ The system has been successfully tested and is fully operational:
 - ✅ **Database Connectivity**: MongoDB connection established and working
 - ✅ **Background Worker**: Celery worker running and connected to Redis
 - ✅ **Monitoring Stack**: Prometheus, Grafana, and ELK stack operational
+- ✅ **EstFor Integration**: Game constants and API endpoints fully tested
 - ✅ **Performance**: Health endpoints responding in < 15ms average
 
 ## 🔄 CI/CD Pipeline
@@ -166,6 +194,10 @@ pytest -m unit      # Unit tests only
 pytest -m integration  # Integration tests only
 pytest -m e2e       # End-to-end tests only
 
+# Test EstFor integration
+pytest tests/test_game_constants.py -v    # Game constants tests
+pytest tests/test_game_assets_api.py -v   # Game API tests
+
 # Run tests in parallel
 pytest -n auto
 ```
@@ -204,6 +236,7 @@ make logs-worker
 - **Health Checks**: ✅ All endpoints operational
 - **Database Integration**: ✅ MongoDB connection working
 - **Background Processing**: ✅ Celery worker operational
+- **EstFor Game Integration**: ✅ 27 tests passing (constants + API)
 - **Monitoring**: ✅ Prometheus, Grafana, ELK stack running
 - **Performance**: ✅ Sub-15ms response times
 
@@ -417,18 +450,55 @@ docker-compose exec app bash
 
 ### EstFor Asset Collection
 
-#### Endpoints
+#### Core Endpoints
 
 - `GET /assets` - List collected assets
 - `POST /assets/collect` - Trigger asset collection
 - `GET /assets/{asset_id}` - Get specific asset
 - `GET /assets/stats` - Collection statistics
 
+### EstFor Game Assets API
+
+The application includes a comprehensive integration with EstFor Kingdom game definitions, providing type-safe access to game constants, items, skills, and more.
+
+#### Game Data Endpoints
+
+- `GET /api/game/items/helmets` - List all helmet items with requirements
+- `GET /api/game/items/{item_id}` - Get specific item details
+- `POST /api/game/player/can-equip` - Check if player meets item requirements
+- `GET /api/game/skills` - List all game skills
+- `GET /api/game/skills?category=combat` - Filter skills by category (combat/gathering/crafting)
+- `GET /api/game/boost-types` - List all boost types and effects
+- `POST /api/game/boost/calculate-effect` - Calculate boost effect on specific skill
+- `GET /api/game/equipment-slots` - List all equipment positions
+
+#### EstFor Definitions Integration
+
+The project includes auto-generated Python constants from EstFor Kingdom TypeScript definitions:
+
+- **20+ Enums**: `Skill`, `EquipPosition`, `BoostType`, `ActivityType`, etc.
+- **2,400+ Constants**: Item IDs, equipment constants, game values
+- **Type-Safe Models**: Pydantic models for game assets with validation
+
+Example usage:
+```python
+from app.game_constants import Skill, EquipPosition, BRONZE_HELMET
+
+# Check skill requirements
+if player.get_skill_level(Skill.DEFENCE) >= 10:
+    player.equip_item(IRON_HELMET, EquipPosition.HEAD)
+```
+
+To regenerate constants from TypeScript:
+```bash
+python scripts/generate_estfor_constants.py
+```
+
 #### Authentication
 
 - No authentication required (public API)
 - Rate limiting
-- Request validation
+- Request validation with Pydantic models
 
 ## 🤝 Contributing
 
