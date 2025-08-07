@@ -12,7 +12,7 @@ from typing import Optional
 
 from app.config import Settings
 from app.database import (
-    init_mongodb, test_connection, store_asset, get_asset,
+    init_mongodb, test_connection as db_test_connection, store_asset, get_asset,
     list_assets, update_asset, delete_asset, get_asset_count
 )
 from app.services.estfor_client import EstForClient
@@ -78,7 +78,7 @@ class TestDatabase:
     @pytest.mark.asyncio
     async def test_test_connection_success(self, firestore_client):
         """Test successful database connection."""
-        result = await test_connection()
+        result = await db_test_connection()
         assert result is True
     
     @pytest.mark.asyncio
@@ -86,7 +86,7 @@ class TestDatabase:
         """Test database connection failure."""
         with patch('app.database.client', None):
             with pytest.raises(RuntimeError, match="MongoDB not initialized"):
-                await test_connection()
+                await db_test_connection()
     
     @pytest.mark.asyncio
     async def test_store_asset_success(self, firestore_client, sample_asset_data):
