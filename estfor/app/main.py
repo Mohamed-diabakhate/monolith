@@ -11,6 +11,12 @@ from contextlib import asynccontextmanager
 from app.config import settings
 from app.routers import assets, health, game_assets
 from app.database import init_mongodb, close_mongodb
+from app.services.container_manager import container_manager
+from app.services.idle_monitor import idle_monitor_manager
+from app.middleware.container_middleware import (
+    ContainerAutoStartMiddleware, 
+    ContainerHealthCheckMiddleware
+)
 
 # Configure structured logging
 structlog.configure(
@@ -44,14 +50,43 @@ async def lifespan(app: FastAPI):
         # Initialize MongoDB
         await init_mongodb()
         logger.info("MongoDB initialized successfully")
+        
+        # Initialize Container Manager
+        if settings.CONTAINER_AUTO_START or settings.CONTAINER_AUTO_STOP:
+            container_init_success = await container_manager.initialize()
+            if container_init_success:
+                logger.info("Container management initialized successfully")
+                
+                # Start idle monitoring service
+                if settings.CONTAINER_AUTO_STOP:
+                    await idle_monitor_manager.start_service()
+                    logger.info("Container idle monitoring started")
+            else:
+                logger.warning("Container management initialization failed - continuing without container management")
+        else:
+            logger.info("Container management disabled")
+            
     except Exception as e:
-        logger.error("Failed to initialize MongoDB", error=str(e))
+        logger.error("Failed to initialize application", error=str(e))
         raise
     
     yield
     
     # Shutdown
     logger.info("Shutting down EstFor Asset Collection System")
+    
+    # Stop container management services
+    try:
+        if settings.CONTAINER_AUTO_STOP:
+            await idle_monitor_manager.stop_service()
+            logger.info("Container idle monitoring stopped")
+        
+        await container_manager.close()
+        logger.info("Container manager closed")
+    except Exception as e:
+        logger.warning("Error during container management shutdown", error=str(e))
+    
+    # Close database
     await close_mongodb()
 
 
@@ -71,6 +106,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Add container management middleware
+if settings.CONTAINER_AUTO_START or settings.CONTAINER_AUTO_STOP:
+    # Add container health check middleware first (runs after auto-start)
+    app.add_middleware(
+        ContainerHealthCheckMiddleware,
+        enable_health_checks=True
+    )
+    
+    # Add container auto-start middleware (runs first)
+    app.add_middleware(
+        ContainerAutoStartMiddleware,
+        enable_auto_start=settings.CONTAINER_AUTO_START
+    )
 
 # Include routers
 app.include_router(health.router, prefix="/health", tags=["health"])

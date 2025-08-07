@@ -26,6 +26,8 @@ services:
     networks:
       - estfor-network
     restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # For container management
     deploy:
       resources:
         limits:
@@ -34,6 +36,10 @@ services:
         reservations:
           memory: 256M
           cpus: "0.25"
+    labels:
+      - "container.auto_management=true"
+      - "container.priority=critical"
+      - "container.service_type=api"
 
   # Background Worker Service
   worker:
@@ -96,6 +102,10 @@ services:
       - mongodb-data:/data/db
       - ./mongo-init:/docker-entrypoint-initdb.d
     restart: unless-stopped
+    labels:
+      - "container.auto_management=true"
+      - "container.priority=critical"
+      - "container.service_type=database"
 
   # Redis for Caching and Job Queue
   redis:
@@ -114,6 +124,10 @@ services:
     volumes:
       - redis-data:/data
     restart: unless-stopped
+    labels:
+      - "container.auto_management=true"
+      - "container.priority=critical"
+      - "container.service_type=cache"
 
   # Prometheus for Metrics
   prometheus:

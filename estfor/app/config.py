@@ -51,6 +51,15 @@ class Settings(BaseSettings):
     MAX_WORKERS: int = Field(default=4, env="MAX_WORKERS")
     WORKER_TIMEOUT: int = Field(default=300, env="WORKER_TIMEOUT")
     
+    # Container Management Configuration
+    CONTAINER_AUTO_START: bool = Field(default=True, env="CONTAINER_AUTO_START")
+    CONTAINER_AUTO_STOP: bool = Field(default=True, env="CONTAINER_AUTO_STOP")
+    CONTAINER_IDLE_TIMEOUT: int = Field(default=30, env="CONTAINER_IDLE_TIMEOUT")  # minutes
+    CONTAINER_HIGH_IDLE_TIMEOUT: int = Field(default=120, env="CONTAINER_HIGH_IDLE_TIMEOUT")  # minutes
+    CONTAINER_LOW_IDLE_TIMEOUT: int = Field(default=10, env="CONTAINER_LOW_IDLE_TIMEOUT")  # minutes
+    CONTAINER_STARTUP_TIMEOUT: int = Field(default=60, env="CONTAINER_STARTUP_TIMEOUT")  # seconds
+    CONTAINER_HEALTH_CHECK_INTERVAL: int = Field(default=30, env="CONTAINER_HEALTH_CHECK_INTERVAL")  # seconds
+    
     class Config:
         env_file = ".env"
         case_sensitive = True
