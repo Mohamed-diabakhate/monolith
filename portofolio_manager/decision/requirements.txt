@@ -1,0 +1,9 @@
+tensortrade
+stable-baselines3
+pandas
+pandas_ta
+numpy
+matplotlib
+seaborn
+rich
+

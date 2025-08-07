@@ -1,0 +1,28 @@
+{
+  "data": {
+    "userReserves": [
+      {
+        "reserve": {
+          "symbol": "USDC",
+          "name": "USD Coin",
+          "decimals": 6,
+          "underlyingAsset": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+        },
+        "scaledATokenBalance": "5000",
+        "currentTotalDebt": "0",
+        "usageAsCollateralEnabledOnUser": true
+      },
+      {
+        "reserve": {
+          "symbol": "WBTC",
+          "name": "Wrapped BTC",
+          "decimals": 8,
+          "underlyingAsset": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
+        },
+        "scaledATokenBalance": "0.02",
+        "currentTotalDebt": "0.001",
+        "usageAsCollateralEnabledOnUser": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "keeper",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "viem": "2.19.8",
+    "zod": "3.23.8",
+    "dotenv": "16.4.5",
+    "pino": "9.4.0",
+    "p-retry": "6.2.0",
+    "node-fetch": "3.3.2"
+  },
+  "devDependencies": {
+    "typescript": "5.5.4",
+    "tsx": "4.19.2",
+    "@types/node": "20.14.9",
+    "eslint": "9.7.0",
+    "@eslint/js": "9.7.0",
+    "typescript-eslint": "8.0.1"
+  }
+}
