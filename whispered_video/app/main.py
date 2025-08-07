@@ -53,10 +53,11 @@ def transcribe_url(
     model_size: Optional[str] = None,
     device: str = "auto",
     output_dir: Optional[str] = None,
-    cleanup: bool = True
+    cleanup: bool = True,
+    download_only: bool = False
 ) -> str:
     """
-    Download and transcribe a video from URL
+    Download and transcribe a video from URL (or just download if download_only=True)
     
     Args:
         url: Video URL
@@ -64,9 +65,10 @@ def transcribe_url(
         device: Device to use (auto, mps, cpu)
         output_dir: Output directory for transcripts
         cleanup: Whether to cleanup temporary files
+        download_only: If True, only download the video without transcription
         
     Returns:
-        Path to the transcript file
+        Path to the transcript file (or downloaded file if download_only)
     """
     start_time = time.time()
     downloaded_files = []
@@ -76,14 +78,16 @@ def transcribe_url(
         downloader = VideoDownloader()
         output_dir = output_dir or str(TRANSCRIPTS_DIR)
         
-        # Detect platform and set default model
+        # Detect platform
         platform = downloader.detect_platform(url)
-        if model_size is None:
-            model_size = DEFAULT_MODELS.get(platform, "medium")
-        
         print(f"🎯 Platform: {platform}")
-        print(f"🧠 Model: {model_size}")
-        print(f"🔧 Device: {device}")
+        
+        if not download_only:
+            # Set default model if transcribing
+            if model_size is None:
+                model_size = DEFAULT_MODELS.get(platform, "medium")
+            print(f"🧠 Model: {model_size}")
+            print(f"🔧 Device: {device}")
         
         # Download video
         print("\n" + "="*60)
@@ -91,6 +95,15 @@ def transcribe_url(
         print("="*60)
         audio_file = downloader.download_video(url, platform)
         downloaded_files.append(audio_file)
+        
+        if download_only:
+            # If download-only mode, we're done
+            print("\n" + "="*60)
+            print("✅ DOWNLOAD COMPLETED")
+            print("="*60)
+            print(f"📥 Downloaded file: {audio_file}")
+            print(f"⏱️  Total time: {time.time() - start_time:.1f} seconds")
+            return audio_file
         
         # Transcribe audio
         print("\n" + "="*60)
@@ -116,8 +129,8 @@ def transcribe_url(
         print(f"\n❌ ERROR: {str(e)}")
         raise
     finally:
-        # Cleanup temporary files
-        if cleanup and downloaded_files:
+        # Cleanup temporary files (unless download-only mode or cleanup disabled)
+        if cleanup and not download_only and downloaded_files:
             print("\n🗑️ Cleaning up temporary files...")
             cleanup_temp_files(downloaded_files)
 
@@ -175,6 +188,9 @@ Examples:
   # Transcribe Twitter video with specific model
   python -m app.main "https://twitter.com/username/status/1234567890123456789" --model large
   
+  # Download video only (no transcription)
+  python -m app.main "https://youtube.com/watch?v=..." --download-only
+  
   # Transcribe local audio file
   python -m app.main --file audio.mp3 --model medium
   
@@ -217,6 +233,13 @@ Examples:
         help="Output directory for transcripts (default: transcripts/)"
     )
     
+    # Download-only option
+    parser.add_argument(
+        "--download-only",
+        action="store_true",
+        help="Download video only without transcription"
+    )
+    
     # Other options
     parser.add_argument(
         "--no-cleanup",
@@ -246,6 +269,11 @@ Examples:
         parser.print_help()
         sys.exit(1)
     
+    # Validate: download-only doesn't make sense with local files
+    if args.download_only and args.file:
+        print("❌ ERROR: --download-only cannot be used with local files")
+        sys.exit(1)
+    
     # Check dependencies
     if not check_dependencies():
         sys.exit(1)
@@ -260,16 +288,20 @@ Examples:
                 output_dir=args.output
             )
         else:
-            # Download and transcribe URL
+            # Download and transcribe URL (or just download)
             transcript_file = transcribe_url(
                 args.url,
                 model_size=args.model,
                 device=args.device,
                 output_dir=args.output,
-                cleanup=not args.no_cleanup
+                cleanup=not args.no_cleanup,
+                download_only=args.download_only
             )
         
-        print(f"\n🎉 SUCCESS: {transcript_file}")
+        if args.download_only:
+            print(f"\n🎉 DOWNLOAD SUCCESS: {transcript_file}")
+        else:
+            print(f"\n🎉 SUCCESS: {transcript_file}")
         
     except KeyboardInterrupt:
         print("\n⚠️ Process interrupted by user")
@@ -280,4 +312,4 @@ Examples:
 
 
 if __name__ == "__main__":
-    main() 
+    main()
