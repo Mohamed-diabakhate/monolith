@@ -4,15 +4,13 @@ A comprehensive cloud-native monorepo containing multiple specialized applicatio
 
 ## 🏗️ Repository Structure
 
-This monorepo contains **5 main projects** with shared infrastructure and deployment patterns:
+This monorepo contains **3 main projects** with shared infrastructure and deployment patterns:
 
 ```
 monolith/
 ├── estfor/                    # 🎮 Gaming asset collection system (FastAPI)
 ├── NFT_Gallery/              # 🖼️ Solana NFT downloader (Python)
-├── rainbow-backend/          # 🌈 Full-stack backend application (Node.js)
 ├── whispered_video/          # 🎤 AI video transcription (Python)
-├── bridge_satori/           # 🌉 Bridge service
 └── monitoring_gcp/          # 📊 GCP monitoring tools
 ```
 
@@ -55,25 +53,6 @@ cd NFT_Gallery/
 python main_enhanced.py --wallet YOUR_WALLET_ADDRESS
 ```
 
-### 🌈 Rainbow Backend
-**Location:** `rainbow-backend/`  
-**Tech Stack:** Node.js, MongoDB, Redis, Express  
-**Purpose:** Full-featured backend with user management and data collection
-
-**Key Features:**
-- 👥 **User Management** - Authentication, roles, permissions
-- 📋 **Data Collection** - Program and collect management
-- 📊 **Reporting System** - Analytics and visualization
-- 🔄 **Background Jobs** - Queue processing with Redis
-- 🐳 **Containerized** - Docker deployment ready
-
-**Quick Start:**
-```bash
-cd rainbow-backend/
-npm install
-npm start
-```
-
 ### 🎤 Whispered Video Transcription
 **Location:** `whispered_video/`  
 **Tech Stack:** Python, Torch, Faster Whisper, Docker  
@@ -92,9 +71,8 @@ cd whispered_video/app/
 python main.py
 ```
 
-### 🌉 Bridge Satori & 📊 Monitoring
+### 📊 Monitoring
 **Additional Services:**
-- **Bridge Satori** - Service bridge and integration layer
 - **Monitoring GCP** - Google Cloud Platform monitoring tools
 
 ## 🛠️ Development Setup
@@ -102,7 +80,6 @@ python main.py
 ### Prerequisites
 - **Docker Desktop** - Container orchestration
 - **Python 3.11+** - For Python projects
-- **Node.js 18+** - For Node.js projects
 - **Git** - Version control
 
 ### Global Setup
@@ -131,11 +108,6 @@ cd NFT_Gallery/
 pip install -r requirements.txt
 python setup_env.py
 
-# Rainbow Backend
-cd rainbow-backend/
-npm install
-cp .env.example .env
-
 # Whispered Video
 cd whispered_video/app/
 pip install -r requirements.txt
@@ -156,7 +128,6 @@ open http://localhost:5601    # Kibana logs
 ```bash
 # Choose your adventure
 cd NFT_Gallery/ && python main_enhanced.py --help
-cd rainbow-backend/ && npm start
 cd whispered_video/app/ && python main.py
 ```
 
@@ -175,10 +146,6 @@ make test-e2e            # End-to-end tests
 # NFT Gallery - Comprehensive testing
 cd NFT_Gallery/
 pytest tests/ -v --cov=src --cov-report=html
-
-# Rainbow Backend - API testing
-cd rainbow-backend/
-npm test
 ```
 
 ## 📊 Monitoring & Observability
@@ -198,9 +165,6 @@ curl http://localhost:8000/health/automation   # Auto-management
 
 # NFT Gallery monitoring
 open NFT_Gallery/monitor/index.html
-
-# Rainbow Backend status
-curl http://localhost:3000/health
 ```
 
 ## 🔧 Container Management (EstFor)
@@ -253,10 +217,6 @@ docker-compose -f docker-compose.prod.yml up -d
 # NFT Gallery with Docker
 cd NFT_Gallery/
 docker-compose up -d
-
-# Rainbow Backend
-cd rainbow-backend/
-npm run deploy
 ```
 
 ### CI/CD Pipelines
@@ -351,7 +311,6 @@ find . -name "package.json" -exec npm test {} \;
 | EstFor Docs | http://localhost:8000/docs | [Container Guide](estfor/CONTAINER_AUTO_MANAGEMENT.md) | 📊 Interactive API |
 | Grafana | http://localhost:3000 | Built-in Help | 📈 Monitoring |
 | NFT Gallery | - | [README.md](NFT_Gallery/README.md) | ✅ Production Ready |
-| Rainbow Backend | http://localhost:3000 | [README.md](rainbow-backend/README.md) | ✅ Production Ready |
 | Whispered Video | - | [CLAUDE.md](whispered_video/CLAUDE.md) | ✅ Production Ready |
 
 **Get Started:** `cd estfor/ && make start` 🚀
