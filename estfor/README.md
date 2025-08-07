@@ -20,6 +20,7 @@ A comprehensive Docker-based system for collecting, storing, and managing EstFor
 ## ✨ Features
 
 ### 🎮 EstFor Kingdom Integration
+
 - **Type-Safe Game Constants**: Auto-generated Python enums from official TypeScript definitions
 - **20+ Game Enums**: Skills, equipment positions, boost types, activity types, etc.
 - **2,400+ Game Constants**: Item IDs, equipment stats, and game values
@@ -27,17 +28,20 @@ A comprehensive Docker-based system for collecting, storing, and managing EstFor
 - **Game Data APIs**: RESTful endpoints for items, skills, boosts, and equipment
 
 ### 🔄 Asset Collection System
+
 - **Automated Collection**: Background workers for continuous asset gathering
 - **MongoDB Storage**: Document-based storage with indexing and performance optimization
 - **Real-time Processing**: Async processing with Celery and Redis
 
 ### 📊 Comprehensive Monitoring
+
 - **Metrics Collection**: Prometheus with custom business metrics
-- **Visualization**: Grafana dashboards for system and business metrics  
+- **Visualization**: Grafana dashboards for system and business metrics
 - **Centralized Logging**: ELK stack for log aggregation and analysis
 - **Performance Monitoring**: Response time, throughput, and error rate tracking
 
 ### 🛡️ Production-Ready
+
 - **Multi-stage Docker Build**: Optimized images for development and production
 - **Health Checks**: Readiness and liveness probes for Kubernetes deployment
 - **Security Scanning**: Container and dependency vulnerability detection
@@ -89,7 +93,7 @@ A comprehensive Docker-based system for collecting, storing, and managing EstFor
    - Grafana: http://localhost:3000 (admin/admin)
    - Prometheus: http://localhost:9090
    - Kibana: http://localhost:5601
-   - MongoDB: localhost:27017
+   - MongoDB: http://localhost:27017
 
 ### Production Deployment
 
@@ -197,6 +201,7 @@ pytest -m e2e       # End-to-end tests only
 # Test EstFor integration
 pytest tests/test_game_constants.py -v    # Game constants tests
 pytest tests/test_game_assets_api.py -v   # Game API tests
+pytest tests/test_enhanced_assets.py -v   # Enhanced asset tests
 
 # Run tests in parallel
 pytest -n auto
@@ -236,7 +241,7 @@ make logs-worker
 - **Health Checks**: ✅ All endpoints operational
 - **Database Integration**: ✅ MongoDB connection working
 - **Background Processing**: ✅ Celery worker operational
-- **EstFor Game Integration**: ✅ 27 tests passing (constants + API)
+- **EstFor Game Integration**: ✅ 45+ tests passing (constants + API + enhanced assets)
 - **Monitoring**: ✅ Prometheus, Grafana, ELK stack running
 - **Performance**: ✅ Sub-15ms response times
 
@@ -448,14 +453,67 @@ docker-compose exec app bash
 
 ## 📚 API Documentation
 
-### EstFor Asset Collection
+### EstFor Asset Collection (Enhanced)
 
 #### Core Endpoints
 
-- `GET /assets` - List collected assets
-- `POST /assets/collect` - Trigger asset collection
-- `GET /assets/{asset_id}` - Get specific asset
-- `GET /assets/stats` - Collection statistics
+- `GET /assets` - List enhanced assets with comprehensive filtering
+  - **Filters**: category, equip_position, rarity, skill requirements, boosts
+  - **Pagination**: limit, offset, sorting options
+  - **Response**: Rich asset metadata with game context
+- `POST /assets/collect` - Collect and enrich assets from EstFor API
+- `GET /assets/{asset_id}` - Get enhanced asset with game metadata
+- `GET /assets/stats/summary` - Comprehensive collection statistics
+
+#### Enhanced Asset Features
+
+- **Game Integration**: Assets enriched with EstFor Kingdom constants
+- **Skill Requirements**: Validate equipment against player skills
+- **Equipment Positions**: Filter by HEAD, BODY, WEAPON, etc.
+- **Boost Effects**: Track XP boosts, gathering bonuses, combat buffs
+- **Asset Categories**: Classify items (helmet, weapon, consumable, material)
+- **Rarity Tiers**: Common, Uncommon, Rare, Epic, Legendary
+
+#### Specialized Endpoints
+
+- `GET /assets/search?q={query}` - Search assets by name/description
+- `GET /assets/equipment/{position}` - Get items by equipment slot
+- `GET /assets/by-skill/{skill_name}` - Get items requiring specific skill
+- `GET /assets/categories` - List all categories with counts
+- `GET /assets/boosts` - Get items with boost effects
+- `POST /assets/compatible` - Check player compatibility with asset
+- `POST /assets/migrate` - Migrate legacy assets to enhanced format
+
+#### Example Enhanced Asset Response
+
+```json
+{
+  "id": "asset_123",
+  "item_id": 1,
+  "name": "Bronze Helmet",
+  "category": "helmet",
+  "equip_position": "HEAD",
+  "rarity_tier": "COMMON",
+  "skill_requirements": { "DEFENCE": 1 },
+  "boost_effects": [
+    {
+      "boost_type": "COMBAT_XP",
+      "value": 10,
+      "duration": 3600
+    }
+  ],
+  "combat_stats": { "defence": 5 },
+  "compatible_skills": ["DEFENCE", "COMBAT"],
+  "tradeable": true,
+  "display_stats": {
+    "name": "Bronze Helmet",
+    "category": "helmet",
+    "rarity": "COMMON",
+    "equip_slot": "HEAD",
+    "requirements": { "DEFENCE": 1 }
+  }
+}
+```
 
 ### EstFor Game Assets API
 
@@ -481,6 +539,7 @@ The project includes auto-generated Python constants from EstFor Kingdom TypeScr
 - **Type-Safe Models**: Pydantic models for game assets with validation
 
 Example usage:
+
 ```python
 from app.game_constants import Skill, EquipPosition, BRONZE_HELMET
 
@@ -490,6 +549,7 @@ if player.get_skill_level(Skill.DEFENCE) >= 10:
 ```
 
 To regenerate constants from TypeScript:
+
 ```bash
 python scripts/generate_estfor_constants.py
 ```
@@ -537,4 +597,5 @@ MIT License - see LICENSE file for details
 
 **Last Updated**: $(date)
 **Version**: v1.0.0
+
 # Test commit to trigger workflow
