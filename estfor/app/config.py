@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     ESTFOR_RATE_LIMIT: int = Field(default=100, env="ESTFOR_RATE_LIMIT")
     
     # MongoDB Configuration
-    MONGODB_URI: str = Field(default="mongodb://localhost:27017/", env="MONGODB_URI")
+    MONGODB_URI: str = Field(default="mongodb://Mohamed:Mohamed@mongo:27017/estfor?authSource=estfor", env="MONGODB_URI")
     MONGODB_DATABASE: str = Field(default="estfor", env="MONGODB_DATABASE")
     MONGODB_COLLECTION: str = Field(default="all_assets", env="MONGODB_COLLECTION")
     MONGODB_MAX_POOL_SIZE: int = Field(default=10, env="MONGODB_MAX_POOL_SIZE")

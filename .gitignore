@@ -383,3 +383,4 @@ app/logs/
 # static/media/
 # user_data/
 rainbow-backend/
+*.example

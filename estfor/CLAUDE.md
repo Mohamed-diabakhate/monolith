@@ -6,6 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 EstFor is a production-ready FastAPI application for collecting and managing EstFor Kingdom gaming assets. It features a comprehensive microservices architecture with MongoDB storage, Redis caching, Celery workers, and full observability stack (Prometheus, Grafana, ELK).
 
+**Key Features:**
+- Real-time asset collection from EstFor Kingdom API (700+ assets)
+- Enhanced game data with categories, rarity, skill requirements, and boost effects
+- Type-safe game constants (2,400+ auto-generated from official game definitions)
+- Advanced filtering with 18+ parameters for precise asset queries
+- Sub-200ms response times with MongoDB indexing
+
 ## Development Commands
 
 ### Quick Start
@@ -37,6 +44,11 @@ make performance-test    # k6 load testing
 
 # Run single test
 pytest tests/test_unit.py::test_specific_function -v
+
+# Test specific categories
+pytest tests/test_enhanced_assets.py -v    # Enhanced asset features
+pytest tests/test_game_constants.py -v     # Game integration
+pytest tests/test_asset_collector.py -v    # Asset collection logic
 ```
 
 ### Code Quality
@@ -67,17 +79,32 @@ Celery Worker     Prometheus (9090)  Grafana (3000)
 ELK Stack        AlertManager (9093)  cAdvisor (8082)
 ```
 
+**Network Configuration:**
+- Services use both `estfor-network` (internal) and `dev_net` (external shared network)
+- MongoDB requires authentication with username/password
+- Redis uses database 0 for caching, database 1 for Celery broker
+
 ### Application Structure
 ```
 app/
 ├── main.py              # FastAPI application entry
 ├── config.py            # Pydantic settings management
-├── database.py          # MongoDB async client setup
+├── database/            # MongoDB connection layer
+│   ├── connection.py    # Async MongoDB client
+│   └── collections.py   # Collection definitions
 ├── models/              # Pydantic models
+│   ├── assets.py        # Asset data models
+│   ├── game.py          # Game-specific models
+│   └── responses.py     # API response models
 ├── routers/             # API endpoints
 │   ├── health.py        # Health checks
-│   └── assets.py        # Asset operations
+│   ├── assets.py        # Asset CRUD operations
+│   └── game_assets.py   # Game asset endpoints
 ├── services/            # Business logic
+│   ├── asset_collector.py  # EstFor API integration
+│   ├── asset_enricher.py   # Asset enhancement logic
+│   └── game_service.py     # Game data processing
+├── middleware/          # Container management
 └── utils/               # Shared utilities
 ```
 
@@ -107,9 +134,10 @@ GitHub Actions workflow (`.github/workflows/estfor-ci-cd.yml`) with stages:
 ## Environment Variables
 
 Required variables (set in `.env`):
-- `MONGODB_URI` - MongoDB connection string (default: mongodb://mongodb:27017/)
-- `DATABASE_NAME` - Database name (default: estfor_db)
-- `REDIS_URL` - Redis connection (default: redis://redis:6379)
+- `MONGODB_URI` - MongoDB connection string with authentication (default: mongodb://Mohamed:Mohamed@mongo:27017/estfor?authSource=estfor)
+- `MONGODB_DATABASE` - Database name (default: estfor)
+- `MONGODB_COLLECTION` - Collection name (default: all_assets)
+- `REDIS_URL` - Redis connection (default: redis://redis:6379/0)
 - `LOG_LEVEL` - Logging level (DEBUG/INFO/WARNING/ERROR)
 - `WORKERS` - Number of API workers (default: 4)
 
@@ -163,8 +191,8 @@ docker build --target production -t estfor:prod .
 docker-compose logs -f app
 docker-compose logs -f worker
 
-# Access MongoDB shell
-docker-compose exec mongodb mongosh
+# Access MongoDB shell with authentication
+docker-compose exec mongodb mongosh -u Mohamed -p Mohamed --authenticationDatabase estfor
 
 # Access Redis CLI
 docker-compose exec redis redis-cli
@@ -179,3 +207,31 @@ The `estfor-definitions/` directory contains TypeScript/AssemblyScript game defi
 - Game mechanics
 
 These are used for validating game assets and ensuring data consistency.
+
+## API Endpoints Overview
+
+### Core Asset Endpoints
+- `GET /assets/` - List all assets with pagination and filtering
+- `GET /assets/search` - Search assets by name
+- `GET /assets/{asset_id}` - Get specific asset details
+- `POST /assets/collect` - Trigger asset collection from EstFor Kingdom API
+- `GET /assets/stats/summary` - Asset statistics and counts
+
+### Game Integration Endpoints
+- `GET /assets/equipment/{position}` - Get items for equipment slots (HEAD, BODY, etc.)
+- `GET /assets/by-skill/{skill}` - Get items requiring specific skills
+- `GET /assets/categories` - List all available categories
+- `GET /health` - Service health status with dependency checks
+
+## Local Deployment Checklist
+
+When preparing for deployment, follow the checklist in `.cursor/rules/local-deployement-checklist.mdc`:
+1. Test coverage >= 90% for production, 75% for main branch
+2. Security scanning with Trivy, Bandit, and Safety
+3. Performance testing with k6 (sub-200ms response times)
+4. Health checks on all services
+5. Rollback strategy with versioned Docker tags
+6. Monitoring setup (Prometheus, Grafana, ELK)
+7. Documentation completeness
+8. Configuration management with `.env` files
+9. Database migration strategy

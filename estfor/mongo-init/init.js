@@ -1,6 +1,8 @@
 // MongoDB initialization script for EstFor Asset Collection System
+// Note: This script is no longer used as we're connecting to services/elephant-mongo
+// which now provides the 'estfor' database with user 'Mohamed'
 
-// Switch to the estfor database
+// Switch to the estfor database (created in elephant-mongo)
 db = db.getSiblingDB("estfor");
 
 // Create the all_assets collection
@@ -31,6 +33,6 @@ db.all_assets.insertOne({
 });
 
 print("MongoDB initialization completed successfully");
-print("Database: estfor");
+print("Database: estfor (elephant-mongo)");
 print("Collection: all_assets");
 print("Indexes created for optimal performance");

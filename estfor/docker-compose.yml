@@ -13,8 +13,6 @@ services:
     env_file:
       - .env
     depends_on:
-      mongodb:
-        condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
@@ -25,6 +23,7 @@ services:
       start_period: 40s
     networks:
       - estfor-network
+      - dev_net
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # For container management
@@ -53,8 +52,6 @@ services:
     env_file:
       - .env
     depends_on:
-      mongodb:
-        condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
@@ -71,6 +68,7 @@ services:
       start_period: 40s
     networks:
       - estfor-network
+      - dev_net
     restart: unless-stopped
     deploy:
       resources:
@@ -81,31 +79,6 @@ services:
           memory: 128M
           cpus: "0.1"
 
-  # MongoDB Database
-  mongodb:
-    image: mongo:7.0
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=Mongo
-      - MONGO_INITDB_ROOT_PASSWORD=Mongo123456
-      - MONGO_INITDB_DATABASE=estfor
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    networks:
-      - estfor-network
-    volumes:
-      - mongodb-data:/data/db
-      - ./mongo-init:/docker-entrypoint-initdb.d
-    restart: unless-stopped
-    labels:
-      - "container.auto_management=true"
-      - "container.priority=critical"
-      - "container.service_type=database"
 
   # Redis for Caching and Job Queue
   redis:
@@ -260,10 +233,12 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: **********/16
+  dev_net:
+    external: true
+    name: dev_net
 
 volumes:
-  mongodb-data:
   redis-data:
   prometheus-data:
   grafana-data:
