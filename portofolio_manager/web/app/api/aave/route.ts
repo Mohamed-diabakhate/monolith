@@ -1,26 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const SUBGRAPHS: Record<string, string> = {
-  "polygon-mainnet":
-    "https://api.thegraph.com/subgraphs/name/aave/protocol-v3-polygon",
-  "arbitrum-mainnet":
-    "https://api.thegraph.com/subgraphs/name/aave/protocol-v3-arbitrum",
-  "optimism-mainnet":
-    "https://api.thegraph.com/subgraphs/name/aave/protocol-v3-optimism",
-  "avalanche-mainnet":
-    "https://api.thegraph.com/subgraphs/name/aave/protocol-v3-avalanche",
-};
-
-const QUERY = `
-query UserPositions($user: String!) {
-  userReserves(where: { user: $user }) {
-    reserve { symbol name decimals underlyingAsset }
-    scaledATokenBalance
-    currentTotalDebt
-    usageAsCollateralEnabledOnUser
-  }
-}
-`;
+import { ethers } from "ethers";
+import { UiPoolDataProvider } from "@aave/contract-helpers";
+import * as markets from "@bgd-labs/aave-address-book";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -41,23 +22,54 @@ export async function GET(req: NextRequest) {
       data: buf.default?.data ?? buf.data ?? {},
     });
   }
-  const url = SUBGRAPHS[chain];
-  if (!url)
+  // On-chain via Aave UiPoolDataProvider
+  type MarketDef = {
+    UI_POOL_DATA_PROVIDER: string;
+    POOL_ADDRESSES_PROVIDER: string;
+  };
+  const cfg =
+    chain === "arbitrum-mainnet"
+      ? {
+          rpc: `https://rpc.ankr.com/arbitrum/${
+            process.env.ANKR_API_KEY ?? ""
+          }`,
+          market: (markets as unknown as { AaveV3Arbitrum: MarketDef })
+            .AaveV3Arbitrum,
+          chainId: 42161,
+        }
+      : chain === "sonic-mainnet"
+      ? {
+          rpc: process.env.SONIC_RPC_URL as string,
+          market: (markets as unknown as { AaveV3Sonic: MarketDef })
+            .AaveV3Sonic,
+          chainId: Number(process.env.SONIC_CHAIN_ID ?? 0),
+        }
+      : null;
+
+  if (!cfg || !cfg.rpc || !cfg.market?.UI_POOL_DATA_PROVIDER) {
     return NextResponse.json(
-      { error: `Subgraph non supporté pour ${chain}` },
+      { error: `Unsupported chain or missing config: ${chain}` },
       { status: 400 }
     );
+  }
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ query: QUERY, variables: { user: address } }),
-  });
-  if (!res.ok)
-    return NextResponse.json(
-      { error: `Subgraph ${res.status}` },
-      { status: 500 }
-    );
-  const data = await res.json();
-  return NextResponse.json({ chain, address, data: data?.data ?? {} });
+  try {
+    const provider = new ethers.providers.JsonRpcProvider(cfg.rpc);
+    const ui = new UiPoolDataProvider({
+      uiPoolDataProviderAddress: cfg.market.UI_POOL_DATA_PROVIDER,
+      provider,
+      chainId: cfg.chainId,
+    });
+    const userRes = await ui.getUserReservesHumanized({
+      lendingPoolAddressProvider: cfg.market.POOL_ADDRESSES_PROVIDER,
+      user: address,
+    });
+    return NextResponse.json({
+      chain,
+      address,
+      data: { userReserves: userRes.userReserves },
+    });
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
 }

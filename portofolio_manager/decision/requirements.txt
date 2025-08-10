@@ -1,8 +1,10 @@
 tensortrade
 stable-baselines3
+torch
+gymnasium
 pandas
 pandas_ta
-numpy
+numpy<2.0
 matplotlib
 seaborn
 rich

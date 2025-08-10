@@ -9,7 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aave/contract-helpers": "^1.36.1",
+    "@aave/math-utils": "^1.36.1",
+    "@bgd-labs/aave-address-book": "^4.26.2",
     "clsx": "^2.1.1",
+    "ethers": "^5.8.0",
     "next": "15.4.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
