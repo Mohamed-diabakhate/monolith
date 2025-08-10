@@ -384,3 +384,4 @@ app/logs/
 # user_data/
 rainbow-backend/
 *.example
+*.example
