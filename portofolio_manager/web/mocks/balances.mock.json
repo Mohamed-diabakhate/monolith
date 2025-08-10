@@ -1,0 +1,50 @@
+{
+  "assets": [
+    {
+      "balance": "2.5",
+      "balanceRawInteger": "2500000000000000000",
+      "balanceUsd": "7500",
+      "blockchain": "eth",
+      "tokenDecimals": 18,
+      "tokenName": "Ether",
+      "tokenPrice": "3000",
+      "tokenSymbol": "ETH"
+    },
+    {
+      "balanceRawInteger": "100000000",
+      "blockchain": "eth",
+      "tokenDecimals": 6,
+      "tokenName": "USD Coin",
+      "tokenPrice": "1",
+      "tokenSymbol": "USDC",
+      "balanceUsd": "100"
+    },
+    {
+      "balanceRawInteger": "50000000",
+      "blockchain": "polygon",
+      "tokenDecimals": 6,
+      "tokenName": "USD Coin (PoS)",
+      "tokenPrice": "1",
+      "tokenSymbol": "USDC",
+      "balanceUsd": "50"
+    },
+    {
+      "balanceRawInteger": "100000000",
+      "blockchain": "polygon",
+      "tokenDecimals": 8,
+      "tokenName": "Wrapped BTC",
+      "tokenPrice": "68000",
+      "tokenSymbol": "WBTC",
+      "balanceUsd": "680"
+    },
+    {
+      "balanceRawInteger": "100000000000000000000",
+      "blockchain": "arbitrum",
+      "tokenDecimals": 18,
+      "tokenName": "Arbitrum",
+      "tokenPrice": "1.2",
+      "tokenSymbol": "ARB",
+      "balanceUsd": "120"
+    }
+  ]
+}

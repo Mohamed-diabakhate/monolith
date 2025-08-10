@@ -1,0 +1,11 @@
+tensortrade
+stable-baselines3
+torch
+gymnasium
+pandas
+pandas_ta
+numpy<2.0
+matplotlib
+seaborn
+rich
+

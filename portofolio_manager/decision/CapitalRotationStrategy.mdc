@@ -1,0 +1,96 @@
+# Capital Rotation Strategy
+
+## **🎯 Objective**
+
+Build a system where:
+
+- **Input**: Historical OHLCV + indicators of the volatile asset (e.g., BTC-USDT).
+- **Output**: Allocate 100% capital to **BTC** or **USDC** at each step.
+- **Goal**: Maximize return while minimizing drawdown (or volatility).
+
+---
+
+## **⚙️ System Architecture (TensorTrade Components)**
+
+| **Component** | **Implementation Idea** |
+| --- | --- |
+| **Exchange** | Simulate a market with **BTC/USDC** price data (from Binance, Coinbase, etc.) |
+| **Action Scheme** | Define actions: {0: 'hold BTC', 1: 'move to USDC'} |
+| **Reward Scheme** | Reward for portfolio growth or Sharpe ratio improvements |
+| **DataFeed** | Include OHLCV, technical indicators, moving averages, RSI, volatility, etc. |
+| **Feature Pipeline** | Normalize or smooth inputs (z-score, min-max, etc.) |
+| **Agent** | RL algorithm (e.g., DQN, PPO) from stable-baselines3, trained to switch intelligently |
+| **Renderer** | Plot portfolio performance, trades, allocations over time |
+
+---
+
+## **🧪 Example Action Scheme**
+
+```
+class CapitalRotationScheme(ActionScheme):
+    def __init__(self, **kwargs):
+        super().__init__(action_space=Discrete(2))  # 0 = BTC, 1 = USDC
+
+    def get_order(self, action: int):
+        if action == 0:
+            return Order(symbol="BTC/USDC", side=OrderSide.BUY, amount=1.0)
+        else:
+            return Order(symbol="BTC/USDC", side=OrderSide.SELL, amount=1.0)
+```
+
+---
+
+## **💡 Feature Ideas**
+
+You can enhance prediction quality using:
+
+- **Momentum Indicators**: RSI, MACD, ROC
+- **Volatility Indicators**: ATR, Bollinger Band Width
+- **Trend Strength**: EMA crossover
+- **Regime Detection**: Short-term trend vs long-term trend
+
+---
+
+## **🎯 Reward Scheme Example**
+
+```
+class RotationalRewardScheme(RewardScheme):
+    def reward(self, env):
+        # Maximize equity + penalize high volatility
+        returns = env.portfolio.performance['net_worth'].pct_change().fillna(0)
+        sharpe = returns.mean() / (returns.std() + 1e-8)
+        return sharpe
+```
+
+Or simply use net worth delta:
+
+```
+return env.portfolio.net_worth - self._previous_net_worth
+```
+
+---
+
+## **🧰 Tools You’ll Need**
+
+Install:
+
+```
+pip install tensortrade[tf] stable-baselines3
+```
+
+And optionally:
+
+```
+pip install pandas_ta  # for easy indicators
+```
+
+---
+
+## **🧠 Key Strategy Notes**
+
+| **Goal** | **Method** |
+| --- | --- |
+| Prevent overtrading | Add transaction costs to environment |
+| Avoid whipsaws in flat markets | Penalize frequent switches (custom reward term) |
+| Adapt to market regimes | Include volatility features + momentum-based indicators |
+| Evaluate strategy | Use metrics like Sharpe, max drawdown, hit rate, turnover |
