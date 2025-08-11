@@ -10,6 +10,7 @@ from contextlib import asynccontextmanager
 
 from app.config import settings
 from app.routers import assets, health, game_assets
+from app.routers import download as download_router
 from app.database import init_mongodb, close_mongodb
 from app.services.container_manager import container_manager
 from app.services.idle_monitor import idle_monitor_manager
@@ -125,6 +126,7 @@ if settings.CONTAINER_AUTO_START or settings.CONTAINER_AUTO_STOP:
 app.include_router(health.router, prefix="/health", tags=["health"])
 app.include_router(assets.router, prefix="/assets", tags=["assets"])
 app.include_router(game_assets.router)
+app.include_router(download_router.router)
 
 
 @app.get("/")

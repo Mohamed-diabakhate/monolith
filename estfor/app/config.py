@@ -3,8 +3,8 @@ Configuration settings for the EstFor Asset Collection System.
 """
 
 from typing import List
-from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic import Field, AliasChoices
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -25,6 +25,23 @@ class Settings(BaseSettings):
     # EstFor API doesn't require authentication
     # ESTFOR_API_KEY: str = Field(env="ESTFOR_API_KEY")
     ESTFOR_RATE_LIMIT: int = Field(default=100, env="ESTFOR_RATE_LIMIT")
+
+    # PaintSwap API Configuration
+    # Accept either PAINTSWAP_API_URL or legacy PAINTSWAP_API_BASE_URL from the environment
+    PAINTSWAP_API_URL: str = Field(
+        default="https://api.paintswap.finance",
+        validation_alias=AliasChoices("PAINTSWAP_API_URL", "PAINTSWAP_API_BASE_URL"),
+    )
+    PAINTSWAP_RATE_LIMIT: int = Field(default=100, env="PAINTSWAP_RATE_LIMIT")
+    # Optional IPFS gateway settings (tolerate presence in environment)
+    IPFS_PRIMARY_GATEWAY: str = Field(
+        default="https://ipfs.io/ipfs/",
+        env="IPFS_PRIMARY_GATEWAY",
+    )
+    IPFS_FALLBACK_GATEWAY: str = Field(
+        default="https://cloudflare-ipfs.com/ipfs/",
+        env="IPFS_FALLBACK_GATEWAY",
+    )
     
     # MongoDB Configuration
     MONGODB_URI: str = Field(default="mongodb://Mohamed:Mohamed@mongo:27017/estfor?authSource=estfor", env="MONGODB_URI")
@@ -60,10 +77,13 @@ class Settings(BaseSettings):
     CONTAINER_STARTUP_TIMEOUT: int = Field(default=60, env="CONTAINER_STARTUP_TIMEOUT")  # seconds
     CONTAINER_HEALTH_CHECK_INTERVAL: int = Field(default=30, env="CONTAINER_HEALTH_CHECK_INTERVAL")  # seconds
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    # Pydantic v2 settings configuration
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra="ignore",  # Ignore unknown env vars instead of failing
+    )
 
 
 # Global settings instance
-settings = Settings() 
+settings = Settings()
