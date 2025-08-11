@@ -3,10 +3,13 @@ Endpoints for downloading external marketplace data (e.g., PaintSwap sales).
 """
 
 from typing import List, Optional, Dict, Any
+import re
 import structlog
-from fastapi import APIRouter, HTTPException, Query, Request
+from fastapi import APIRouter, HTTPException, Query, Request, Depends
+from pydantic import field_validator
 
 from app.services.paintswap_client import paintswap_client
+from app.dependencies.auth import verify_api_key
 
 
 logger = structlog.get_logger()
@@ -17,10 +20,20 @@ class SalesResponse(Dict[str, Any]):
     pass
 
 
+def validate_collection_slug(collection: str) -> str:
+    """Validate collection slug format and length."""
+    # Allow alphanumeric, hyphens, underscores, max 100 chars
+    pattern = r'^[a-zA-Z0-9_-]{1,100}$'
+    if not re.match(pattern, collection):
+        raise ValueError(f"Invalid collection slug format: {collection}")
+    return collection
+
+
 @router.get("/sales", response_model=None)
 async def download_sales(
     request: Request,
-    collections: List[str] = Query(..., description="Collection slugs or IDs to filter sales by"),
+    api_key: str = Depends(verify_api_key),
+    collections: List[str] = Query(..., description="Collection slugs or IDs to filter sales by", min_length=1, max_length=50),
     limit: int = Query(100, ge=1, le=500, description="Number of sales to return"),
     offset: int = Query(0, ge=0, description="Number of sales to skip"),
     page: Optional[int] = Query(None, ge=0, description="Page number (0-indexed). If provided, overrides offset as page*limit"),
@@ -38,6 +51,13 @@ async def download_sales(
     Pagination: limit, offset
     """
     try:
+        # Validate each collection slug
+        validated_collections = []
+        for collection in collections:
+            try:
+                validated_collections.append(validate_collection_slug(collection))
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=str(e))
         # Support page-based pagination
         effective_limit = page_size if page_size is not None else limit
         effective_offset = (page * effective_limit) if page is not None else offset
@@ -61,7 +81,7 @@ async def download_sales(
 
         while True:
             data = await paintswap_client.get_sales(
-                collections=collections,
+                collections=validated_collections,
                 limit=effective_limit,
                 offset=current_offset,
                 sort=sort,
@@ -122,7 +142,7 @@ async def download_sales(
                 )
 
         return {
-            "collections": collections,
+            "collections": validated_collections,
             "pagination": {
                 "limit": effective_limit,
                 "offset": effective_offset,
