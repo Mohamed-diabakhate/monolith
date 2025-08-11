@@ -1,0 +1,2 @@
+click>=8.2.1
+typing-extensions>=4.14.1

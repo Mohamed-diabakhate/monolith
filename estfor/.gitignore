@@ -1,1 +1,110 @@
+############################
+# Project specific
+############################
 estfor-definitions/
+
+############################
+# Python
+############################
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Environments
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.local
+.env.*
+.envrc
+.python-version
+
+# Keep shared templates
+!env.production.template
+
+# Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+wheels/
+!estfor_app.egg-info/
+
+# Test & Coverage
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.hypothesis/
+.benchmarks/
+
+# Type checkers / linters
+.mypy_cache/
+.pytype/
+.ruff_cache/
+.cache/
+
+############################
+# Docker
+############################
+.docker/
+docker-data/
+docker-compose.override.yml
+.env.docker
+
+############################
+# Operating system / Editors
+############################
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VSCode / JetBrains
+.vscode/
+.idea/
+*.code-workspace
+
+# Swap/backup files
+*~
+*.swp
+*.swo
+*.tmp
+*.bak
+
+############################
+# Logs & runtime
+############################
+logs/
+*.log
+*.pid
+*.seed
+
+############################
+# Notebooks
+############################
+.ipynb_checkpoints/
+
+############################
+# Monitoring & local data
+############################
+monitoring/**/data/
+monitoring/**/logs/
+
+############################
+# K6 outputs
+############################
+k6/results/
+
+############################
+# Nginx runtime logs
+############################
+nginx/logs/
+nginx/*.log

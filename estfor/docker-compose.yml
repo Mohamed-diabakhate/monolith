@@ -10,6 +10,8 @@ services:
     environment:
       - ENVIRONMENT=production
       - LOG_LEVEL=INFO
+      - CONTAINER_AUTO_START=false
+      - CONTAINER_AUTO_STOP=false
     env_file:
       - .env
     depends_on:
@@ -26,7 +28,7 @@ services:
       - dev_net
     restart: unless-stopped
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # For container management
+      - /var/run/docker.sock:/var/run/docker.sock # For container management
     deploy:
       resources:
         limits:
@@ -78,7 +80,6 @@ services:
         reservations:
           memory: 128M
           cpus: "0.1"
-
 
   # Redis for Caching and Job Queue
   redis:
@@ -141,7 +142,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
@@ -233,7 +234,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: **********/16
+        - subnet: 172.20.0.0/16
   dev_net:
     external: true
     name: dev_net

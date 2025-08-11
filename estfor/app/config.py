@@ -3,8 +3,8 @@ Configuration settings for the EstFor Asset Collection System.
 """
 
 from typing import List
-from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic import Field, AliasChoices
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -25,9 +25,26 @@ class Settings(BaseSettings):
     # EstFor API doesn't require authentication
     # ESTFOR_API_KEY: str = Field(env="ESTFOR_API_KEY")
     ESTFOR_RATE_LIMIT: int = Field(default=100, env="ESTFOR_RATE_LIMIT")
+
+    # PaintSwap API Configuration
+    # Accept either PAINTSWAP_API_URL or legacy PAINTSWAP_API_BASE_URL from the environment
+    PAINTSWAP_API_URL: str = Field(
+        default="https://api.paintswap.finance",
+        validation_alias=AliasChoices("PAINTSWAP_API_URL", "PAINTSWAP_API_BASE_URL"),
+    )
+    PAINTSWAP_RATE_LIMIT: int = Field(default=100, env="PAINTSWAP_RATE_LIMIT")
+    # Optional IPFS gateway settings (tolerate presence in environment)
+    IPFS_PRIMARY_GATEWAY: str = Field(
+        default="https://ipfs.io/ipfs/",
+        env="IPFS_PRIMARY_GATEWAY",
+    )
+    IPFS_FALLBACK_GATEWAY: str = Field(
+        default="https://cloudflare-ipfs.com/ipfs/",
+        env="IPFS_FALLBACK_GATEWAY",
+    )
     
     # MongoDB Configuration
-    MONGODB_URI: str = Field(default="mongodb://Mohamed:Mohamed@mongo:27017/estfor?authSource=estfor", env="MONGODB_URI")
+    MONGODB_URI: str = Field(env="MONGODB_URI")
     MONGODB_DATABASE: str = Field(default="estfor", env="MONGODB_DATABASE")
     MONGODB_COLLECTION: str = Field(default="all_assets", env="MONGODB_COLLECTION")
     MONGODB_MAX_POOL_SIZE: int = Field(default=10, env="MONGODB_MAX_POOL_SIZE")
@@ -41,8 +58,9 @@ class Settings(BaseSettings):
     CELERY_RESULT_BACKEND: str = Field(default="redis://redis:6379/2", env="CELERY_RESULT_BACKEND")
     
     # Security
-    SECRET_KEY: str = Field(env="SECRET_KEY", default="your-secret-key-change-in-production")
+    SECRET_KEY: str = Field(env="SECRET_KEY")
     API_KEY_HEADER: str = Field(default="X-API-Key", env="API_KEY_HEADER")
+    API_KEYS: List[str] = Field(default=[], env="API_KEYS")
     
     # Monitoring
     PROMETHEUS_MULTIPROC_DIR: str = Field(default="/tmp", env="PROMETHEUS_MULTIPROC_DIR")
@@ -60,10 +78,13 @@ class Settings(BaseSettings):
     CONTAINER_STARTUP_TIMEOUT: int = Field(default=60, env="CONTAINER_STARTUP_TIMEOUT")  # seconds
     CONTAINER_HEALTH_CHECK_INTERVAL: int = Field(default=30, env="CONTAINER_HEALTH_CHECK_INTERVAL")  # seconds
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    # Pydantic v2 settings configuration
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra="ignore",  # Ignore unknown env vars instead of failing
+    )
 
 
 # Global settings instance
-settings = Settings() 
+settings = Settings()
